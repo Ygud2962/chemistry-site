@@ -1,0 +1,2013 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>План занятий - Ресурсный центр "Биология"</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Raleway:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #0D3B2E;
+            --primary-light: #1B5E5B;
+            --accent: #C9A961;
+            --accent-light: #D4B570;
+            --bg: #FAFAF7;
+            --text: #2B2D42;
+            --white: #FFFFFF;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Raleway', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        h1, h2, h3, h4 {
+            font-family: 'Playfair Display', serif;
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(40px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes fadeInDown {
+            from { opacity: 0; transform: translateY(-40px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* Navigation - Premium */
+        .nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: rgba(255, 255, 255, 0.98);
+            backdrop-filter: blur(15px);
+            padding: 1rem 2rem;
+            box-shadow: 0 2px 20px rgba(13,59,46,0.1);
+            z-index: 1000;
+            animation: fadeInDown 0.8s ease;
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .nav-logo {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--primary);
+            letter-spacing: 1px;
+            z-index: 1001;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: var(--text);
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: 600;
+            transition: color 0.3s;
+            position: relative;
+        }
+
+        .nav-links a:after {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--accent);
+            transition: width 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: var(--accent);
+        }
+
+        .nav-links a:hover:after {
+            width: 100%;
+        }
+
+        /* Burger Menu */
+        .burger {
+            display: none;
+            flex-direction: column;
+            justify-content: space-between;
+            width: 28px;
+            height: 20px;
+            cursor: pointer;
+            z-index: 1001;
+            background: none;
+            border: none;
+            padding: 0;
+        }
+
+        .burger span {
+            display: block;
+            width: 100%;
+            height: 2px;
+            background: var(--primary);
+            transition: all 0.3s ease;
+            border-radius: 2px;
+        }
+
+        .burger.active span:nth-child(1) {
+            transform: translateY(9px) rotate(45deg);
+        }
+
+        .burger.active span:nth-child(2) {
+            opacity: 0;
+            transform: translateX(-10px);
+        }
+
+        .burger.active span:nth-child(3) {
+            transform: translateY(-9px) rotate(-45deg);
+        }
+
+        .mobile-menu {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+            z-index: 999;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            transition: opacity 0.4s ease;
+        }
+
+        .mobile-menu.active {
+            display: flex;
+            opacity: 1;
+        }
+
+        .mobile-menu ul {
+            list-style: none;
+            text-align: center;
+        }
+
+        .mobile-menu li {
+            margin: 1.5rem 0;
+            transform: translateY(20px);
+            opacity: 0;
+            transition: all 0.4s ease;
+        }
+
+        .mobile-menu.active li {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        .mobile-menu.active li:nth-child(1) { transition-delay: 0.1s; }
+        .mobile-menu.active li:nth-child(2) { transition-delay: 0.2s; }
+        .mobile-menu.active li:nth-child(3) { transition-delay: 0.3s; }
+        .mobile-menu.active li:nth-child(4) { transition-delay: 0.4s; }
+
+        .mobile-menu a {
+            color: var(--white);
+            text-decoration: none;
+            font-family: 'Playfair Display', serif;
+            font-size: 2rem;
+            font-weight: 600;
+            letter-spacing: 1px;
+            transition: color 0.3s;
+            position: relative;
+        }
+
+        .mobile-menu a:hover {
+            color: var(--accent);
+        }
+
+        .mobile-menu a:after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 0;
+            height: 2px;
+            background: var(--accent);
+            transition: width 0.3s;
+        }
+
+        .mobile-menu a:hover:after {
+            width: 60%;
+        }
+
+        /* Header */
+        .header {
+            background: linear-gradient(-45deg, var(--primary), var(--primary-light), #0f4d45, #1a5f5a);
+            background-size: 400% 400%;
+            animation: gradientShift 15s ease infinite;
+            color: var(--white);
+            padding: 8rem 2rem 4rem; /* Увеличен отступ сверху, чтобы меню не перекрывало текст */
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header:before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -10%;
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(201,169,97,0.15) 0%, transparent 70%);
+            animation: float 20s ease-in-out infinite;
+            border-radius: 50%;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            33% { transform: translateY(-20px) rotate(5deg); }
+            66% { transform: translateY(-10px) rotate(-5deg); }
+        }
+
+        .header h1 {
+            font-size: 2.8rem;
+            margin-bottom: 1rem;
+            letter-spacing: 2px;
+            animation: fadeInDown 1s ease;
+            position: relative;
+            z-index: 1;
+        }
+
+        .header p {
+            font-size: 1.1rem;
+            opacity: 0.95;
+            font-weight: 300;
+            max-width: 700px;
+            margin: 0 auto;
+            animation: fadeInUp 1s ease 0.3s both;
+            position: relative;
+            z-index: 1;
+        }
+
+        .content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 4rem 2rem;
+        }
+
+        .info-box {
+            background: var(--white);
+            padding: 2rem;
+            border-radius: 15px;
+            margin-bottom: 3rem;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.08);
+            border-left: 4px solid var(--accent);
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s ease;
+        }
+
+        .info-box.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .info-box h2 {
+            color: var(--primary);
+            font-size: 1.8rem;
+            margin-bottom: 1rem;
+        }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-top: 1.5rem;
+        }
+
+        .info-item {
+            padding: 1rem;
+            background: var(--bg);
+            border-radius: 10px;
+            border: 1px solid rgba(201,169,97,0.2);
+        }
+
+        .info-item strong {
+            color: var(--primary);
+            display: block;
+            margin-bottom: 0.5rem;
+            font-size: 0.9rem;
+        }
+
+        .info-item span {
+            font-size: 0.95rem;
+            opacity: 0.85;
+        }
+
+        .months-section {
+            margin-bottom: 4rem;
+        }
+
+        .month-title {
+            font-size: 2rem;
+            color: var(--primary);
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 3px solid var(--accent);
+            display: inline-block;
+            position: relative;
+        }
+
+        .month-title:after {
+            content: '';
+            position: absolute;
+            bottom: -3px;
+            left: 0;
+            width: 100px;
+            height: 3px;
+            background: var(--primary);
+        }
+
+        .lessons-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 3rem;
+        }
+
+        .lesson-card {
+            background: var(--white);
+            border-radius: 15px;
+            padding: 1.8rem;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.06);
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            border: 2px solid transparent;
+            opacity: 0;
+            transform: translateY(30px) scale(0.95);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .lesson-card:before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary), var(--primary-light));
+            transform: scaleX(0);
+            transform-origin: left;
+            transition: transform 0.5s ease;
+        }
+
+        .lesson-card.visible {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+        }
+
+        .lesson-card:hover:before {
+            transform: scaleX(1);
+        }
+
+        .lesson-card:hover {
+            transform: translateY(-8px) scale(1.01);
+            box-shadow: 0 15px 50px rgba(13,59,46,0.15);
+            border-color: var(--accent);
+        }
+
+        .lesson-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1.2rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid var(--bg);
+        }
+
+        .lesson-number {
+            background: linear-gradient(135deg, var(--primary), var(--primary-light));
+            color: var(--white);
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 1.1rem;
+            flex-shrink: 0;
+            box-shadow: 0 4px 15px rgba(13,59,46,0.3);
+            transition: transform 0.3s;
+        }
+
+        .lesson-card:hover .lesson-number {
+            transform: rotate(360deg) scale(1.1);
+        }
+
+        .lesson-title {
+            color: var(--primary);
+            font-size: 1.15rem;
+            flex: 1;
+            font-weight: 600;
+            font-family: 'Playfair Display', serif;
+        }
+
+        .lesson-meta {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .lesson-hours, .lesson-date {
+            background: linear-gradient(135deg, rgba(201,169,97,0.2), rgba(201,169,97,0.1));
+            color: var(--primary);
+            padding: 0.3rem 0.9rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            border: 1px solid rgba(201,169,97,0.3);
+        }
+
+        .lesson-content {
+            font-size: 0.9rem;
+            line-height: 1.6;
+        }
+
+        .lesson-content h4 {
+            color: var(--primary);
+            font-size: 0.95rem;
+            margin: 1rem 0 0.6rem;
+            font-family: 'Raleway', sans-serif;
+            font-weight: 600;
+        }
+
+        .lesson-content p, .lesson-content ul {
+            margin-bottom: 0.7rem;
+        }
+
+        .lesson-content ul {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .lesson-content li {
+            padding: 0.35rem 0;
+            padding-left: 1.5rem;
+            position: relative;
+            font-size: 0.88rem;
+            line-height: 1.5;
+        }
+
+        .lesson-content li:before {
+            content: "–";
+            color: var(--accent);
+            position: absolute;
+            left: 0;
+            font-weight: 600;
+        }
+
+        .lesson-form {
+            background: linear-gradient(135deg, var(--bg), rgba(250,250,247,0.8));
+            padding: 1rem;
+            border-radius: 10px;
+            margin-top: 1rem;
+            border-left: 3px solid var(--accent);
+            font-size: 0.87rem;
+        }
+
+        .lesson-form strong {
+            color: var(--primary);
+            display: block;
+            margin-bottom: 0.4rem;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+
+        footer {
+            background: linear-gradient(135deg, var(--text), #1a1a2e);
+            color: var(--white);
+            text-align: center;
+            padding: 2.5rem;
+            margin-top: 5rem;
+            font-size: 0.9rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        footer:before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--accent), var(--accent-light));
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .nav {
+                padding: 1rem 1.5rem;
+            }
+
+            .nav-links {
+                display: none;
+            }
+
+            .burger {
+                display: flex;
+            }
+
+            .header {
+                padding: 6.5rem 1.5rem 3rem; /* Защита от перекрытия на мобильных */
+            }
+
+            .header h1 {
+                font-size: 2.2rem;
+            }
+
+            .header p {
+                font-size: 1rem;
+            }
+
+            .lessons-grid {
+                grid-template-columns: 1fr;
+                gap: 1.2rem;
+            }
+
+            .lesson-card {
+                padding: 1.5rem;
+            }
+
+            .content {
+                padding: 3rem 1.5rem;
+            }
+        }
+
+        .scroll-animate {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .scroll-animate.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    </style>
+</head>
+<body>
+
+    <nav class="nav">
+        <div class="nav-container">
+            <div class="nav-logo">🌿 БИОЛОГИЯ</div>
+            <ul class="nav-links">
+                <li><a href="index.html">Главная</a></li>
+                <li><a href="programma.html">Программа</a></li>
+                <li><a href="plan.html">План</a></li>
+                <li><a href="contacts.html">Контакты</a></li>
+            </ul>
+            <button class="burger" id="burger" aria-label="Меню">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Мобильное меню -->
+    <div class="mobile-menu" id="mobileMenu">
+        <ul>
+            <li><a href="index.html" class="mobile-link">Главная</a></li>
+            <li><a href="programma.html" class="mobile-link">Программа</a></li>
+            <li><a href="plan.html" class="mobile-link">План</a></li>
+            <li><a href="contacts.html" class="mobile-link">Контакты</a></li>
+        </ul>
+    </div>
+
+    <div class="header">
+        <h1>📅 План занятий</h1>
+        <p>Расписание уроков и контрольных работ на 2026/2027 учебный год</p>
+    </div>
+
+    <div class="content">
+        <div class="info-box scroll-animate">
+            <h2>Общая информация</h2>
+            <p>План занятий районного ресурсного центра по подготовке учащихся к олимпиаде по учебному предмету «Биология»</p>
+            <div class="info-grid">
+                <div class="info-item">
+                    <strong>📚 Всего занятий</strong>
+                    <span>70 уроков</span>
+                </div>
+                <div class="info-item">
+                    <strong>👥 Классы</strong>
+                    <span>6-11 классы</span>
+                </div>
+                <div class="info-item">
+                    <strong>📆 Период</strong>
+                    <span>Сентябрь 2026 - Май 2027</span>
+                </div>
+                <div class="info-item">
+                    <strong>🚪 Кабинет</strong>
+                    <span>3-1</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="months-section">
+            <h2 class="month-title scroll-animate">Сентябрь 2026</h2>
+            <div class="lessons-grid">
+                <div class="lesson-card scroll-animate">
+                    <div class="lesson-header">
+                        <div class="lesson-number">1</div>
+                        <h3 class="lesson-title">Введение. Многообразие органического мира</h3>
+                    </div>
+                    <div class="lesson-meta">
+                        <span class="lesson-hours">1 час</span>
+                        <span class="lesson-date">05.09</span>
+                    </div>
+                    <div class="lesson-content">
+                        <p><strong>Основное содержание:</strong> Классификация. Систематические категории. Обзор царств живой природы</p>
+                        <div class="lesson-form">
+                            <strong>Форма работы:</strong>
+                            Работа с таксономическими схемами
+                        </div>
+                    </div>
+                </div>
+
+                <div class="lesson-card scroll-animate">
+                    <div class="lesson-header">
+                        <div class="lesson-number">2</div>
+                        <h3 class="lesson-title">Доядерные организмы (Прокариоты)</h3>
+                    </div>
+                    <div class="lesson-meta">
+                        <span class="lesson-hours">1 час</span>
+                        <span class="lesson-date">05.09</span>
+                    </div>
+                    <div class="lesson-content">
+                        <p><strong>Основное содержание:</strong> Бактерии: строение и функционирование клетки, спорообразование. Цианобактерии. Роль в природе и патогенез</p>
+                        <div class="lesson-form">
+                            <strong>Форма работы:</strong>
+                            Микроскопирование препаратов, работа с рисунками. Сравнение бактериальной клетки с растительной и животной
+                        </div>
+                    </div>
+                </div>
+
+                <div class="lesson-card scroll-animate">
+                    <div class="lesson-header">
+                        <div class="lesson-number">3</div>
+                        <h3 class="lesson-title">Протисты. Гетеротрофные и автотрофные протисты</h3>
+                    </div>
+                    <div class="lesson-meta">
+                        <span class="lesson-hours">1 час</span>
+                        <span class="lesson-date">12.09</span>
+                    </div>
+                    <div class="lesson-content">
+                        <p><strong>Основное содержание:</strong> Амеба и инфузория туфелька: пищеварение, осморегуляция. Эвглена зеленая</p>
+                        <div class="lesson-form">
+                            <strong>Форма работы:</strong>
+                            Сравнительная таблица «Органоиды протистов». Отработка подписей к рисункам
+                        </div>
+                    </div>
+                </div>
+
+                <div class="lesson-card scroll-animate">
+                    <div class="lesson-header">
+                        <div class="lesson-number">4</div>
+                        <h3 class="lesson-title">Многоклеточные и колониальные водоросли</h3>
+                    </div>
+                    <div class="lesson-meta">
+                        <span class="lesson-hours">1 час</span>
+                        <span class="lesson-date">12.09</span>
+                    </div>
+                    <div class="lesson-content">
+                        <p><strong>Основное содержание:</strong> Хлорелла, вольвокс, улотрикс, спирогира, ламинария. Жизненные циклы водорослей</p>
+                        <div class="lesson-form">
+                            <strong>Форма работы:</strong>
+                            Решение тестов на циклы развития. Анализ схем жизненных циклов водорослей
+                        </div>
+                    </div>
+                </div>
+
+                <div class="lesson-card scroll-animate">
+                    <div class="lesson-header">
+                        <div class="lesson-number">5</div>
+                        <h3 class="lesson-title">Грибы и Лишайники</h3>
+                    </div>
+                    <div class="lesson-meta">
+                        <span class="lesson-hours">1 час</span>
+                        <span class="lesson-date">19.09</span>
+                    </div>
+                    <div class="lesson-content">
+                        <p><strong>Основное содержание:</strong> Мукор, пеницилл, дрожжи. Лишайники как индикаторы чистоты воздуха</p>
+                        <div class="lesson-form">
+                            <strong>Форма работы:</strong>
+                            Определение съедобных и ядовитых грибов по описанию. Биология паразитических грибов
+                        </div>
+                    </div>
+                </div>
+
+                <div class="lesson-card scroll-animate">
+                    <div class="lesson-header">
+                        <div class="lesson-number">6</div>
+                        <h3 class="lesson-title">Растения. Общая характеристика растений. Ткани растений</h3>
+                    </div>
+                    <div class="lesson-meta">
+                        <span class="lesson-hours">1 час</span>
+                        <span class="lesson-date">19.09</span>
+                    </div>
+                    <div class="lesson-content">
+                        <p><strong>Основное содержание:</strong> Жизненные формы растений. Образовательные, покровные, проводящие, механические и основные ткани растений</p>
+                        <div class="lesson-form">
+                            <strong>Форма работы:</strong>
+                            Работа с микропрепаратами тканей растений. Определение типа тканей по рисунку
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="months-section">
+            <h2 class="month-title scroll-animate">Октябрь 2026</h2>
+            <div class="lessons-grid">
+                <div class="lesson-card scroll-animate">
+                    <div class="lesson-header">
+                        <div class="lesson-number">7</div>
+                        <h3 class="lesson-title">Корень. Зоны и видоизменения корня</h3>
+                    </div>
+                    <div class="lesson-meta">
+                        <span class="lesson-hours">1 час</span>
+                        <span class="lesson-date">26.09</span>
+                    </div>
+                    <div class="lesson-content">
+                        <p><strong>Основное содержание:</strong> Внутреннее строение корня в зоне всасывания. Корнеплоды (анатомия редиса, моркови). Корневые клубни (георгин)</p>
+                        <div class="lesson-form">
+                            <strong>Форма работы:</strong>
+                            Работа с микропрепаратами «Зоны корня проростка». Решение задач на определение зон
+                        </div>
+                    </div>
+                </div>
+
+                <div class="lesson-card scroll-animate">
+                    <div class="lesson-header">
+                        <div class="lesson-number">8</div>
+                        <h3 class="lesson-title">Побег. Почка. Стебель</h3>
+                    </div>
+                    <div class="lesson-meta">
+                        <span class="lesson-hours">1 час</span>
+                        <span class="lesson-date">26.09</span>
+                    </div>
+                    <div class="lesson-content">
+                        <p><strong>Основное содержание:</strong> Строение почек. Проводящие пучки стебля однодольных и двудольных растений. Годичные кольца древесного растения</p>
+                        <div class="lesson-form">
+                            <strong>Форма работы:</strong>
+                            Микроскопия «Анатомия стебля липы». Расчет возраста дерева по спилу
+                        </div>
+                    </div>
+                </div>
+
+                <div class="lesson-card scroll-animate">
+                    <div class="lesson-header">
+                        <div class="lesson-number">9</div>
+                        <h3 class="lesson-title">Лист. Анатомия и функции листа растений</h3>
+                    </div>
+                    <div class="lesson-meta">
+                        <span class="lesson-hours">1 час</span>
+                        <span class="lesson-date">03.10</span>
+                    </div>
+                    <div class="lesson-content">
+                        <p><strong>Основное содержание:</strong> Устьичный аппарат, мезофилл, жилкование листьев. Фотосинтез и транспирация</p>
+                        <div class="lesson-form">
+                            <strong>Форма работы:</strong>
+                            Работа с микропрепаратами «Поперечный срез липы». Определение типов жилкования по гербарным экземплярам
+                        </div>
+                    </div>
+                </div>
+
+                <div class="lesson-card scroll-animate">
+                    <div class="lesson-header">
+                        <div class="lesson-number">10</div>
+                        <h3 class="lesson-title">Видоизменение побегов и вегетативное размножение растений</h3>
+                    </div>
+                    <div class="lesson-meta">
+                        <span class="lesson-hours">1 час</span>
+                        <span class="lesson-date">03.10</span>
+                    </div>
+                    <div class="lesson-content">
+                        <p><strong>Основное содержание:</strong> Корневище, клубень, луковица. Прививки (копулировка, окулировка)</p>
+                        <div class="lesson-form">
+                            <strong>Форма работы:</strong>
+                            Отработка терминов. Решение заданий по биологическому значению вегетативного размножения
+                        </div>
+                    </div>
+                </div>
+
+                <div class="lesson-card scroll-animate">
+                    <div class="lesson-header">
+                        <div class="lesson-number">11</div>
+                        <h3 class="lesson-title">Споровые растения. Мхи и Папоротники</h3>
+                    </div>
+                    <div class="lesson-meta">
+                        <span class="lesson-hours">1 час</span>
+                        <span class="lesson-date">10.10</span>
+                    </div>
+                    <div class="lesson-content">
+                        <p><strong>Основное содержание:</strong> Циклы развития кукушкина льна и щитовника</p>
+                        <div class="lesson-form">
+                            <strong>Форма работы:</strong>
+                            Сравнение циклов развития споровых растений. Составление схемы «Чередование поколений споровых растений»
+                        </div>
+                    </div>
+                </div>
+
+                <div class="lesson-card scroll-animate">
+                    <div class="lesson-header">
+                        <div class="lesson-number">12</div>
+                        <h3 class="lesson-title">Голосеменные. Строение и размножение</h3>
+                    </div>
+                    <div class="lesson-meta">
+                        <span class="lesson-hours">1 час</span>
+                        <span class="lesson-date">10.10</span>
+                    </div>
+                    <div class="lesson-content">
+                        <p><strong>Основное содержание:</strong> Сосна обыкновенная. Строение мужских и женских шишек, строение семени. Значение хвойных растений</p>
+                        <div class="lesson-form">
+                            <strong>Форма работы:</strong>
+                            Работа с гербарием. Сравнение хвои и шишек сосны обыкновенной и ели европейской
+                        </div>
+                    </div>
+                </div>
+
+                <div class="lesson-card scroll-animate">
+                    <div class="lesson-header">
+                        <div class="lesson-number">13</div>
+                        <h3 class="lesson-title">Цветок. Соцветия. Опыление</h3>
+                    </div>
+                    <div class="lesson-meta">
+                        <span class="lesson-hours">1 час</span>
+                        <span class="lesson-date">17.10</span>
+                    </div>
+                    <div class="lesson-content">
+                        <p><strong>Основное содержание:</strong> Формулы цветков. Типы соцветий. Перекрестное опыление и самоопыление</p>
+                        <div class="lesson-form">
+                            <strong>Форма работы:</strong>
+                            Определение типов соцветий на гербарном материале
+                        </div>
+                    </div>
+                </div>
+
+                <div class="lesson-card scroll-animate">
+                    <div class="lesson-header">
+                        <div class="lesson-number">14</div>
+                        <h3 class="lesson-title">Плоды и семена</h3>
+                    </div>
+                    <div class="lesson-meta">
+                        <span class="lesson-hours">1 час</span>
+                        <span class="lesson-date">17.10</span>
+                    </div>
+                    <div class="lesson-content">
+                        <p><strong>Основное содержание:</strong> Классификация плодов. Строение семян однодольных и двудольных растений</p>
+                        <div class="lesson-form">
+                            <strong>Форма работы:</strong>
+                            Изучение строения семян на примере семян фасоли и пшеницы
+                        </div>
+                    </div>
+                </div>
+
+                <div class="lesson-card scroll-animate">
+                    <div class="lesson-header">
+                        <div class="lesson-number">15</div>
+                        <h3 class="lesson-title">Семейства двудольных растений</h3>
+                    </div>
+                    <div class="lesson-meta">
+                        <span class="lesson-hours">1 час</span>
+                        <span class="lesson-date">24.10</span>
+                    </div>
+                    <div class="lesson-content">
+                        <p><strong>Основное содержание:</strong> Формулы цветков, соцветия, плоды у семейств Крестоцветные, Бобовые, Розоцветные</p>
+                        <div class="lesson-form">
+                            <strong>Форма работы:</strong>
+                            Заполнение таблицы «Семейства двудольных растений». Работа с определителем растений
+                        </div>
+                    </div>
+                </div>
+
+                <div class="lesson-card scroll-animate">
+                    <div class="lesson-header">
+                        <div class="lesson-number">16</div>
+                        <h3 class="lesson-title">Семейства однодольных растений</h3>
+                    </div>
+                    <div class="lesson-meta">
+                        <span class="lesson-hours">1 час</span>
+                        <span class="lesson-date">24.10</span>
+                    </div>
+                    <div class="lesson-content">
+                        <p><strong>Основное содержание:</strong> Формулы цветков, соцветия, плоды у семейств Злаки, Лилейные</p>
+                        <div class="lesson-form">
+                            <strong>Форма работы:</strong>
+                            Заполнение таблицы «Семейства однодольных растений». Работа с определителем растений
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="months-section">
+            <h2 class="month-title scroll-animate">Ноябрь 2026</h2>
+            <div class="lessons-grid">
+                <div class="lesson-card scroll-animate">
+                    <div class="lesson-header">
+                        <div class="lesson-number">17</div>
+                        <h3 class="lesson-title">Общая характеристика животных. Тип Кишечнополостные</h3>
+                    </div>
+                    <div class="lesson-meta">
+                        <span class="lesson-hours">1 час</span>
+                        <span class="lesson-date">31.10</span>
+                    </div>
+                    <div class="lesson-content">
+                        <p><strong>Основное содержание:</strong> Классификация тканей животных. Строение и функционирование гидры. Медузы</p>
+                        <div class="lesson-form">
+                            <strong>Форма работы:</strong>
+                            Работа с рисунками «Тип Кишечнополостные»
+                        </div>
+                    </div>
+                </div>
+
+                <div class="lesson-card scroll-animate">
+                    <div class="lesson-header">
+                        <div class="lesson-number">18</div>
+                        <h3 class="lesson-title">Тип Плоские и тип Круглые черви</h3>
+                    </div>
+                    <div class="lesson-meta">
+                        <span class="lesson-hours">1 час</span>
+                        <span class="lesson-date">31.10</span>
+                    </div>
+                    <div class="lesson-content">
+                        <p><strong>Основное содержание:</strong> Планария. Паразиты: бычий цепень, печеночный сосальщик, аскариды</p>
+                        <div class="lesson-form">
+                            <strong>Форма работы:</strong>
+                            Составление схем «Жизненные циклы паразитов. Профилактика гельминтозов»
+                        </div>
+                    </div>
+                </div>
+
+                <div class="lesson-card scroll-animate">
+                    <div class="lesson-header">
+                        <div class="lesson-number">19</div>
+                        <h3 class="lesson-title">Тип Кольчатые черви</h3>
+                    </div>
+                    <div class="lesson-meta">
+                        <span class="lesson-hours">1 час</span>
+                        <span class="lesson-date">06.11</span>
+                    </div>
+                    <div class="lesson-content">
+                        <p><strong>Основное содержание:</strong> Строение и функционирование дождевого червя. Пиявки</p>
+                        <div class="lesson-form">
+                            <strong>Форма работы:</strong>
+                            Видео-демонстрация вскрытия дождевого червя. Адаптации к почвенной среде жизни
+                        </div>
+                    </div>
+                </div>
+
+                <div class="lesson-card scroll-animate">
+                    <div class="lesson-header">
+                        <div class="lesson-number">20</div>
+                        <h3 class="lesson-title">Моллюски</h3>
+                    </div>
+                    <div class="lesson-meta">
+                        <span class="lesson-hours">1 час</span>
+                        <span class="lesson-date">06.11</span>
+                    </div>
+                    <div class="lesson-content">
+                        <p><strong>Основное содержание:</strong> Брюхоногие, двустворчатые и головоногие моллюски</p>
+                        <div class="lesson-form">
+                            <strong>Форма работы:</strong>
+                            Сравнение систем органов моллюсков. Работа с раковинами моллюсков
+                        </div>
+                    </div>
+                </div>
+
+                <div class="lesson-card scroll-animate">
+                    <div class="lesson-header">
+                        <div class="lesson-number">21</div>
+                        <h3 class="lesson-title">Тип Членистоногие. Ракообразные и Паукообразные</h3>
+                    </div>
+                    <div class="lesson-meta">
+                        <span class="lesson-hours">1 час</span>
+                        <span class="lesson-date">14.11</span>
+                    </div>
+                    <div class="lesson-content">
+                        <p><strong>Основное содержание:</strong> Речной рак и паук-крестовик. Клещи</p>
+                        <div class="lesson-form">
+                            <strong>Форма работы:</strong>
+                            Работа с микропрепаратами «Конечности речного рака». Сравнение челюстных аппаратов речного рака и паука-крестовика
+                        </div>
+                    </div>
+                </div>
+
+                <div class="lesson-card scroll-animate">
+                    <div class="lesson-header">
+                        <div class="lesson-number">22</div>
+                        <h3 class="lesson-title">Насекомые. Отряды насекомых</h3>
+                    </div>
+                    <div class="lesson-meta">
+                        <span class="lesson-hours">1 час</span>
+                        <span class="lesson-date">14.11</span>
+                    </div>
+                    <div class="lesson-content">
+                        <p><strong>Основное содержание:</strong> Строение майского жука. Типы отрядов насекомых. Типы ротовых аппаратов</p>
+                        <div class="lesson-form">
+                            <strong>Форма работы:</strong>
+                            Определение отряда насекомого по внешнему строению (работа с коллекциями насекомых). Работа с рисунками
+                        </div>
+                    </div>
+                </div>
+
+                <div class="lesson-card scroll-animate">
+                    <div class="lesson-header">
+                        <div class="lesson-number">23</div>
+                        <h3 class="lesson-title">Насекомые. Отряды насекомых</h3>
+                    </div>
+                    <div class="lesson-meta">
+                        <span class="lesson-hours">1 час</span>
+                        <span class="lesson-date">21.11</span>
+                    </div>
+                    <div class="lesson-content">
+                        <p><strong>Основное содержание:</strong> Двукрылые и перепончатокрылые насекомые</p>
+                        <div class="lesson-form">
+                            <strong>Форма работы:</strong>
+                            Решение задач на типы развития насекомых. Роль вредителей сельскохозяйственных культур
+                        </div>
+                    </div>
+                </div>
+
+                <div class="lesson-card scroll-animate">
+                    <div class="lesson-header">
+                        <div class="lesson-number">24</div>
+                        <h3 class="lesson-title">Тип Хордовые. Подтип Бесчерепные. Ланцетник. Подтип Черепные. Надкласс Рыбы</h3>
+                    </div>
+                    <div class="lesson-meta">
+                        <span class="lesson-hours">1 час</span>
+                        <span class="lesson-date">21.11</span>
+                    </div>
+                    <div class="lesson-content">
+                        <p><strong>Основное содержание:</strong> Ланцетник. Костные и Хрящевые рыбы</p>
+                        <div class="lesson-form">
+                            <strong>Форма работы:</strong>
+                            Сравнение надклассов рыб. Особенности осморегуляции морских и пресноводных рыб
+                        </div>
+                    </div>
+                </div>
+
+                <div class="lesson-card scroll-animate">
+                    <div class="lesson-header">
+                        <div class="lesson-number">25</div>
+                        <h3 class="lesson-title">Класс Земноводные (Амфибии)</h3>
+                    </div>
+                    <div class="lesson-meta">
+                        <span class="lesson-hours">1 час</span>
+                        <span class="lesson-date">28.11</span>
+                    </div>
+                    <div class="lesson-content">
+                        <p><strong>Основное содержание:</strong> Строение и образ жизни лягушки обыкновенной. Отряды Хвостатые и Бесхвостые</p>
+                        <div class="lesson-form">
+                            <strong>Форма работы:</strong>
+                            Эволюционные преобразования земноводных. Сравнение личинки и взрослой формы земноводных
+                        </div>
+                    </div>
+                </div>
+
+                <div class="lesson-card scroll-animate">
+                    <div class="lesson-header">
+                        <div class="lesson-number">26</div>
+                        <h3 class="lesson-title">Класс Пресмыкающиеся (Рептилии)</h3>
+                    </div>
+                    <div class="lesson-meta">
+                        <span class="lesson-hours">1 час</span>
+                        <span class="lesson-date">28.11</span>
+                    </div>
+                    <div class="lesson-content">
+                        <p><strong>Основное содержание:</strong> Внешнее и внутреннее строение ящерицы прыткой. Отряды Чешуйчатые, Крокодилы, Черепахи</p>
+                        <div class="lesson-form">
+                            <strong>Форма работы:</strong>
+                            Ароморфозы наземного образа жизни. Составление сравнительной таблицы «Особенности Земноводных и Пресмыкающихся»
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="months-section">
+            <h2 class="month-title scroll-animate">Декабрь 2026</h2>
+            <div class="lessons-grid">
+                <div class="lesson-card scroll-animate">
+                    <div class="lesson-header">
+                        <div class="lesson-number">27</div>
+                        <h3 class="lesson-title">Класс Птицы. Экологические группы птиц</h3>
+                    </div>
+                    <div class="lesson-meta">
+                        <span class="lesson-hours">1 час</span>
+                        <span class="lesson-date">05.12</span>
+                    </div>
+                    <div class="lesson-content">
+                        <p><strong>Основное содержание:</strong> Строение птиц на примере голубя сизого</p>
+                        <div class="lesson-form">
+                            <strong>Форма работы:</strong>
+                            Адаптации птиц к полету. Работа с перьями птиц
+                        </div>
+                    </div>
+                </div>
+
+                <div class="lesson-card scroll-animate">
+                    <div class="lesson-header">
+                        <div class="lesson-number">28</div>
+                        <h3 class="lesson-title">Многообразие птиц</h3>
+                    </div>
+                    <div class="lesson-meta">
+                        <span class="lesson-hours">1 час</span>
+                        <span class="lesson-date">05.12</span>
+                    </div>
+                    <div class="lesson-content">
+                        <p><strong>Основное содержание:</strong> Сравнение клювов и конечностей птиц разных экологических групп</p>
+                        <div class="lesson-form">
+                            <strong>Форма работы:</strong>
+                            Определение экологической группы птиц по внешнему строению
+                        </div>
+                    </div>
+                </div>
+
+                <div class="lesson-card scroll-animate">
+                    <div class="lesson-header">
+                        <div class="lesson-number">29</div>
+                        <h3 class="lesson-title">Класс Млекопитающие (Звери). Яйцекладущие и Сумчатые</h3>
+                    </div>
+                    <div class="lesson-meta">
+                        <span class="lesson-hours">1 час</span>
+                        <span class="lesson-date">12.12</span>
+                    </div>
+                    <div class="lesson-content">
+                        <p><strong>Основное содержание:</strong> Утконос. Коала. Особенности размножения</p>
+                        <div class="lesson-form">
+                            <strong>Форма работы:</strong>
+                            Филогенетический ряд
+                        </div>
+                    </div>
+                </div>
+
+                <div class="lesson-card scroll-animate">
+                    <div class="lesson-header">
+                        <div class="lesson-number">30</div>
+                        <h3 class="lesson-title">Отряд Насекомоядные, Грызуны, Рукокрылые</h3>
+                    </div>
+                    <div class="lesson-meta">
+                        <span class="lesson-hours">1 час</span>
+                        <span class="lesson-date">12.12</span>
+                    </div>
+                    <div class="lesson-content">
+                        <p><strong>Основное содержание:</strong> Особенности строения представителей млекопитающих из различных отрядов</p>
+                        <div class="lesson-form">
+                            <strong>Форма работы:</strong>
+                            Сравнение зубных систем
+                        </div>
+                    </div>
+                </div>
+
+                <div class="lesson-card scroll-animate">
+                    <div class="lesson-header">
+                        <div class="lesson-number">31</div>
+                        <h3 class="lesson-title">Отряд Хищные, Парнокопытные, Непарнокопытные</h3>
+                    </div>
+                    <div class="lesson-meta">
+                        <span class="lesson-hours">1 час</span>
+                        <span class="lesson-date">19.12</span>
+                    </div>
+                    <div class="lesson-content">
+                        <p><strong>Основное содержание:</strong> Особенности строения костей конечностей млекопитающих</p>
+                        <div class="lesson-form">
+                            <strong>Форма работы:</strong>
+                            Работа со скелетами млекопитающих
+                        </div>
+                    </div>
+                </div>
+
+                <div class="lesson-card scroll-animate">
+                    <div class="lesson-header">
+                        <div class="lesson-number">32</div>
+                        <h3 class="lesson-title">Отряд Ластоногие, Китообразные, Приматы</h3>
+                    </div>
+                    <div class="lesson-meta">
+                        <span class="lesson-hours">1 час</span>
+                        <span class="lesson-date">19.12</span>
+                    </div>
+                    <div class="lesson-content">
+                        <p><strong>Основное содержание:</strong> Особенности вторичноводных млекопитающих</p>
+                        <div class="lesson-form">
+                            <strong>Форма работы:</strong>
+                            Адаптации вторичноводных млекопитающих к водной среде жизни
+                        </div>
+                    </div>
+                </div>
+
+                <div class="lesson-card scroll-animate">
+                    <div class="lesson-header">
+                        <div class="lesson-number">33</div>
+                        <h3 class="lesson-title">Повторение: Систематика и эволюция животных</h3>
+                    </div>
+                    <div class="lesson-meta">
+                        <span class="lesson-hours">1 час</span>
+                        <span class="lesson-date">26.12</span>
+                    </div>
+                    <div class="lesson-content">
+                        <p><strong>Основное содержание:</strong> Сравнение типов животных</p>
+                        <div class="lesson-form">
+                            <strong>Форма работы:</strong>
+                            Выполнение олимпиадных заданий
+                        </div>
+                    </div>
+                </div>
+
+                <div class="lesson-card scroll-animate">
+                    <div class="lesson-header">
+                        <div class="lesson-number">34</div>
+                        <h3 class="lesson-title">Решение олимпиадных задач по Зоологии</h3>
+                    </div>
+                    <div class="lesson-meta">
+                        <span class="lesson-hours">1 час</span>
+                        <span class="lesson-date">26.12</span>
+                    </div>
+                    <div class="lesson-content">
+                        <p><strong>Основное содержание:</strong> Расчетные задачи (скорость реакции, количество потомства у паразитов)</p>
+                        <div class="lesson-form">
+                            <strong>Форма работы:</strong>
+                            Решение олимпиадных заданий
+                        </div>
+                    </div>
+                </div>
+
+                <div class="lesson-card scroll-animate">
+                    <div class="lesson-header">
+                        <div class="lesson-number">35</div>
+                        <h3 class="lesson-title">Итоговая проверочная работа</h3>
+                    </div>
+                    <div class="lesson-meta">
+                        <span class="lesson-hours">1 час</span>
+                        <span class="lesson-date">30.12</span>
+                    </div>
+                    <div class="lesson-content">
+                        <p><strong>Основное содержание:</strong> Зачет по номенклатуре</p>
+                        <div class="lesson-form">
+                            <strong>Форма работы:</strong>
+                            Самостоятельная работа
+                        </div>
+                    </div>
+                </div>
+
+                <div class="lesson-card scroll-animate">
+                    <div class="lesson-header">
+                        <div class="lesson-number">36</div>
+                        <h3 class="lesson-title">Общий обзор организма человека. Ткани человека</h3>
+                    </div>
+                    <div class="lesson-meta">
+                        <span class="lesson-hours">1 час</span>
+                        <span class="lesson-date">30.12</span>
+                    </div>
+                    <div class="lesson-content">
+                        <p><strong>Основное содержание:</strong> Классификация тканей человека</p>
+                        <div class="lesson-form">
+                            <strong>Форма работы:</strong>
+                            Работа с готовыми микропрепаратами. Определение типов ткани по рисункам
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="months-section">
+            <h2 class="month-title scroll-animate">Январь 2027</h2>
+            <div class="lessons-grid">
+                <div class="lesson-card scroll-animate">
+                    <div class="lesson-header">
+                        <div class="lesson-number">37</div>
+                        <h3 class="lesson-title">Регуляция функций организма человека. Нервная регуляция</h3>
+                    </div>
+                    <div class="lesson-meta">
+                        <span class="lesson-hours">1 час</span>
+                        <span class="lesson-date">09.01</span>
+                    </div>
+                    <div class="lesson-content">
+                        <p><strong>Основное содержание:</strong> Нейрон. Синапс. Рефлекторная дуга</p>
+                        <div class="lesson-form">
+                            <strong>Форма работы:</strong>
+                            Составление схем рефлекторных дуг. Решение задач на проведение импульса
+                        </div>
+                    </div>
+                </div>
+
+                <div class="lesson-card scroll-animate">
+                    <div class="lesson-header">
+                        <div class="lesson-number">38</div>
+                        <h3 class="lesson-title">Строение спинного и головного мозга человека</h3>
+                    </div>
+                    <div class="lesson-meta">
+                        <span class="lesson-hours">1 час</span>
+                        <span class="lesson-date">09.01</span>
+                    </div>
+                    <div class="lesson-content">
+                        <p><strong>Основное содержание:</strong> Отделы головного мозга. Доли коры больших полушарий головного мозга</p>
+                        <div class="lesson-form">
+                            <strong>Форма работы:</strong>
+                            Работа с объемной моделью «Головной мозг человека». Заполнение таблицы «Отделы головного мозга человека»
+                        </div>
+                    </div>
+                </div>
+
+                <div class="lesson-card scroll-animate">
+                    <div class="lesson-header">
+                        <div class="lesson-number">39</div>
+                        <h3 class="lesson-title">Вегетативная нервная система</h3>
+                    </div>
+                    <div class="lesson-meta">
+                        <span class="lesson-hours">1 час</span>
+                        <span class="lesson-date">16.01</span>
+                    </div>
+                    <div class="lesson-content">
+                        <p><strong>Основное содержание:</strong> Симпатический и парасимпатический отделы вегетативной нервной системы</p>
+                        <div class="lesson-form">
+                            <strong>Форма работы:</strong>
+                            Сравнение влияния на органы и системы органов различных отделов вегетативной нервной системы
+                        </div>
+                    </div>
+                </div>
+
+                <div class="lesson-card scroll-animate">
+                    <div class="lesson-header">
+                        <div class="lesson-number">40</div>
+                        <h3 class="lesson-title">Эндокринная система</h3>
+                    </div>
+                    <div class="lesson-meta">
+                        <span class="lesson-hours">1 час</span>
+                        <span class="lesson-date">16.01</span>
+                    </div>
+                    <div class="lesson-content">
+                        <p><strong>Основное содержание:</strong> Гипофиз, эпифиз, поджелудочная железа, надпочечники</p>
+                        <div class="lesson-form">
+                            <strong>Форма работы:</strong>
+                            Решение задач на синдромы, связанные с гипо- и гиперфункцией эндокринных желез
+                        </div>
+                    </div>
+                </div>
+
+                <div class="lesson-card scroll-animate">
+                    <div class="lesson-header">
+                        <div class="lesson-number">41</div>
+                        <h3 class="lesson-title">Опорно-двигательный аппарат</h3>
+                    </div>
+                    <div class="lesson-meta">
+                        <span class="lesson-hours">1 час</span>
+                        <span class="lesson-date">23.01</span>
+                    </div>
+                    <div class="lesson-content">
+                        <p><strong>Основное содержание:</strong> Строение костей и мышц. Суставы, типы суставов</p>
+                        <div class="lesson-form">
+                            <strong>Форма работы:</strong>
+                            Отработка основных терминов по теме
+                        </div>
+                    </div>
+                </div>
+
+                <div class="lesson-card scroll-animate">
+                    <div class="lesson-header">
+                        <div class="lesson-number">42</div>
+                        <h3 class="lesson-title">Внутренняя среда организма. Кровь. Иммунитет</h3>
+                    </div>
+                    <div class="lesson-meta">
+                        <span class="lesson-hours">1 час</span>
+                        <span class="lesson-date">23.01</span>
+                    </div>
+                    <div class="lesson-content">
+                        <p><strong>Основное содержание:</strong> Эритроциты, лейкоциты, тромбоциты. Группы крови</p>
+                        <div class="lesson-form">
+                            <strong>Форма работы:</strong>
+                            Решение задач на переливание крови. Клеточный и гуморальный иммунитет
+                        </div>
+                    </div>
+                </div>
+
+                <div class="lesson-card scroll-animate">
+                    <div class="lesson-header">
+                        <div class="lesson-number">43</div>
+                        <h3 class="lesson-title">Сердечно-сосудистая система</h3>
+                    </div>
+                    <div class="lesson-meta">
+                        <span class="lesson-hours">1 час</span>
+                        <span class="lesson-date">30.01</span>
+                    </div>
+                    <div class="lesson-content">
+                        <p><strong>Основное содержание:</strong> Анатомия и физиология сердца. Автоматия. Круги кровообращения. Давление крови. Пульс</p>
+                        <div class="lesson-form">
+                            <strong>Форма работы:</strong>
+                            Расчет ЧСС и давления крови. Первая помощь при кровотечениях
+                        </div>
+                    </div>
+                </div>
+
+                <div class="lesson-card scroll-animate">
+                    <div class="lesson-header">
+                        <div class="lesson-number">44</div>
+                        <h3 class="lesson-title">Дыхательная система</h3>
+                    </div>
+                    <div class="lesson-meta">
+                        <span class="lesson-hours">1 час</span>
+                        <span class="lesson-date">30.01</span>
+                    </div>
+                    <div class="lesson-content">
+                        <p><strong>Основное содержание:</strong> Строение воздухоносных путей и легких. Жизненная емкость легких. Регуляция дыхания</p>
+                        <div class="lesson-form">
+                            <strong>Форма работы:</strong>
+                            Решение задач на газообмен в альвеолах
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="months-section">
+            <h2 class="month-title scroll-animate">Февраль 2027</h2>
+            <div class="lessons-grid">
+                <div class="lesson-card scroll-animate">
+                    <div class="lesson-header">
+                        <div class="lesson-number">45</div>
+                        <h3 class="lesson-title">Пищеварительная система</h3>
+                    </div>
+                    <div class="lesson-meta">
+                        <span class="lesson-hours">1 час</span>
+                        <span class="lesson-date">06.02</span>
+                    </div>
+                    <div class="lesson-content">
+                        <p><strong>Основное содержание:</strong> Оптимальные условия для работы пищеварительных ферментов. Строение органов ротовой полости, желудка</p>
+                        <div class="lesson-form">
+                            <strong>Форма работы:</strong>
+                            Решение задач на скорость ферментативных реакций
+                        </div>
+                    </div>
+                </div>
+
+                <div class="lesson-card scroll-animate">
+                    <div class="lesson-header">
+                        <div class="lesson-number">46</div>
+                        <h3 class="lesson-title">Обмен веществ</h3>
+                    </div>
+                    <div class="lesson-meta">
+                        <span class="lesson-hours">1 час</span>
+                        <span class="lesson-date">06.02</span>
+                    </div>
+                    <div class="lesson-content">
+                        <p><strong>Основное содержание:</strong> Строение и функции кишечника. Обмен белков, жиров и углеводов. Витамины</p>
+                        <div class="lesson-form">
+                            <strong>Форма работы:</strong>
+                            Расчет калорийности пищи
+                        </div>
+                    </div>
+                </div>
+
+                <div class="lesson-card scroll-animate">
+                    <div class="lesson-header">
+                        <div class="lesson-number">47</div>
+                        <h3 class="lesson-title">Выделительная система</h3>
+                    </div>
+                    <div class="lesson-meta">
+                        <span class="lesson-hours">1 час</span>
+                        <span class="lesson-date">13.02</span>
+                    </div>
+                    <div class="lesson-content">
+                        <p><strong>Основное содержание:</strong> Строение почек и нефрона. Фильтрация и реабсорбция</p>
+                        <div class="lesson-form">
+                            <strong>Форма работы:</strong>
+                            Отработка схемы «Образование мочи»
+                        </div>
+                    </div>
+                </div>
+
+                <div class="lesson-card scroll-animate">
+                    <div class="lesson-header">
+                        <div class="lesson-number">48</div>
+                        <h3 class="lesson-title">Покровная система (кожа)</h3>
+                    </div>
+                    <div class="lesson-meta">
+                        <span class="lesson-hours">1 час</span>
+                        <span class="lesson-date">13.02</span>
+                    </div>
+                    <div class="lesson-content">
+                        <p><strong>Основное содержание:</strong> Особенности строения эпидермиса, дермы и подкожно-жировой клетчатки. Терморегуляция</p>
+                        <div class="lesson-form">
+                            <strong>Форма работы:</strong>
+                            Отработка основных терминов по теме
+                        </div>
+                    </div>
+                </div>
+
+                <div class="lesson-card scroll-animate">
+                    <div class="lesson-header">
+                        <div class="lesson-number">49</div>
+                        <h3 class="lesson-title">Репродуктивная система. Онтогенез человека</h3>
+                    </div>
+                    <div class="lesson-meta">
+                        <span class="lesson-hours">1 час</span>
+                        <span class="lesson-date">20.02</span>
+                    </div>
+                    <div class="lesson-content">
+                        <p><strong>Основное содержание:</strong> Образование половых клеток. Строение яйцеклетки и сперматозоида</p>
+                        <div class="lesson-form">
+                            <strong>Форма работы:</strong>
+                            Решение задач на определение плоидности половых клеток
+                        </div>
+                    </div>
+                </div>
+
+                <div class="lesson-card scroll-animate">
+                    <div class="lesson-header">
+                        <div class="lesson-number">50</div>
+                        <h3 class="lesson-title">Сенсорные системы</h3>
+                    </div>
+                    <div class="lesson-meta">
+                        <span class="lesson-hours">1 час</span>
+                        <span class="lesson-date">20.02</span>
+                    </div>
+                    <div class="lesson-content">
+                        <p><strong>Основное содержание:</strong> Строение и функции зрительной и слуховой сенсорных систем</p>
+                        <div class="lesson-form">
+                            <strong>Форма работы:</strong>
+                            Решение задач на оптику глаза
+                        </div>
+                    </div>
+                </div>
+
+                <div class="lesson-card scroll-animate">
+                    <div class="lesson-header">
+                        <div class="lesson-number">51</div>
+                        <h3 class="lesson-title">Поведение и психика. Высшая нервная деятельность</h3>
+                    </div>
+                    <div class="lesson-meta">
+                        <span class="lesson-hours">1 час</span>
+                        <span class="lesson-date">27.02</span>
+                    </div>
+                    <div class="lesson-content">
+                        <p><strong>Основное содержание:</strong> Безусловные и условные рефлексы (опыты Павлова). Торможение. Память, мышление. Сон</p>
+                        <div class="lesson-form">
+                            <strong>Форма работы:</strong>
+                            Разбор олимпиадных заданий по нейрофизиологии
+                        </div>
+                    </div>
+                </div>
+
+                <div class="lesson-card scroll-animate">
+                    <div class="lesson-header">
+                        <div class="lesson-number">52</div>
+                        <h3 class="lesson-title">Решение задач по физиологии человека</h3>
+                    </div>
+                    <div class="lesson-meta">
+                        <span class="lesson-hours">1 час</span>
+                        <span class="lesson-date">27.02</span>
+                    </div>
+                    <div class="lesson-content">
+                        <p><strong>Основное содержание:</strong> Интегрированные задачи по системам органов</p>
+                        <div class="lesson-form">
+                            <strong>Форма работы:</strong>
+                            Самостоятельная работа
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="months-section">
+            <h2 class="month-title scroll-animate">Март - Май 2027</h2>
+            <div class="lessons-grid">
+                <div class="lesson-card scroll-animate">
+                    <div class="lesson-header">
+                        <div class="lesson-number">53</div>
+                        <h3 class="lesson-title">Свойства живых организмов</h3>
+                    </div>
+                    <div class="lesson-meta">
+                        <span class="lesson-hours">1 час</span>
+                        <span class="lesson-date">06.03</span>
+                    </div>
+                    <div class="lesson-content">
+                        <p><strong>Основное содержание:</strong> Уровни организации биологических систем</p>
+                        <div class="lesson-form">
+                            <strong>Форма работы:</strong>
+                            Тестирование по общей терминологии
+                        </div>
+                    </div>
+                </div>
+
+                <div class="lesson-card scroll-animate">
+                    <div class="lesson-header">
+                        <div class="lesson-number">54</div>
+                        <h3 class="lesson-title">Химия клетки: вода и минеральные вещества</h3>
+                    </div>
+                    <div class="lesson-meta">
+                        <span class="lesson-hours">1 час</span>
+                        <span class="lesson-date">06.03</span>
+                    </div>
+                    <div class="lesson-content">
+                        <p><strong>Основное содержание:</strong> Вода. Буферные системы. Макро- и микроэлементы</p>
+                        <div class="lesson-form">
+                            <strong>Форма работы:</strong>
+                            Решение олимпиадных заданий на pH растворов
+                        </div>
+                    </div>
+                </div>
+
+                <div class="lesson-card scroll-animate">
+                    <div class="lesson-header">
+                        <div class="lesson-number">55</div>
+                        <h3 class="lesson-title">Белки. Углеводы</h3>
+                    </div>
+                    <div class="lesson-meta">
+                        <span class="lesson-hours">1 час</span>
+                        <span class="lesson-date">13.03</span>
+                    </div>
+                    <div class="lesson-content">
+                        <p><strong>Основное содержание:</strong> Аминокислоты. Уровни организации белковой молекулы. Денатурация белков</p>
+                        <div class="lesson-form">
+                            <strong>Форма работы:</strong>
+                            Решение задач на пептидные связи
+                        </div>
+                    </div>
+                </div>
+
+                <div class="lesson-card scroll-animate">
+                    <div class="lesson-header">
+                        <div class="lesson-number">56</div>
+                        <h3 class="lesson-title">Липиды. Нуклеиновые кислоты</h3>
+                    </div>
+                    <div class="lesson-meta">
+                        <span class="lesson-hours">1 час</span>
+                        <span class="lesson-date">13.03</span>
+                    </div>
+                    <div class="lesson-content">
+                        <p><strong>Основное содержание:</strong> Жиры. ДНК и РНК. Правила Чаргаффа. АТФ</p>
+                        <div class="lesson-form">
+                            <strong>Форма работы:</strong>
+                            Решение задач на комплементарность ДНК
+                        </div>
+                    </div>
+                </div>
+
+                <div class="lesson-card scroll-animate">
+                    <div class="lesson-header">
+                        <div class="lesson-number">57</div>
+                        <h3 class="lesson-title">Цитология. Цитоплазматические мембраны</h3>
+                    </div>
+                    <div class="lesson-meta">
+                        <span class="lesson-hours">1 час</span>
+                        <span class="lesson-date">20.03</span>
+                    </div>
+                    <div class="lesson-content">
+                        <p><strong>Основное содержание:</strong> Плазмалемма, клеточный транспорт. Органоиды. Цитоскелет</p>
+                        <div class="lesson-form">
+                            <strong>Форма работы:</strong>
+                            Микроскопия растительной и животной клетки
+                        </div>
+                    </div>
+                </div>
+
+                <div class="lesson-card scroll-animate">
+                    <div class="lesson-header">
+                        <div class="lesson-number">58</div>
+                        <h3 class="lesson-title">Органоиды клетки</h3>
+                    </div>
+                    <div class="lesson-meta">
+                        <span class="lesson-hours">1 час</span>
+                        <span class="lesson-date">20.03</span>
+                    </div>
+                    <div class="lesson-content">
+                        <p><strong>Основное содержание:</strong> Строение митохондрий и хлоропластов. Симбиогенез. Ядро</p>
+                        <div class="lesson-form">
+                            <strong>Форма работы:</strong>
+                            Сравнение клеток прокариот и эукариот
+                        </div>
+                    </div>
+                </div>
+
+                <div class="lesson-card scroll-animate">
+                    <div class="lesson-header">
+                        <div class="lesson-number">59</div>
+                        <h3 class="lesson-title">Деление клетки</h3>
+                    </div>
+                    <div class="lesson-meta">
+                        <span class="lesson-hours">1 час</span>
+                        <span class="lesson-date">27.03</span>
+                    </div>
+                    <div class="lesson-content">
+                        <p><strong>Основное содержание:</strong> Митоз. Мейоз</p>
+                        <div class="lesson-form">
+                            <strong>Форма работы:</strong>
+                            Решение задач на плоидность клеток
+                        </div>
+                    </div>
+                </div>
+
+                <div class="lesson-card scroll-animate">
+                    <div class="lesson-header">
+                        <div class="lesson-number">60</div>
+                        <h3 class="lesson-title">Обмен веществ и энергии. Энергетический обмен</h3>
+                    </div>
+                    <div class="lesson-meta">
+                        <span class="lesson-hours">1 час</span>
+                        <span class="lesson-date">27.03</span>
+                    </div>
+                    <div class="lesson-content">
+                        <p><strong>Основное содержание:</strong> Гликолиз. Кислородное окисление. Цикл Кребса</p>
+                        <div class="lesson-form">
+                            <strong>Форма работы:</strong>
+                            Решение задач на расчет энергетического выхода
+                        </div>
+                    </div>
+                </div>
+
+                <div class="lesson-card scroll-animate">
+                    <div class="lesson-header">
+                        <div class="lesson-number">61</div>
+                        <h3 class="lesson-title">Фотосинтез. Биосинтез белка</h3>
+                    </div>
+                    <div class="lesson-meta">
+                        <span class="lesson-hours">1 час</span>
+                        <span class="lesson-date">03.04</span>
+                    </div>
+                    <div class="lesson-content">
+                        <p><strong>Основное содержание:</strong> Световая и темновая фазы фотосинтеза. Цикл Кальвина. Генетический код. Транскрипция</p>
+                        <div class="lesson-form">
+                            <strong>Форма работы:</strong>
+                            Решение задач на транскрипцию ДНК
+                        </div>
+                    </div>
+                </div>
+
+                <div class="lesson-card scroll-animate">
+                    <div class="lesson-header">
+                        <div class="lesson-number">62</div>
+                        <h3 class="lesson-title">Трансляция и реализация наследственной информации</h3>
+                    </div>
+                    <div class="lesson-meta">
+                        <span class="lesson-hours">1 час</span>
+                        <span class="lesson-date">03.04</span>
+                    </div>
+                    <div class="lesson-content">
+                        <p><strong>Основное содержание:</strong> Трансляция</p>
+                        <div class="lesson-form">
+                            <strong>Форма работы:</strong>
+                            Решение задач на биосинтез белка
+                        </div>
+                    </div>
+                </div>
+
+                <div class="lesson-card scroll-animate">
+                    <div class="lesson-header">
+                        <div class="lesson-number">63</div>
+                        <h3 class="lesson-title">Размножение живых организмов</h3>
+                    </div>
+                    <div class="lesson-meta">
+                        <span class="lesson-hours">1 час</span>
+                        <span class="lesson-date">10.04</span>
+                    </div>
+                    <div class="lesson-content">
+                        <p><strong>Основное содержание:</strong> Бесполое и половое размножение. Гермафродитизм. Партеногенез</p>
+                        <div class="lesson-form">
+                            <strong>Форма работы:</strong>
+                            Сравнение преимуществ и недостатков различных типов размножения
+                        </div>
+                    </div>
+                </div>
+
+                <div class="lesson-card scroll-animate">
+                    <div class="lesson-header">
+                        <div class="lesson-number">64</div>
+                        <h3 class="lesson-title">Индивидуальное развитие (онтогенез)</h3>
+                    </div>
+                    <div class="lesson-meta">
+                        <span class="lesson-hours">1 час</span>
+                        <span class="lesson-date">10.04</span>
+                    </div>
+                    <div class="lesson-content">
+                        <p><strong>Основное содержание:</strong> Эмбриональный и постэмбриональный периоды онтогенеза</p>
+                        <div class="lesson-form">
+                            <strong>Форма работы:</strong>
+                            Определение типа онтогенеза у разных типов животных
+                        </div>
+                    </div>
+                </div>
+
+                <div class="lesson-card scroll-animate">
+                    <div class="lesson-header">
+                        <div class="lesson-number">65</div>
+                        <h3 class="lesson-title">Наследственность и изменчивость организмов. Законы Г. Менделя</h3>
+                    </div>
+                    <div class="lesson-meta">
+                        <span class="lesson-hours">1 час</span>
+                        <span class="lesson-date">17.04</span>
+                    </div>
+                    <div class="lesson-content">
+                        <p><strong>Основное содержание:</strong> Моногибридное и дигибридное скрещивание</p>
+                        <div class="lesson-form">
+                            <strong>Форма работы:</strong>
+                            Решение стандартных задач на законы Менделя и анализирующее скрещивание
+                        </div>
+                    </div>
+                </div>
+
+                <div class="lesson-card scroll-animate">
+                    <div class="lesson-header">
+                        <div class="lesson-number">66</div>
+                        <h3 class="lesson-title">Взаимодействие аллельных и неаллельных генов. Сцепленное наследование</h3>
+                    </div>
+                    <div class="lesson-meta">
+                        <span class="lesson-hours">1 час</span>
+                        <span class="lesson-date">24.04</span>
+                    </div>
+                    <div class="lesson-content">
+                        <p><strong>Основное содержание:</strong> Неполное доминирование. Кодоминирование. Множественный аллелизм. Генетика пола</p>
+                        <div class="lesson-form">
+                            <strong>Форма работы:</strong>
+                            Решение задач на взаимодействие генов и признаков, сцепленных с полом
+                        </div>
+                    </div>
+                </div>
+
+                <div class="lesson-card scroll-animate">
+                    <div class="lesson-header">
+                        <div class="lesson-number">67</div>
+                        <h3 class="lesson-title">Изменчивость. Мутации</h3>
+                    </div>
+                    <div class="lesson-meta">
+                        <span class="lesson-hours">1 час</span>
+                        <span class="lesson-date">30.04</span>
+                    </div>
+                    <div class="lesson-content">
+                        <p><strong>Основное содержание:</strong> Модификационная, комбинативная и мутационная изменчивость. Генные, хромосомные и геномные мутации</p>
+                        <div class="lesson-form">
+                            <strong>Форма работы:</strong>
+                            Решение задач на мутации
+                        </div>
+                    </div>
+                </div>
+
+                <div class="lesson-card scroll-animate">
+                    <div class="lesson-header">
+                        <div class="lesson-number">68</div>
+                        <h3 class="lesson-title">Методы изучения наследственности и изменчивости человека. Селекция</h3>
+                    </div>
+                    <div class="lesson-meta">
+                        <span class="lesson-hours">1 час</span>
+                        <span class="lesson-date">08.05</span>
+                    </div>
+                    <div class="lesson-content">
+                        <p><strong>Основное содержание:</strong> Методы изучения генетики человека. Центры происхождения культурных растений</p>
+                        <div class="lesson-form">
+                            <strong>Форма работы:</strong>
+                            Решение задач на построение и анализ родословных
+                        </div>
+                    </div>
+                </div>
+
+                <div class="lesson-card scroll-animate">
+                    <div class="lesson-header">
+                        <div class="lesson-number">69</div>
+                        <h3 class="lesson-title">Биотехнология</h3>
+                    </div>
+                    <div class="lesson-meta">
+                        <span class="lesson-hours">1 час</span>
+                        <span class="lesson-date">15.05</span>
+                    </div>
+                    <div class="lesson-content">
+                        <p><strong>Основное содержание:</strong> Получение трансгенных организмов</p>
+                        <div class="lesson-form">
+                            <strong>Форма работы:</strong>
+                            Достижения и этические аспекты биотехнологии
+                        </div>
+                    </div>
+                </div>
+
+                <div class="lesson-card scroll-animate">
+                    <div class="lesson-header">
+                        <div class="lesson-number">70</div>
+                        <h3 class="lesson-title">Генная инженерия</h3>
+                    </div>
+                    <div class="lesson-meta">
+                        <span class="lesson-hours">1 час</span>
+                        <span class="lesson-date">22.05</span>
+                    </div>
+                    <div class="lesson-content">
+                        <p><strong>Основное содержание:</strong> Проблемы безопасности генной инженерии</p>
+                        <div class="lesson-form">
+                            <strong>Форма работы:</strong>
+                            Решение олимпиадных заданий по теме «Генная инженерия»
+                        </div>
+                    </div>
+                </div>
+
+                <div class="lesson-card scroll-animate">
+                    <div class="lesson-header">
+                        <div class="lesson-number">71</div>
+                        <h3 class="lesson-title">Итоговая проверочная работа</h3>
+                    </div>
+                    <div class="lesson-meta">
+                        <span class="lesson-hours">1 час</span>
+                        <span class="lesson-date">29.05</span>
+                    </div>
+                    <div class="lesson-content">
+                        <p><strong>Основное содержание:</strong> Комплексная работа</p>
+                        <div class="lesson-form">
+                            <strong>Форма работы:</strong>
+                            Анализ ошибок. Подведение итогов
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <p>© 2026 Ресурсный центр «Биология» | Даниленко А.А.</p>
+        <p>Email: zz999an@yandex.by | г. Хойники, школа №3</p>
+    </footer>
+
+    <script>
+        // Burger Menu Logic
+        const burger = document.getElementById('burger');
+        const mobileMenu = document.getElementById('mobileMenu');
+        const mobileLinks = document.querySelectorAll('.mobile-link');
+
+        if (burger) {
+            burger.addEventListener('click', () => {
+                burger.classList.toggle('active');
+                mobileMenu.classList.toggle('active');
+                document.body.style.overflow = mobileMenu.classList.contains('active') ? 'hidden' : '';
+            });
+
+            mobileLinks.forEach(link => {
+                link.addEventListener('click', () => {
+                    burger.classList.remove('active');
+                    mobileMenu.classList.remove('active');
+                    document.body.style.overflow = '';
+                });
+            });
+        }
+
+        // Intersection Observer for animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: "0px 0px -50px 0px"
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach((entry, index) => {
+                if (entry.isIntersecting) {
+                    setTimeout(() => {
+                        entry.target.classList.add('visible');
+                    }, index * 50);
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.scroll-animate').forEach((el) => {
+            observer.observe(el);
+        });
+    </script>
+
+</body>
+</html>

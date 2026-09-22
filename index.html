@@ -1,0 +1,713 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ресурсный центр "Биология"</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Raleway:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #0D3B2E;
+            --primary-light: #1B5E5B;
+            --accent: #C9A961;
+            --bg: #FAFAF7;
+            --text: #2B2D42;
+            --white: #FFFFFF;
+        }
+
+        html {
+            scroll-behavior: smooth;
+            scroll-padding-top: 80px;
+        }
+
+        body {
+            font-family: 'Raleway', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+        }
+
+        h1, h2, h3 {
+            font-family: 'Playfair Display', serif;
+        }
+
+        /* Navigation - Premium */
+        .nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: rgba(255, 255, 255, 0.98);
+            backdrop-filter: blur(15px);
+            padding: 1rem 2rem;
+            box-shadow: 0 2px 20px rgba(13,59,46,0.1);
+            z-index: 1000;
+            transition: all 0.3s ease;
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .nav-logo {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--primary);
+            letter-spacing: 1px;
+            z-index: 1001;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: var(--text);
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: 600;
+            transition: color 0.3s;
+            position: relative;
+        }
+
+        .nav-links a:after {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--accent);
+            transition: width 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: var(--accent);
+        }
+
+        .nav-links a:hover:after {
+            width: 100%;
+        }
+
+        /* Burger Menu - Mobile */
+        .burger {
+            display: none;
+            flex-direction: column;
+            justify-content: space-between;
+            width: 28px;
+            height: 20px;
+            cursor: pointer;
+            z-index: 1001;
+            background: none;
+            border: none;
+            padding: 0;
+        }
+
+        .burger span {
+            display: block;
+            width: 100%;
+            height: 2px;
+            background: var(--primary);
+            transition: all 0.3s ease;
+            border-radius: 2px;
+        }
+
+        .burger.active span:nth-child(1) {
+            transform: translateY(9px) rotate(45deg);
+        }
+
+        .burger.active span:nth-child(2) {
+            opacity: 0;
+            transform: translateX(-10px);
+        }
+
+        .burger.active span:nth-child(3) {
+            transform: translateY(-9px) rotate(-45deg);
+        }
+
+        /* Mobile Menu Overlay */
+        .mobile-menu {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+            z-index: 999;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            transition: opacity 0.4s ease;
+        }
+
+        .mobile-menu.active {
+            display: flex;
+            opacity: 1;
+        }
+
+        .mobile-menu ul {
+            list-style: none;
+            text-align: center;
+        }
+
+        .mobile-menu li {
+            margin: 1.5rem 0;
+            transform: translateY(20px);
+            opacity: 0;
+            transition: all 0.4s ease;
+        }
+
+        .mobile-menu.active li {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        .mobile-menu.active li:nth-child(1) { transition-delay: 0.1s; }
+        .mobile-menu.active li:nth-child(2) { transition-delay: 0.2s; }
+        .mobile-menu.active li:nth-child(3) { transition-delay: 0.3s; }
+        .mobile-menu.active li:nth-child(4) { transition-delay: 0.4s; }
+
+        .mobile-menu a {
+            color: var(--white);
+            text-decoration: none;
+            font-family: 'Playfair Display', serif;
+            font-size: 2rem;
+            font-weight: 600;
+            letter-spacing: 1px;
+            transition: color 0.3s;
+            position: relative;
+        }
+
+        .mobile-menu a:hover {
+            color: var(--accent);
+        }
+
+        .mobile-menu a:after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 0;
+            height: 2px;
+            background: var(--accent);
+            transition: width 0.3s;
+        }
+
+        .mobile-menu a:hover:after {
+            width: 60%;
+        }
+
+        /* Hero Section */
+        .hero {
+            background: 
+                linear-gradient(135deg, rgba(13,59,46,0.9), rgba(27,94,91,0.85)),
+                url('https://images.unsplash.com/photo-1518531933037-91b2f5f229cc?w=1920&q=80');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            color: var(--white);
+            padding: 6rem 2rem 2rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: 
+                radial-gradient(circle at 20% 50%, rgba(201,169,97,0.2) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(201,169,97,0.15) 0%, transparent 50%);
+            animation: float 20s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translate(0, 0); }
+            50% { transform: translate(-20px, -20px); }
+        }
+
+        .hero h1, .hero .subtitle, .hero .teacher-info, .btn-primary {
+            position: relative;
+            z-index: 2;
+        }
+
+        .hero h1 {
+            font-size: 3.5rem;
+            margin-bottom: 1rem;
+            font-weight: 700;
+            letter-spacing: 2px;
+            text-shadow: 2px 2px 8px rgba(0,0,0,0.5);
+            animation: fadeInDown 1s ease-out;
+        }
+
+        .hero .subtitle {
+            font-size: 1.3rem;
+            margin-bottom: 2rem;
+            font-weight: 300;
+            opacity: 0.95;
+            text-shadow: 1px 1px 4px rgba(0,0,0,0.4);
+        }
+
+        .hero .teacher-info {
+            font-size: 1.1rem;
+            margin-bottom: 3rem;
+            opacity: 0.9;
+        }
+
+        @keyframes fadeInDown {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .btn-primary {
+            display: inline-block;
+            padding: 1rem 2.5rem;
+            background: linear-gradient(135deg, var(--accent), #D4B570);
+            color: var(--primary);
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 1rem;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 30px rgba(201,169,97,0.4);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(201,169,97,0.6);
+        }
+
+        .scroll-indicator {
+            position: absolute;
+            bottom: 2rem;
+            left: 50%;
+            transform: translateX(-50%);
+            animation: bounce 2s infinite;
+            z-index: 2;
+            color: var(--white);
+            font-size: 2rem;
+            opacity: 0.8;
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% { transform: translateX(-50%) translateY(0); }
+            40% { transform: translateX(-50%) translateY(-10px); }
+        }
+
+        /* About Section */
+        .about {
+            padding: 5rem 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 4rem;
+            align-items: center;
+        }
+
+        .about-photo {
+            width: 300px;
+            height: 300px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 5px solid var(--accent);
+            box-shadow: 0 10px 40px rgba(13,59,46,0.3);
+        }
+
+        .about-content h2 {
+            font-size: 2.5rem;
+            color: var(--primary);
+            margin-bottom: 1.5rem;
+        }
+
+        .about-content p {
+            font-size: 1.1rem;
+            margin-bottom: 1rem;
+            line-height: 1.8;
+        }
+
+        /* Sections */
+        .sections {
+            padding: 5rem 2rem;
+            background: linear-gradient(180deg, var(--white) 0%, #f0f0eb 100%);
+        }
+
+        .sections-title {
+            text-align: center;
+            font-size: 2.8rem;
+            color: var(--primary);
+            margin-bottom: 3.5rem;
+            font-weight: 700;
+            position: relative;
+        }
+
+        .sections-title:after {
+            content: '';
+            position: absolute;
+            bottom: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 120px;
+            height: 4px;
+            background: linear-gradient(90deg, var(--accent), var(--primary));
+            border-radius: 2px;
+        }
+
+        .sections-grid {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 2.5rem;
+        }
+
+        .section-card {
+            background: linear-gradient(135deg, var(--white) 0%, #f8f8f3 100%);
+            padding: 3rem 2rem;
+            border-radius: 20px;
+            text-align: center;
+            text-decoration: none;
+            color: var(--text);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            border: 2px solid transparent;
+            box-shadow: 0 8px 30px rgba(13,59,46,0.12);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .section-card:before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 5px;
+            background: linear-gradient(90deg, var(--primary), var(--accent));
+            transform: scaleX(0);
+            transform-origin: left;
+            transition: transform 0.4s ease;
+        }
+
+        .section-card:hover:before {
+            transform: scaleX(1);
+        }
+
+        .section-card:hover {
+            transform: translateY(-12px);
+            border-color: var(--accent);
+            box-shadow: 0 20px 50px rgba(13,59,46,0.2);
+        }
+
+        .section-icon {
+            font-size: 4.5rem;
+            margin-bottom: 1.5rem;
+            display: block;
+            filter: drop-shadow(0 4px 8px rgba(0,0,0,0.1));
+            transition: transform 0.3s ease;
+        }
+
+        .section-card:hover .section-icon {
+            transform: scale(1.15) rotate(5deg);
+        }
+
+        .section-card h3 {
+            font-size: 1.6rem;
+            color: var(--primary);
+            margin-bottom: 1rem;
+            font-weight: 700;
+        }
+
+        .section-card p {
+            font-size: 1rem;
+            color: var(--text);
+            opacity: 0.85;
+            line-height: 1.6;
+        }
+
+        /* Quote Section */
+        .quote {
+            padding: 5rem 2rem;
+            background: linear-gradient(135deg, var(--primary), var(--primary-light));
+            color: var(--white);
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .quote:before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -10%;
+            width: 500px;
+            height: 500px;
+            background: radial-gradient(circle, rgba(201,169,97,0.1) 0%, transparent 70%);
+            border-radius: 50%;
+        }
+
+        .quote-text {
+            font-size: 2.2rem;
+            font-family: 'Playfair Display', serif;
+            font-style: italic;
+            max-width: 900px;
+            margin: 0 auto 1rem;
+            line-height: 1.4;
+            position: relative;
+            z-index: 1;
+        }
+
+        .quote-author {
+            font-size: 1.1rem;
+            opacity: 0.9;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Footer */
+        footer {
+            background: linear-gradient(135deg, var(--text), #1a1a2e);
+            color: var(--white);
+            text-align: center;
+            padding: 2.5rem;
+            font-size: 0.9rem;
+        }
+
+        /* Mobile Responsive */
+        @media (max-width: 768px) {
+            .nav {
+                padding: 1rem 1.5rem;
+            }
+
+            .nav-logo {
+                font-size: 1.2rem;
+            }
+
+            .nav-links {
+                display: none;
+            }
+
+            .burger {
+                display: flex;
+            }
+
+            .hero {
+                padding: 5rem 1.5rem 2rem;
+                min-height: 90vh;
+            }
+
+            .hero h1 {
+                font-size: 2.2rem;
+                letter-spacing: 1px;
+            }
+
+            .hero .subtitle {
+                font-size: 1.1rem;
+            }
+
+            .hero .teacher-info {
+                font-size: 1rem;
+            }
+
+            .btn-primary {
+                padding: 0.9rem 2rem;
+                font-size: 0.9rem;
+            }
+
+            .about {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+                padding: 3rem 1.5rem;
+                text-align: center;
+            }
+
+            .about-photo {
+                width: 220px;
+                height: 220px;
+                margin: 0 auto;
+            }
+
+            .about-content h2 {
+                font-size: 2rem;
+            }
+
+            .about-content p {
+                font-size: 1rem;
+            }
+
+            .sections {
+                padding: 4rem 1.5rem;
+            }
+
+            .sections-title {
+                font-size: 2.2rem;
+                margin-bottom: 3rem;
+            }
+
+            .sections-grid {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+
+            .section-card {
+                padding: 2.5rem 2rem;
+            }
+
+            .section-icon {
+                font-size: 4rem;
+            }
+
+            .section-card h3 {
+                font-size: 1.5rem;
+            }
+
+            .quote {
+                padding: 4rem 1.5rem;
+            }
+
+            .quote-text {
+                font-size: 1.7rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Navigation -->
+    <nav class="nav">
+        <div class="nav-container">
+            <div class="nav-logo">🌿 БИОЛОГИЯ</div>
+            <ul class="nav-links">
+                <li><a href="#about">О центре</a></li>
+                <li><a href="#sections">Разделы</a></li>
+                <li><a href="contacts.html">Контакты</a></li>
+            </ul>
+            <button class="burger" id="burger" aria-label="Меню">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Mobile Menu -->
+    <div class="mobile-menu" id="mobileMenu">
+        <ul>
+            <li><a href="#about" class="mobile-link">О центре</a></li>
+            <li><a href="#sections" class="mobile-link">Разделы</a></li>
+            <li><a href="contacts.html" class="mobile-link">Контакты</a></li>
+            <li><a href="mailto:zz999an@yandex.by" class="mobile-link">Написать</a></li>
+        </ul>
+    </div>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <h1>РЕСУРСНЫЙ ЦЕНТР<br>«БИОЛОГИЯ»</h1>
+        <p class="subtitle">Погружение в мир живой природы</p>
+        <p class="teacher-info">Даниленко Анна Александровна<br>Учитель биологии высшей категории</p>
+        <a href="#sections" class="btn-primary">Начать обучение</a>
+        <a href="#sections" class="scroll-indicator">↓</a>
+    </section>
+
+    <!-- About Section -->
+    <section class="about" id="about">
+        <img src="https://github.com/Ygud2962/biology-site/blob/main/images/teacher.jpg?raw=true" alt="Учитель" class="about-photo">
+        <div class="about-content">
+            <h2>Добро пожаловать!</h2>
+            <p>Меня зовут <strong>Даниленко Анна Александровна</strong>, и я рада приветствовать вас в нашем ресурсном центре по биологии.</p>
+            <p>Более 15 лет я помогаю ученикам открывать для себя удивительный мир живой природы. Моя цель — сделать изучение биологии интересным, понятным и эффективным для каждого ученика.</p>
+            <p>Здесь вы найдёте материалы для подготовки к урокам, олимпиадам и просто для расширения кругозора.</p>
+        </div>
+    </section>
+
+    <!-- Sections Grid -->
+    <section class="sections" id="sections">
+        <h2 class="sections-title">Разделы ресурсного центра</h2>
+        <div class="sections-grid">
+            <a href="programma.html" class="section-card">
+                <div class="section-icon">📋</div>
+                <h3>Программа занятий</h3>
+                <p>Учебная программа и тематическое планирование</p>
+            </a>
+
+            <a href="plan.html" class="section-card">
+                <div class="section-icon">📅</div>
+                <h3>План занятий</h3>
+                <p>Расписание уроков и контрольных работ</p>
+            </a>
+
+            <a href="materials.html" class="section-card">
+                <div class="section-icon">📚</div>
+                <h3>Материалы для самоподготовки</h3>
+                <p>Учебные материалы по темам и классам</p>
+            </a>
+
+            <a href="olimpiads.html" class="section-card">
+                <div class="section-icon">🏆</div>
+                <h3>Олимпиады прошлых лет</h3>
+                <p>Задания и решения олимпиад разных лет</p>
+            </a>
+        </div>
+    </section>
+
+    <!-- Quote Section -->
+    <section class="quote">
+        <p class="quote-text">«Биология — это поэзия жизни, написанная на языке ДНК»</p>
+        <p class="quote-author">— Ресурсный центр «Биология»</p>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <p>© 2026 Ресурсный центр «Биология» | Даниленко А.А.</p>
+        <p>Email: zz999an@yandex.by</p>
+    </footer>
+
+    <script>
+        // Burger Menu
+        const burger = document.getElementById('burger');
+        const mobileMenu = document.getElementById('mobileMenu');
+        const mobileLinks = document.querySelectorAll('.mobile-link');
+
+        burger.addEventListener('click', () => {
+            burger.classList.toggle('active');
+            mobileMenu.classList.toggle('active');
+            document.body.style.overflow = mobileMenu.classList.contains('active') ? 'hidden' : '';
+        });
+
+        mobileLinks.forEach(link => {
+            link.addEventListener('click', () => {
+                burger.classList.remove('active');
+                mobileMenu.classList.remove('active');
+                document.body.style.overflow = '';
+            });
+        });
+    </script>
+
+</body>
+</html>

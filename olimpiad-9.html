@@ -1,0 +1,1904 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Олимпиада по биологии: 9 класс - Интерактивный тест</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Raleway:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        :root {
+            --primary: #0D3B2E; --primary-light: #1B5E5B; --accent: #C9A961;
+            --accent-light: #D4B570; --bg: #FAFAF7; --text: #2B2D42; --white: #FFFFFF;
+            --correct: #28a745; --incorrect: #dc3545;
+        }
+        html { scroll-behavior: smooth; scroll-padding-top: 100px; }
+        body { font-family: 'Raleway', sans-serif; background: var(--bg); color: var(--text); line-height: 1.6; overflow-x: hidden; }
+        h1, h2, h3, h4 { font-family: 'Playfair Display', serif; }
+
+        .nav {
+            position: fixed; top: 0; left: 0; right: 0;
+            background: rgba(255, 255, 255, 0.98); backdrop-filter: blur(15px);
+            padding: 1rem 2rem; box-shadow: 0 2px 20px rgba(13,59,46,0.1); z-index: 1000;
+        }
+        .nav-container { max-width: 1200px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; }
+        .nav-logo { font-family: 'Playfair Display', serif; font-size: 1.3rem; font-weight: 700; color: var(--primary); text-decoration: none; letter-spacing: 1px; z-index: 1001; }
+        .nav-links { display: flex; gap: 2rem; list-style: none; }
+        .nav-links a { color: var(--text); text-decoration: none; font-size: 0.9rem; font-weight: 600; transition: color 0.3s; position: relative; }
+        .nav-links a:after { content: ''; position: absolute; bottom: -4px; left: 0; width: 0; height: 2px; background: var(--accent); transition: width 0.3s; }
+        .nav-links a:hover { color: var(--accent); }
+        .nav-links a:hover:after { width: 100%; }
+
+        .burger { display: none; flex-direction: column; justify-content: space-between; width: 28px; height: 20px; cursor: pointer; z-index: 1001; background: none; border: none; padding: 0; }
+        .burger span { display: block; width: 100%; height: 2px; background: var(--primary); transition: all 0.3s ease; border-radius: 2px; }
+        .burger.active span:nth-child(1) { transform: translateY(9px) rotate(45deg); }
+        .burger.active span:nth-child(2) { opacity: 0; transform: translateX(-10px); }
+        .burger.active span:nth-child(3) { transform: translateY(-9px) rotate(-45deg); }
+
+        .mobile-menu {
+            display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+            z-index: 999; flex-direction: column; justify-content: center; align-items: center; opacity: 0; transition: opacity 0.4s ease;
+        }
+        .mobile-menu.active { display: flex; opacity: 1; }
+        .mobile-menu ul { list-style: none; text-align: center; }
+        .mobile-menu li { margin: 1.5rem 0; transform: translateY(20px); opacity: 0; transition: all 0.4s ease; }
+        .mobile-menu.active li { transform: translateY(0); opacity: 1; }
+        .mobile-menu.active li:nth-child(1) { transition-delay: 0.1s; }
+        .mobile-menu.active li:nth-child(2) { transition-delay: 0.2s; }
+        .mobile-menu.active li:nth-child(3) { transition-delay: 0.3s; }
+        .mobile-menu.active li:nth-child(4) { transition-delay: 0.4s; }
+        .mobile-menu a { color: var(--white); text-decoration: none; font-family: 'Playfair Display', serif; font-size: 2rem; font-weight: 600; letter-spacing: 1px; transition: color 0.3s; position: relative; }
+        .mobile-menu a:hover { color: var(--accent); }
+
+        .header {
+            background: linear-gradient(-45deg, var(--primary), var(--primary-light), #0f4d45, #1a5f5a);
+            background-size: 400% 400%;
+            animation: gradientShift 15s ease infinite;
+            color: var(--white); padding: 8rem 2rem 4rem; text-align: center; position: relative; overflow: hidden;
+        }
+        @keyframes gradientShift { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
+        .header:before { content: ''; position: absolute; top: -50%; right: -10%; width: 600px; height: 600px; background: radial-gradient(circle, rgba(201,169,97,0.15) 0%, transparent 70%); border-radius: 50%; }
+        .header h1 { font-size: 2.8rem; margin-bottom: 1rem; letter-spacing: 2px; position: relative; z-index: 1; text-shadow: 2px 2px 4px rgba(0,0,0,0.3); }
+        .header p { font-size: 1.1rem; opacity: 0.95; font-weight: 300; max-width: 800px; margin: 0 auto; position: relative; z-index: 1; line-height: 1.8; }
+
+        .main-wrapper { display: flex; max-width: 1400px; margin: 0 auto; position: relative; }
+        .content { flex: 1; padding: 2rem 2rem; max-width: 1100px; }
+
+        .side-nav {
+            position: sticky; top: 100px; width: 300px; padding: 2rem 1.5rem;
+            background: var(--white); border-radius: 15px; box-shadow: 0 5px 20px rgba(13,59,46,0.1);
+            margin-left: 2rem; align-self: flex-start; max-height: calc(100vh - 120px); overflow-y: auto;
+        }
+        .side-nav h3 { font-size: 1.1rem; color: var(--primary); margin-bottom: 1.5rem; padding-bottom: 0.8rem; border-bottom: 2px solid var(--accent); }
+        .nav-section { margin-bottom: 1rem; }
+        .nav-section h4 {
+            font-size: 0.95rem; color: var(--primary); margin-bottom: 0.5rem; padding-bottom: 0.5rem;
+            border-bottom: 1px solid rgba(201,169,97,0.3); font-weight: 600; cursor: pointer;
+            display: flex; justify-content: space-between; align-items: center; transition: color 0.3s;
+        }
+        .nav-section h4:hover { color: var(--accent); }
+        .nav-section h4::after { content: '▼'; font-size: 0.7rem; transition: transform 0.3s ease; }
+        .nav-section.collapsed h4::after { transform: rotate(-90deg); }
+        .nav-section ul { list-style: none; padding-left: 0; }
+        .nav-section.collapsed ul { display: none; }
+        .nav-section li { margin-bottom: 0.3rem; }
+        .nav-section a {
+            display: block; padding: 0.5rem 1rem 0.5rem 1.5rem; color: var(--text); text-decoration: none;
+            border-radius: 6px; font-size: 0.85rem; font-weight: 500; transition: all 0.3s ease; border-left: 3px solid transparent;
+        }
+        .nav-section a:hover { background: rgba(201,169,97,0.1); border-left-color: var(--accent); color: var(--primary); transform: translateX(3px); }
+        .nav-section a.active { background: rgba(13,59,46,0.1); border-left-color: var(--primary); color: var(--primary); font-weight: 600; }
+        .nav-section a.answered-correct { border-left-color: var(--correct); }
+        .nav-section a.answered-wrong { border-left-color: var(--incorrect); }
+        .nav-section a.unanswered { border-left-color: #ff9800; }
+
+        .section-title {
+            font-size: 1.8rem; color: var(--primary); margin: 3rem 0 1rem; padding-bottom: 0.8rem;
+            border-bottom: 3px solid var(--accent); display: inline-block; position: relative; scroll-margin-top: 100px;
+        }
+        .section-title:after { content: ''; position: absolute; bottom: -3px; left: 0; width: 100px; height: 3px; background: var(--primary); }
+        .section-subtitle { font-size: 1rem; color: var(--text); opacity: 0.7; margin-bottom: 2rem; font-style: italic; display: block; }
+
+        .question-card {
+            background: var(--white); border-radius: 15px; padding: 2rem;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.06); border-left: 5px solid var(--accent);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1); margin-bottom: 1.5rem;
+            scroll-margin-top: 120px;
+        }
+        .question-card:hover { box-shadow: 0 15px 40px rgba(13,59,46,0.12); }
+        .question-card.correct { border-left-color: var(--correct); }
+        .question-card.incorrect { border-left-color: var(--incorrect); }
+        .question-card.highlight-unanswered { 
+            animation: pulse 2s ease-in-out 3;
+            border-left-color: #ff9800;
+            box-shadow: 0 0 20px rgba(255,152,0,0.4);
+        }
+        @keyframes pulse {
+            0%, 100% { box-shadow: 0 0 20px rgba(255,152,0,0.4); }
+            50% { box-shadow: 0 0 40px rgba(255,152,0,0.8); }
+        }
+
+        .question-number {
+            font-size: 0.9rem; color: var(--accent); font-weight: 600;
+            margin-bottom: 0.5rem; text-transform: uppercase; letter-spacing: 1px;
+        }
+        .question-text {
+            font-size: 1.05rem; color: var(--text); margin-bottom: 1.5rem; line-height: 1.7;
+        }
+        .question-text em { color: var(--primary-light); font-style: italic; }
+        .question-text strong { color: var(--primary); }
+
+        .image-placeholder {
+            background: linear-gradient(135deg, rgba(13,59,46,0.05), rgba(201,169,97,0.08));
+            border: 2px dashed var(--accent);
+            border-radius: 10px;
+            padding: 2rem;
+            text-align: center;
+            margin: 1rem 0;
+            color: var(--primary);
+            font-style: italic;
+        }
+
+        .options { display: flex; flex-direction: column; gap: 0.8rem; }
+        .option {
+            display: flex; align-items: center; padding: 1rem 1.5rem;
+            background: var(--bg); border: 2px solid transparent;
+            border-radius: 10px; cursor: pointer; transition: all 0.3s ease;
+        }
+        .option:hover { background: rgba(201,169,97,0.1); border-color: var(--accent); }
+        .option input[type="radio"],
+        .option input[type="checkbox"] {
+            margin-right: 1rem; width: 20px; height: 20px; cursor: pointer; accent-color: var(--primary);
+        }
+        .option label { cursor: pointer; flex: 1; font-size: 1rem; line-height: 1.5; }
+        .option.correct { background: rgba(40,167,69,0.15); border-color: var(--correct); }
+        .option.incorrect { background: rgba(220,53,69,0.15); border-color: var(--incorrect); }
+        .option.correct label::after { content: ' ✓'; color: var(--correct); font-weight: bold; font-size: 1.2rem; }
+        .option.incorrect label::after { content: ' ✗'; color: var(--incorrect); font-weight: bold; font-size: 1.2rem; }
+
+        .matching-row {
+            display: flex; align-items: center; justify-content: space-between;
+            padding: 0.8rem 1rem; background: var(--bg); border-radius: 8px;
+            margin-bottom: 0.5rem; flex-wrap: wrap; gap: 0.5rem;
+        }
+        .matching-row label { flex: 1; font-weight: 500; }
+        .matching-row select {
+            padding: 0.5rem 1rem; border: 2px solid #e0e0e0; border-radius: 8px;
+            font-size: 0.95rem; font-family: 'Raleway', sans-serif; cursor: pointer;
+            background: var(--white); transition: border-color 0.3s;
+        }
+        .matching-row select:focus { outline: none; border-color: var(--accent); }
+        .matching-row.correct { background: rgba(40,167,69,0.15); border: 2px solid var(--correct); }
+        .matching-row.incorrect { background: rgba(220,53,69,0.15); border: 2px solid var(--incorrect); }
+
+        .mode-switcher {
+            max-width: 1100px;
+            margin: 2rem auto;
+            padding: 1.5rem 2rem;
+            background: var(--white);
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.06);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+        .mode-switcher h3 { color: var(--primary); font-size: 1.2rem; margin-bottom: 0.3rem; }
+        .mode-switcher p { font-size: 0.9rem; opacity: 0.7; }
+        .mode-buttons { display: flex; gap: 0.8rem; flex-wrap: wrap; }
+        .mode-btn {
+            padding: 0.8rem 1.5rem;
+            border: 2px solid var(--accent);
+            background: var(--white);
+            color: var(--primary);
+            border-radius: 30px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: 'Raleway', sans-serif;
+        }
+        .mode-btn:hover { background: rgba(201,169,97,0.1); }
+        .mode-btn.active { background: var(--accent); color: var(--white); }
+
+        .progress-container {
+            max-width: 1100px;
+            margin: 1rem auto;
+            padding: 1rem 2rem;
+            background: var(--white);
+            border-radius: 15px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.05);
+        }
+        .progress-bar {
+            width: 100%;
+            height: 10px;
+            background: #e0e0e0;
+            border-radius: 5px;
+            overflow: hidden;
+            margin-top: 0.5rem;
+        }
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--accent), var(--primary));
+            width: 0%;
+            transition: width 0.5s ease;
+        }
+        .progress-text {
+            font-size: 0.9rem;
+            color: var(--primary);
+            font-weight: 600;
+        }
+
+        .check-btn {
+            display: block; width: 100%; padding: 1.2rem;
+            background: linear-gradient(135deg, var(--accent), var(--accent-light));
+            color: var(--primary); border: none; border-radius: 30px;
+            font-size: 1.1rem; font-weight: 600; cursor: pointer;
+            transition: all 0.3s ease; margin: 2rem 0;
+            font-family: 'Raleway', sans-serif;
+        }
+        .check-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 25px rgba(201,169,97,0.5); }
+
+        .results {
+            background: var(--white); border-radius: 15px; padding: 2rem;
+            margin: 2rem 0; box-shadow: 0 5px 20px rgba(0,0,0,0.06);
+            border-left: 5px solid var(--accent); display: none;
+        }
+        .results.show { display: block; animation: fadeIn 0.5s ease; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        .results h3 { font-size: 1.5rem; color: var(--primary); margin-bottom: 1rem; }
+        .score { font-size: 2.5rem; color: var(--accent); font-weight: 700; margin: 1rem 0; font-family: 'Playfair Display', serif; }
+        .score-details { font-size: 1rem; opacity: 0.85; line-height: 1.8; }
+        .score-details strong { color: var(--primary); }
+        .reset-btn {
+            display: inline-block; padding: 0.8rem 2rem;
+            background: var(--primary); color: var(--white);
+            border: none; border-radius: 30px; cursor: pointer;
+            font-size: 1rem; font-weight: 600; margin-top: 1rem;
+            transition: all 0.3s ease; font-family: 'Raleway', sans-serif;
+        }
+        .reset-btn:hover { background: var(--accent); color: var(--primary); }
+
+        .answers-section {
+            background: var(--white); border-radius: 15px; padding: 2rem;
+            margin: 2rem 0; box-shadow: 0 5px 20px rgba(0,0,0,0.06);
+            border-left: 5px solid var(--accent);
+            display: none;
+        }
+        .answers-section.show { display: block; }
+        .answers-section h3 {
+            font-size: 1.5rem; color: var(--primary); margin-bottom: 1.5rem;
+            padding-bottom: 0.8rem; border-bottom: 2px solid var(--accent);
+        }
+        .answer-block {
+            background: var(--bg); border-radius: 10px; padding: 1.2rem 1.5rem;
+            margin-bottom: 1rem; border-left: 4px solid var(--correct);
+        }
+        .answer-block h4 { color: var(--primary); font-size: 1.1rem; margin-bottom: 0.5rem; }
+        .answer-block p { font-size: 0.95rem; line-height: 1.6; margin-bottom: 0.3rem; }
+        .answer-block .correct-answer { color: var(--correct); font-weight: 600; }
+        .answer-block ul { list-style: none; padding-left: 0; margin-top: 0.5rem; }
+        .answer-block ul li { padding: 0.3rem 0 0.3rem 1.5rem; position: relative; }
+        .answer-block ul li:before { content: '✓'; position: absolute; left: 0; color: var(--correct); font-weight: bold; }
+
+        .legend {
+            background: var(--white); border-radius: 10px; padding: 1rem 1.5rem;
+            margin: 1.5rem 0; display: flex; gap: 1.5rem; flex-wrap: wrap;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.05);
+        }
+        .legend-item { display: flex; align-items: center; gap: 0.5rem; font-size: 0.9rem; }
+        .legend-color { width: 20px; height: 20px; border-radius: 5px; }
+        .legend-color.correct { background: var(--correct); }
+        .legend-color.incorrect { background: var(--incorrect); }
+        .legend-color.unchecked { background: #e0e0e0; }
+
+        .download-banner {
+            background: linear-gradient(135deg, rgba(201,169,97,0.15), rgba(13,59,46,0.08));
+            border: 2px solid var(--accent);
+            border-radius: 15px;
+            padding: 1.5rem 2rem;
+            margin: 2rem auto;
+            max-width: 1100px;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+        .download-banner h3 { color: var(--primary); font-size: 1.2rem; margin-bottom: 0.5rem; }
+        .download-banner .btn-download {
+            display: inline-flex; align-items: center; gap: 0.5rem;
+            padding: 0.8rem 1.5rem; background: var(--primary); color: var(--white);
+            text-decoration: none; border-radius: 30px; font-weight: 600; font-size: 0.9rem;
+            transition: all 0.3s ease;
+        }
+        .download-banner .btn-download:hover { background: var(--accent); color: var(--primary); transform: translateY(-2px); }
+
+        .scroll-top-btn {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--accent), var(--accent-light));
+            color: var(--primary);
+            border: none;
+            cursor: pointer;
+            box-shadow: 0 5px 20px rgba(201,169,97,0.4);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+            z-index: 998;
+        }
+        .scroll-top-btn.visible { opacity: 1; visibility: visible; }
+        .scroll-top-btn:hover { transform: translateY(-5px); box-shadow: 0 10px 30px rgba(201,169,97,0.6); }
+        .scroll-top-btn svg { width: 28px; height: 28px; fill: currentColor; }
+
+        footer {
+            background: linear-gradient(135deg, var(--text), #1a1a2e);
+            color: var(--white); text-align: center; padding: 2.5rem; margin-top: 5rem; font-size: 0.9rem; position: relative; overflow: hidden;
+        }
+        footer:before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; background: linear-gradient(90deg, var(--accent), var(--accent-light)); }
+
+        @media (max-width: 1200px) {
+            .side-nav { display: none; }
+            .main-wrapper { max-width: 100%; }
+            .content { max-width: 100%; padding: 3rem 1.5rem; }
+        }
+        @media (max-width: 768px) {
+            .nav { padding: 1rem 1.5rem; }
+            .nav-links { display: none; }
+            .burger { display: flex; }
+            .header { padding: 6.5rem 1.5rem 3rem; }
+            .header h1 { font-size: 2.2rem; }
+            .header p { font-size: 1rem; }
+            .content { padding: 2rem 1rem; }
+            .mode-switcher { flex-direction: column; align-items: flex-start; }
+            .mode-buttons { width: 100%; justify-content: stretch; }
+            .mode-btn { flex: 1; text-align: center; }
+            .scroll-top-btn { width: 50px; height: 50px; bottom: 20px; right: 20px; }
+        }
+    </style>
+</head>
+<body>
+
+    <nav class="nav">
+        <div class="nav-container">
+            <a href="index.html" class="nav-logo">🌿 БИОЛОГИЯ</a>
+            <ul class="nav-links">
+                <li><a href="index.html">Главная</a></li>
+                <li><a href="materials.html">← Назад к материалам</a></li>
+                <li><a href="contacts.html">Контакты</a></li>
+            </ul>
+            <button class="burger" id="burger" aria-label="Меню">
+                <span></span><span></span><span></span>
+            </button>
+        </div>
+    </nav>
+
+    <div class="mobile-menu" id="mobileMenu">
+        <ul>
+            <li><a href="index.html">Главная</a></li>
+            <li><a href="materials.html">← Назад к материалам</a></li>
+            <li><a href="contacts.html">Контакты</a></li>
+        </ul>
+    </div>
+
+    <div class="header">
+        <h1>🏆 Олимпиада по биологии: 9 класс</h1>
+        <p>Всероссийская олимпиада школьников 2025 года. Пригласительный этап. Интерактивный тест с двумя режимами проверки.</p>
+    </div>
+
+    <!-- Скачать документы (В НАЧАЛЕ) -->
+    <div class="download-banner">
+        <div>
+            <h3>📥 Скачать оригинальные документы</h3>
+            <p style="font-size: 0.9rem; opacity: 0.8; margin-top: 0.3rem;">Официальные материалы олимпиады 2025 года</p>
+        </div>
+        <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
+            <a href="files/olympiads/olympiad_9_tasks.pdf" class="btn-download" target="_blank">📄 Задания (PDF)</a>
+            <a href="files/olympiads/olympiad_9_answers.pdf" class="btn-download" target="_blank">✅ Ответы (PDF)</a>
+        </div>
+    </div>
+
+    <!-- Переключатель режимов -->
+    <div class="mode-switcher">
+        <div>
+            <h3>🎯 Выберите режим прохождения</h3>
+            <p>Режим влияет на то, когда вы увидите правильные ответы</p>
+        </div>
+        <div class="mode-buttons">
+            <button class="mode-btn active" data-mode="instant" onclick="setMode('instant')">⚡ Мгновенная проверка</button>
+            <button class="mode-btn" data-mode="end" onclick="setMode('end')">📋 Проверка в конце</button>
+        </div>
+    </div>
+
+    <!-- Прогресс-бар -->
+    <div class="progress-container">
+        <div class="progress-text">Прогресс: <span id="progressText">0 / 41</span> вопросов решено</div>
+        <div class="progress-bar">
+            <div class="progress-fill" id="progressFill"></div>
+        </div>
+    </div>
+
+    <div class="main-wrapper">
+        <div class="content">
+
+            <!-- Легенда -->
+            <div class="legend">
+                <div class="legend-item"><div class="legend-color unchecked"></div> Не проверено</div>
+                <div class="legend-item"><div class="legend-color correct"></div> Правильно</div>
+                <div class="legend-item"><div class="legend-color incorrect"></div> Неправильно</div>
+            </div>
+
+            <!-- ЧАСТЬ 1 -->
+            <h2 class="section-title" id="section-part1">📝 Часть 1: Тестовые задания</h2>
+            <span class="section-subtitle">Один правильный ответ из четырёх. Максимум 5 баллов за задание. Всего: 125 баллов.</span>
+
+            <div class="question-card" id="q1" data-answer="b" data-type="single">
+                <div class="question-number">Вопрос 1 (5 баллов)</div>
+                <div class="question-text">Какая схема лучше отражает современные представления о происхождении и родстве крупных групп?</div>
+                <div class="options">
+                    <div class="option"><input type="radio" name="q1" id="q1a" value="a"><label for="q1a">Линейная схема эволюции</label></div>
+                    <div class="option"><input type="radio" name="q1" id="q1b" value="b"><label for="q1b">Дивергентная схема с тремя доменами (Бактерии, Археи, Эукариоты)</label></div>
+                    <div class="option"><input type="radio" name="q1" id="q1c" value="c"><label for="q1c">Круговая схема развития</label></div>
+                    <div class="option"><input type="radio" name="q1" id="q1d" value="d"><label for="q1d">Лестничная схема усложнения</label></div>
+                </div>
+            </div>
+
+            <div class="question-card" id="q2" data-answer="c" data-type="single">
+                <div class="question-number">Вопрос 2 (5 баллов)</div>
+                <div class="question-text">Выберите характеристику клеток склеренхимы.</div>
+                <div class="options">
+                    <div class="option"><input type="radio" name="q2" id="q2a" value="a"><label for="q2a">Это живые клетки</label></div>
+                    <div class="option"><input type="radio" name="q2" id="q2b" value="b"><label for="q2b">Способны растягиваться</label></div>
+                    <div class="option"><input type="radio" name="q2" id="q2c" value="c"><label for="q2c">Обладают вторичной клеточной стенкой</label></div>
+                    <div class="option"><input type="radio" name="q2" id="q2d" value="d"><label for="q2d">Относятся к проводящей ткани</label></div>
+                </div>
+            </div>
+
+            <div class="question-card" id="q3" data-answer="c" data-type="single">
+                <div class="question-number">Вопрос 3 (5 баллов)</div>
+                <div class="question-text">На рисунке представлена схема строения семени двудольного растения. Выберите структуру, отсутствующую в зрелом семени чечевицы.</div>
+                <div class="image-placeholder">📷 Схема семени (см. оригинальный PDF)</div>
+                <div class="options">
+                    <div class="option"><input type="radio" name="q3" id="q3a" value="a"><label for="q3a">Семенная кожура</label></div>
+                    <div class="option"><input type="radio" name="q3" id="q3b" value="b"><label for="q3b">Зародыш</label></div>
+                    <div class="option"><input type="radio" name="q3" id="q3c" value="c"><label for="q3c">Эндосперм</label></div>
+                    <div class="option"><input type="radio" name="q3" id="q3d" value="d"><label for="q3d">Семядоли</label></div>
+                </div>
+            </div>
+
+            <div class="question-card" id="q4" data-answer="a" data-type="single">
+                <div class="question-number">Вопрос 4 (5 баллов)</div>
+                <div class="question-text">Из каких частей корня могут развиваться корневые клубни (корневые шишки) у разных растений?</div>
+                <div class="options">
+                    <div class="option"><input type="radio" name="q4" id="q4a" value="a"><label for="q4a">Из базальной, средней и апикальной</label></div>
+                    <div class="option"><input type="radio" name="q4" id="q4b" value="b"><label for="q4b">Из средней и апикальной</label></div>
+                    <div class="option"><input type="radio" name="q4" id="q4c" value="c"><label for="q4c">Из апикальной и базальной</label></div>
+                    <div class="option"><input type="radio" name="q4" id="q4d" value="d"><label for="q4d">Только из апикальной</label></div>
+                </div>
+            </div>
+
+            <div class="question-card" id="q5" data-answer="b" data-type="single">
+                <div class="question-number">Вопрос 5 (5 баллов)</div>
+                <div class="question-text">Какое утверждение об объекте, представленном на фотографии, является неверным?</div>
+                <div class="image-placeholder">📷 Фотография объекта (см. оригинальный PDF)</div>
+                <div class="options">
+                    <div class="option"><input type="radio" name="q5" id="q5a" value="a"><label for="q5a">Это гаметофит</label></div>
+                    <div class="option"><input type="radio" name="q5" id="q5b" value="b"><label for="q5b">Образуется из гаметы</label></div>
+                    <div class="option"><input type="radio" name="q5" id="q5c" value="c"><label for="q5c">Содержит гаметангии</label></div>
+                    <div class="option"><input type="radio" name="q5" id="q5d" value="d"><label for="q5d">Содержит гаплоидный набор хромосом</label></div>
+                </div>
+            </div>
+
+            <div class="question-card" id="q6" data-answer="b" data-type="single">
+                <div class="question-number">Вопрос 6 (5 баллов)</div>
+                <div class="question-text">Из какого растения получают заменитель сахара — сорбит?</div>
+                <div class="options">
+                    <div class="option"><input type="radio" name="q6" id="q6a" value="a"><label for="q6a">Сахарная свёкла</label></div>
+                    <div class="option"><input type="radio" name="q6" id="q6b" value="b"><label for="q6b">Рябина</label></div>
+                    <div class="option"><input type="radio" name="q6" id="q6c" value="c"><label for="q6c">Сахарный тростник</label></div>
+                    <div class="option"><input type="radio" name="q6" id="q6d" value="d"><label for="q6d">Стевия</label></div>
+                </div>
+            </div>
+
+            <div class="question-card" id="q7" data-answer="b" data-type="single">
+                <div class="question-number">Вопрос 7 (5 баллов)</div>
+                <div class="question-text">В какой среде, вероятнее всего, находятся клетки кожицы красного лука, представленные на фотографии?</div>
+                <div class="image-placeholder">📷 Микрофотография клеток (см. оригинальный PDF)</div>
+                <div class="options">
+                    <div class="option"><input type="radio" name="q7" id="q7a" value="a"><label for="q7a">В гипотонической</label></div>
+                    <div class="option"><input type="radio" name="q7" id="q7b" value="b"><label for="q7b">В гипертонической</label></div>
+                    <div class="option"><input type="radio" name="q7" id="q7c" value="c"><label for="q7c">В изотонической</label></div>
+                    <div class="option"><input type="radio" name="q7" id="q7d" value="d"><label for="q7d">В гипертермической</label></div>
+                </div>
+            </div>
+
+            <div class="question-card" id="q8" data-answer="b" data-type="single">
+                <div class="question-number">Вопрос 8 (5 баллов)</div>
+                <div class="question-text">Растения из семейства бобовых вступают в симбиоз с клубеньковыми бактериями. Выберите верное утверждение об этом типе взаимоотношений.</div>
+                <div class="options">
+                    <div class="option"><input type="radio" name="q8" id="q8a" value="a"><label for="q8a">Бактерии поглощают из атмосферы молекулярный азот и включают его в белки, которые затем поступают в растения</label></div>
+                    <div class="option"><input type="radio" name="q8" id="q8b" value="b"><label for="q8b">Растения обеспечивают бактерий органическими соединениями, служащими источником энергии для азотфиксации и других реакций метаболизма</label></div>
+                    <div class="option"><input type="radio" name="q8" id="q8c" value="c"><label for="q8c">Кислород, выделяемый растениями в процессе фотосинтеза, растворяется во флоэмном соке и через корни поступает к бактериям</label></div>
+                    <div class="option"><input type="radio" name="q8" id="q8d" value="d"><label for="q8d">Клубеньковые бактерии по типу питания являются хемоавтотрофами и поставляют растениям продукты хемосинтеза</label></div>
+                </div>
+            </div>
+
+            <div class="question-card" id="q9" data-answer="c" data-type="single">
+                <div class="question-number">Вопрос 9 (5 баллов)</div>
+                <div class="question-text">Выберите верное утверждение об изображённом моллюске.</div>
+                <div class="image-placeholder">📷 Фотография моллюска (см. оригинальный PDF)</div>
+                <div class="options">
+                    <div class="option"><input type="radio" name="q9" id="q9a" value="a"><label for="q9a">Имеет нервную систему лестничного типа</label></div>
+                    <div class="option"><input type="radio" name="q9" id="q9b" value="b"><label for="q9b">Дышит при помощи жабр</label></div>
+                    <div class="option"><input type="radio" name="q9" id="q9c" value="c"><label for="q9c">Является промежуточным хозяином партеногенетической стадии трематод (сосальщиков)</label></div>
+                    <div class="option"><input type="radio" name="q9" id="q9d" value="d"><label for="q9d">Является окончательным хозяином круглого червя ришты</label></div>
+                </div>
+            </div>
+
+            <div class="question-card" id="q10" data-answer="d" data-type="single">
+                <div class="question-number">Вопрос 10 (5 баллов)</div>
+                <div class="question-text">Грудной отдел насекомых несёт три пары конечностей и обычно две пары крыльев. Какие крылья характерны для большинства представителей отряда насекомых, к которому относится обладатель изображённой конечности?</div>
+                <div class="image-placeholder">📷 Фотография конечности (см. оригинальный PDF)</div>
+                <div class="options">
+                    <div class="option"><input type="radio" name="q10" id="q10a" value="a"><label for="q10a">Передние крылья наполовину кожистые, задняя часть мягкая, спрятана под передней частью</label></div>
+                    <div class="option"><input type="radio" name="q10" id="q10b" value="b"><label for="q10b">Передние крылья твёрдые, лишены жилкования; задние — перепончатые</label></div>
+                    <div class="option"><input type="radio" name="q10" id="q10c" value="c"><label for="q10c">Крылья прозрачные, задние меньше передних, в покое складываются горизонтально на спине</label></div>
+                    <div class="option"><input type="radio" name="q10" id="q10d" value="d"><label for="q10d">Передние крылья кожистые; задние — веерообразные, с густой сетью жилок, предназначены для полёта</label></div>
+                </div>
+            </div>
+
+            <div class="question-card" id="q11" data-answer="b" data-type="single">
+                <div class="question-number">Вопрос 11 (5 баллов)</div>
+                <div class="question-text">На рисунке изображён фрагмент древесины, повреждённый моллюском, который наносит ощутимый вред деревянным конструкциям, в том числе корпусам судов и портовым сооружениям. Этот моллюск протачивает ходы с помощью...</div>
+                <div class="options">
+                    <div class="option"><input type="radio" name="q11" id="q11a" value="a"><label for="q11a">радулы</label></div>
+                    <div class="option"><input type="radio" name="q11" id="q11b" value="b"><label for="q11b">двустворчатой раковины</label></div>
+                    <div class="option"><input type="radio" name="q11" id="q11c" value="c"><label for="q11c">гладиуса</label></div>
+                    <div class="option"><input type="radio" name="q11" id="q11d" value="d"><label for="q11d">спиральной раковины</label></div>
+                </div>
+            </div>
+
+            <div class="question-card" id="q12" data-answer="c" data-type="single">
+                <div class="question-number">Вопрос 12 (5 баллов)</div>
+                <div class="question-text">У какого животного и личинки, и взрослые особи имеют хорду?</div>
+                <div class="options">
+                    <div class="option"><input type="radio" name="q12" id="q12a" value="a"><label for="q12a">У голотурии</label></div>
+                    <div class="option"><input type="radio" name="q12" id="q12b" value="b"><label for="q12b">У гребневика</label></div>
+                    <div class="option"><input type="radio" name="q12" id="q12c" value="c"><label for="q12c">У миноги</label></div>
+                    <div class="option"><input type="radio" name="q12" id="q12d" value="d"><label for="q12d">У асцидии</label></div>
+                </div>
+            </div>
+
+            <div class="question-card" id="q13" data-answer="c" data-type="single">
+                <div class="question-number">Вопрос 13 (5 баллов)</div>
+                <div class="question-text">У какого из представленных на рисунках животных артериальная кровь от органов дыхания НЕ проходит через сердце?</div>
+                <div class="image-placeholder">📷 Рисунки животных (см. оригинальный PDF)</div>
+                <div class="options">
+                    <div class="option"><input type="radio" name="q13" id="q13a" value="a"><label for="q13a">У лягушки</label></div>
+                    <div class="option"><input type="radio" name="q13" id="q13b" value="b"><label for="q13b">У птицы</label></div>
+                    <div class="option"><input type="radio" name="q13" id="q13c" value="c"><label for="q13c">У рыбы</label></div>
+                    <div class="option"><input type="radio" name="q13" id="q13d" value="d"><label for="q13d">У млекопитающего</label></div>
+                </div>
+            </div>
+
+            <div class="question-card" id="q14" data-answer="b" data-type="single">
+                <div class="question-number">Вопрос 14 (5 баллов)</div>
+                <div class="question-text">На рисунке представлена реконструкция тиктаалика, ископаемой рыбы из позднего девона. Тиктаалик рассматривают как переходную форму между рыбами и наземными позвоночными. Какое из современных животных, вероятно, является наиболее близким родственником тиктаалика?</div>
+                <div class="options">
+                    <div class="option"><input type="radio" name="q14" id="q14a" value="a"><label for="q14a">Большой протоптер (Двоякодышащие рыбы)</label></div>
+                    <div class="option"><input type="radio" name="q14" id="q14b" value="b"><label for="q14b">Латимерия коморская (Целакантообразные рыбы)</label></div>
+                    <div class="option"><input type="radio" name="q14" id="q14c" value="c"><label for="q14c">Миксина атлантическая (Бесчелюстные)</label></div>
+                    <div class="option"><input type="radio" name="q14" id="q14d" value="d"><label for="q14d">Химера европейская (Хрящевые рыбы)</label></div>
+                </div>
+            </div>
+
+            <div class="question-card" id="q15" data-answer="d" data-type="single">
+                <div class="question-number">Вопрос 15 (5 баллов)</div>
+                <div class="question-text">Многие ящерицы, обитающие в Кавказских горах, размножаются партеногенезом. Чем можно объяснить эту особенность?</div>
+                <div class="options">
+                    <div class="option"><input type="radio" name="q15" id="q15a" value="a"><label for="q15a">Выраженный половой диморфизм привёл к почти полному вымиранию самцов в популяции</label></div>
+                    <div class="option"><input type="radio" name="q15" id="q15b" value="b"><label for="q15b">Данная особенность может быть преадаптацией к эусоциальности, как у голых землекопов</label></div>
+                    <div class="option"><input type="radio" name="q15" id="q15c" value="c"><label for="q15c">Данная особенность является примером эволюционного регресса</label></div>
+                    <div class="option"><input type="radio" name="q15" id="q15d" value="d"><label for="q15d">Партеногенез — это адаптация к низкой плотности популяции</label></div>
+                </div>
+            </div>
+
+            <div class="question-card" id="q16" data-answer="b" data-type="single">
+                <div class="question-number">Вопрос 16 (5 баллов)</div>
+                <div class="question-text">Каким заболеванием можно заразиться, выпив сырую воду?</div>
+                <div class="options">
+                    <div class="option"><input type="radio" name="q16" id="q16a" value="a"><label for="q16a">Энцефалитом</label></div>
+                    <div class="option"><input type="radio" name="q16" id="q16b" value="b"><label for="q16b">Холерой</label></div>
+                    <div class="option"><input type="radio" name="q16" id="q16c" value="c"><label for="q16c">Гриппом</label></div>
+                    <div class="option"><input type="radio" name="q16" id="q16d" value="d"><label for="q16d">Бешенством</label></div>
+                </div>
+            </div>
+
+            <div class="question-card" id="q17" data-answer="b" data-type="single">
+                <div class="question-number">Вопрос 17 (5 баллов)</div>
+                <div class="question-text">В жару усиливается потоотделение. Что при этом происходит в нефронах почек?</div>
+                <div class="options">
+                    <div class="option"><input type="radio" name="q17" id="q17a" value="a"><label for="q17a">Снижается реабсорбция</label></div>
+                    <div class="option"><input type="radio" name="q17" id="q17b" value="b"><label for="q17b">Увеличивается реабсорбция</label></div>
+                    <div class="option"><input type="radio" name="q17" id="q17c" value="c"><label for="q17c">Снижается секреция</label></div>
+                    <div class="option"><input type="radio" name="q17" id="q17d" value="d"><label for="q17d">Увеличивается секреция</label></div>
+                </div>
+            </div>
+
+            <div class="question-card" id="q18" data-answer="c" data-type="single">
+                <div class="question-number">Вопрос 18 (5 баллов)</div>
+                <div class="question-text">Какая выделенная цветом кость НЕ является трубчатой?</div>
+                <div class="image-placeholder">📷 Изображение скелета (см. оригинальный PDF)</div>
+                <div class="options">
+                    <div class="option"><input type="radio" name="q18" id="q18a" value="a"><label for="q18a">Плечевая</label></div>
+                    <div class="option"><input type="radio" name="q18" id="q18b" value="b"><label for="q18b">Бедренная</label></div>
+                    <div class="option"><input type="radio" name="q18" id="q18c" value="c"><label for="q18c">Лопатка</label></div>
+                    <div class="option"><input type="radio" name="q18" id="q18d" value="d"><label for="q18d">Большеберцовая</label></div>
+                </div>
+            </div>
+
+            <div class="question-card" id="q19" data-answer="d" data-type="single">
+                <div class="question-number">Вопрос 19 (5 баллов)</div>
+                <div class="question-text">Какой путь проходит артериальная кровь в сердце человека? Выберите правильную последовательность цифр, обозначающих отделы сердца и сосуды, связанные с ним.</div>
+                <div class="image-placeholder">📷 Схема сердца (см. оригинальный PDF)</div>
+                <div class="options">
+                    <div class="option"><input type="radio" name="q19" id="q19a" value="a"><label for="q19a">6 — 4 — 3 — 9</label></div>
+                    <div class="option"><input type="radio" name="q19" id="q19b" value="b"><label for="q19b">7 — 1 — 2 — 5</label></div>
+                    <div class="option"><input type="radio" name="q19" id="q19c" value="c"><label for="q19c">8 — 2 — 1 — 7</label></div>
+                    <div class="option"><input type="radio" name="q19" id="q19d" value="d"><label for="q19d">9 — 3 — 4 — 6</label></div>
+                </div>
+            </div>
+
+            <div class="question-card" id="q20" data-answer="c" data-type="single">
+                <div class="question-number">Вопрос 20 (5 баллов)</div>
+                <div class="question-text">На рисунке изображён эмбрион млекопитающего с провизорными (внезародышевыми) органами. Выберите орган, который встречается также и у анамний, а у млекопитающих в ходе эмбрионального развития постепенно редуцируется.</div>
+                <div class="image-placeholder">📷 Схема эмбриона (см. оригинальный PDF)</div>
+                <div class="options">
+                    <div class="option"><input type="radio" name="q20" id="q20a" value="a"><label for="q20a">Амнион</label></div>
+                    <div class="option"><input type="radio" name="q20" id="q20b" value="b"><label for="q20b">Хорион</label></div>
+                    <div class="option"><input type="radio" name="q20" id="q20c" value="c"><label for="q20c">Желточный мешок</label></div>
+                    <div class="option"><input type="radio" name="q20" id="q20d" value="d"><label for="q20d">Аллантоис</label></div>
+                </div>
+            </div>
+
+            <div class="question-card" id="q21" data-answer="b" data-type="single">
+                <div class="question-number">Вопрос 21 (5 баллов)</div>
+                <div class="question-text">Во время интенсивной физической работы в мышцах накапливается молочная кислота. В период покоя она поступает в кровоток и переносится в печень. Что происходит с молочной кислотой в клетках печени?</div>
+                <div class="options">
+                    <div class="option"><input type="radio" name="q21" id="q21a" value="a"><label for="q21a">Превращается в молочный сахар</label></div>
+                    <div class="option"><input type="radio" name="q21" id="q21b" value="b"><label for="q21b">Превращается в пировиноградную кислоту, а затем в глюкозу</label></div>
+                    <div class="option"><input type="radio" name="q21" id="q21c" value="c"><label for="q21c">Распадается на воду и углекислый газ</label></div>
+                    <div class="option"><input type="radio" name="q21" id="q21d" value="d"><label for="q21d">Полимеризуется, образуя крахмал</label></div>
+                </div>
+            </div>
+
+            <div class="question-card" id="q22" data-answer="d" data-type="single">
+                <div class="question-number">Вопрос 22 (5 баллов)</div>
+                <div class="question-text">Охарактеризуйте объект, представленный на фотографии:</div>
+                <div class="image-placeholder">📷 Микрофотография объекта (см. оригинальный PDF)</div>
+                <div class="options">
+                    <div class="option"><input type="radio" name="q22" id="q22a" value="a"><label for="q22a">Является бактериальной клеткой</label></div>
+                    <div class="option"><input type="radio" name="q22" id="q22b" value="b"><label for="q22b">Относится к археям</label></div>
+                    <div class="option"><input type="radio" name="q22" id="q22c" value="c"><label for="q22c">Представляет собой цисту одноклеточного эукариотического организма</label></div>
+                    <div class="option"><input type="radio" name="q22" id="q22d" value="d"><label for="q22d">Не имеет клеточного строения</label></div>
+                </div>
+            </div>
+
+            <div class="question-card" id="q23" data-answer="b" data-type="single">
+                <div class="question-number">Вопрос 23 (5 баллов)</div>
+                <div class="question-text">Какой из белков НЕ является ферментом?</div>
+                <div class="options">
+                    <div class="option"><input type="radio" name="q23" id="q23a" value="a"><label for="q23a">Трипсин</label></div>
+                    <div class="option"><input type="radio" name="q23" id="q23b" value="b"><label for="q23b">Фибрин</label></div>
+                    <div class="option"><input type="radio" name="q23" id="q23c" value="c"><label for="q23c">Птиалин</label></div>
+                    <div class="option"><input type="radio" name="q23" id="q23d" value="d"><label for="q23d">Пепсин</label></div>
+                </div>
+            </div>
+
+            <div class="question-card" id="q24" data-answer="c" data-type="single">
+                <div class="question-number">Вопрос 24 (5 баллов)</div>
+                <div class="question-text">Три из перечисленных ниже органелл эукариотической клетки схожи по строению. Какая органелла отличается от остальных?</div>
+                <div class="options">
+                    <div class="option"><input type="radio" name="q24" id="q24a" value="a"><label for="q24a">Лизосома</label></div>
+                    <div class="option"><input type="radio" name="q24" id="q24b" value="b"><label for="q24b">Пероксисома</label></div>
+                    <div class="option"><input type="radio" name="q24" id="q24c" value="c"><label for="q24c">Рибосома</label></div>
+                    <div class="option"><input type="radio" name="q24" id="q24d" value="d"><label for="q24d">Фагосома</label></div>
+                </div>
+            </div>
+
+            <div class="question-card" id="q25" data-answer="d" data-type="single">
+                <div class="question-number">Вопрос 25 (5 баллов)</div>
+                <div class="question-text">Если в культуру инфузорий добавить каплю молока, через некоторое время можно наблюдать резкое увеличение их численности. Почему?</div>
+                <div class="options">
+                    <div class="option"><input type="radio" name="q25" id="q25a" value="a"><label for="q25a">Инфузории питаются молоком</label></div>
+                    <div class="option"><input type="radio" name="q25" id="q25b" value="b"><label for="q25b">Молоко стимулирует деление у инфузорий</label></div>
+                    <div class="option"><input type="radio" name="q25" id="q25c" value="c"><label for="q25c">Инфузории получают необходимые для роста витамины</label></div>
+                    <div class="option"><input type="radio" name="q25" id="q25d" value="d"><label for="q25d">В молоке развиваются бактерии, которыми питаются инфузории</label></div>
+                </div>
+            </div>
+
+            <!-- ЧАСТЬ 2 -->
+            <h2 class="section-title" id="section-part2">📋 Часть 2: Множественный выбор</h2>
+            <span class="section-subtitle">Один или несколько верных ответов. За каждый правильно выбранный и правильно невыбранный ответ — 2 балла. Максимум 10 баллов за задание. Всего: 100 баллов.</span>
+
+            <div class="question-card" id="q26" data-answer="a,b,c" data-type="multiple">
+                <div class="question-number">Вопрос 26 (10 баллов)</div>
+                <div class="question-text">У каких водорослей в жизненном цикле преобладает гаплоидная стадия (диплоидна только одна клетка)?</div>
+                <div class="options">
+                    <div class="option"><input type="checkbox" name="q26" id="q26a" value="a"><label for="q26a">У зелёной водоросли хламидомонады</label></div>
+                    <div class="option"><input type="checkbox" name="q26" id="q26b" value="b"><label for="q26b">У зелёной водоросли улотрикса</label></div>
+                    <div class="option"><input type="checkbox" name="q26" id="q26c" value="c"><label for="q26c">У харовой водоросли спирогиры</label></div>
+                    <div class="option"><input type="checkbox" name="q26" id="q26d" value="d"><label for="q26d">У бурой водоросли ламинарии</label></div>
+                    <div class="option"><input type="checkbox" name="q26" id="q26e" value="e"><label for="q26e">У бурой водоросли фукуса</label></div>
+                </div>
+            </div>
+
+            <div class="question-card" id="q27" data-answer="a,c" data-type="multiple">
+                <div class="question-number">Вопрос 27 (10 баллов)</div>
+                <div class="question-text">В ходе работы над проектом школьники изучали влияние углекислого газа на морфологию листа гречихи. Одну группу растений они поместили в теплицу с постоянной концентрацией CO2, соответствующей атмосферному уровню (0.03% по массе), а другую группу — в теплицу с концентрацией CO2, равной 0.3%. Спустя некоторое время роста гречихи юные исследователи приготовили препараты эпидермиса листьев растений из разных групп. Рассмотрите изображения этих препаратов и выберите верные утверждения.</div>
+                <div class="image-placeholder">📷 Микрофотографии эпидермиса (см. оригинальный PDF)</div>
+                <div class="options">
+                    <div class="option"><input type="checkbox" name="q27" id="q27a" value="a"><label for="q27a">Среди основных клеток эпидермы видны устьица, состоящие из замыкающих клеток и устьичной щели между ними</label></div>
+                    <div class="option"><input type="checkbox" name="q27" id="q27b" value="b"><label for="q27b">Через устьичную щель поступает углекислый газ, необходимый для дыхания растений</label></div>
+                    <div class="option"><input type="checkbox" name="q27" id="q27c" value="c"><label for="q27c">Растение 2 было выращено в теплице с повышенной концентрацией углекислого газа (0.3%)</label></div>
+                    <div class="option"><input type="checkbox" name="q27" id="q27d" value="d"><label for="q27d">Чем больше концентрация углекислого газа в теплице, тем больше устьиц в эпидерме</label></div>
+                    <div class="option"><input type="checkbox" name="q27" id="q27e" value="e"><label for="q27e">Недостаток кислорода в теплице приводит к уменьшению плотности устьиц</label></div>
+                </div>
+            </div>
+
+            <div class="question-card" id="q28" data-answer="a,b,e" data-type="multiple">
+                <div class="question-number">Вопрос 28 (10 баллов)</div>
+                <div class="question-text">Какие структуры можно найти в пыльцевом зерне цветкового растения?</div>
+                <div class="options">
+                    <div class="option"><input type="checkbox" name="q28" id="q28a" value="a"><label for="q28a">Вегетативную клетку</label></div>
+                    <div class="option"><input type="checkbox" name="q28" id="q28b" value="b"><label for="q28b">Генеративную клетку</label></div>
+                    <div class="option"><input type="checkbox" name="q28" id="q28c" value="c"><label for="q28c">Центральную клетку</label></div>
+                    <div class="option"><input type="checkbox" name="q28" id="q28d" value="d"><label for="q28d">Пыльцевую трубку</label></div>
+                    <div class="option"><input type="checkbox" name="q28" id="q28e" value="e"><label for="q28e">Экзину</label></div>
+                </div>
+            </div>
+
+            <div class="question-card" id="q29" data-answer="a,b,e" data-type="multiple">
+                <div class="question-number">Вопрос 29 (10 баллов)</div>
+                <div class="question-text">Какие из этих животных развиваются с метаморфозом?</div>
+                <div class="image-placeholder">📷 Фотографии животных (см. оригинальный PDF)</div>
+                <div class="options">
+                    <div class="option"><input type="checkbox" name="q29" id="q29a" value="a"><label for="q29a">Лягушка</label></div>
+                    <div class="option"><input type="checkbox" name="q29" id="q29b" value="b"><label for="q29b">Бабочка</label></div>
+                    <div class="option"><input type="checkbox" name="q29" id="q29c" value="c"><label for="q29c">Собака</label></div>
+                    <div class="option"><input type="checkbox" name="q29" id="q29d" value="d"><label for="q29d">Ящерица</label></div>
+                    <div class="option"><input type="checkbox" name="q29" id="q29e" value="e"><label for="q29e">Комар</label></div>
+                </div>
+            </div>
+
+            <div class="question-card" id="q30" data-answer="a,b,c,d,e" data-type="multiple">
+                <div class="question-number">Вопрос 30 (10 баллов)</div>
+                <div class="question-text">На конце брюшка подёнок можно увидеть парные хвостовые нити. Какую функцию могут выполнять подобные придатки у разных насекомых?</div>
+                <div class="options">
+                    <div class="option"><input type="checkbox" name="q30" id="q30a" value="a"><label for="q30a">Служить органами осязания</label></div>
+                    <div class="option"><input type="checkbox" name="q30" id="q30b" value="b"><label for="q30b">Служить сенсорными органами, воспринимающими инфразвук</label></div>
+                    <div class="option"><input type="checkbox" name="q30" id="q30c" value="c"><label for="q30c">Помогать планировать в воздухе</label></div>
+                    <div class="option"><input type="checkbox" name="q30" id="q30d" value="d"><label for="q30d">Использоваться для защиты</label></div>
+                    <div class="option"><input type="checkbox" name="q30" id="q30e" value="e"><label for="q30e">Использоваться для захвата добычи</label></div>
+                </div>
+            </div>
+
+            <div class="question-card" id="q31" data-answer="a,b,c" data-type="multiple">
+                <div class="question-number">Вопрос 31 (10 баллов)</div>
+                <div class="question-text">Какие из этих птиц относятся к бескилевым (Palaeognathae)?</div>
+                <div class="image-placeholder">📷 Фотографии птиц (см. оригинальный PDF)</div>
+                <div class="options">
+                    <div class="option"><input type="checkbox" name="q31" id="q31a" value="a"><label for="q31a">Страус</label></div>
+                    <div class="option"><input type="checkbox" name="q31" id="q31b" value="b"><label for="q31b">Эму</label></div>
+                    <div class="option"><input type="checkbox" name="q31" id="q31c" value="c"><label for="q31c">Киви</label></div>
+                    <div class="option"><input type="checkbox" name="q31" id="q31d" value="d"><label for="q31d">Пингвин</label></div>
+                    <div class="option"><input type="checkbox" name="q31" id="q31e" value="e"><label for="q31e">Сокол</label></div>
+                </div>
+            </div>
+
+            <div class="question-card" id="q32" data-answer="b,c,e" data-type="multiple">
+                <div class="question-number">Вопрос 32 (10 баллов)</div>
+                <div class="question-text">Эта ткань хорошо развита у новорождённых и животных, впадающих в спячку. Выберите верные характеристики этой ткани.</div>
+                <div class="options">
+                    <div class="option"><input type="checkbox" name="q32" id="q32a" value="a"><label for="q32a">Эта ткань выполняет барьерную функцию</label></div>
+                    <div class="option"><input type="checkbox" name="q32" id="q32b" value="b"><label for="q32b">В этой ткани много кровеносных сосудов</label></div>
+                    <div class="option"><input type="checkbox" name="q32" id="q32c" value="c"><label for="q32c">В этой ткани много липидов</label></div>
+                    <div class="option"><input type="checkbox" name="q32" id="q32d" value="d"><label for="q32d">В этой ткани активно синтезируются белки</label></div>
+                    <div class="option"><input type="checkbox" name="q32" id="q32e" value="e"><label for="q32e">В этой ткани много митохондрий</label></div>
+                </div>
+            </div>
+
+            <div class="question-card" id="q33" data-answer="b,d" data-type="multiple">
+                <div class="question-number">Вопрос 33 (10 баллов)</div>
+                <div class="question-text">Какие болезни НЕ относятся к инфекционным?</div>
+                <div class="options">
+                    <div class="option"><input type="checkbox" name="q33" id="q33a" value="a"><label for="q33a">Синдром приобретённого иммунного дефицита</label></div>
+                    <div class="option"><input type="checkbox" name="q33" id="q33b" value="b"><label for="q33b">Синдром Дауна</label></div>
+                    <div class="option"><input type="checkbox" name="q33" id="q33c" value="c"><label for="q33c">Болезнь Лайма</label></div>
+                    <div class="option"><input type="checkbox" name="q33" id="q33d" value="d"><label for="q33d">Кессонная болезнь</label></div>
+                    <div class="option"><input type="checkbox" name="q33" id="q33e" value="e"><label for="q33e">Сонная болезнь</label></div>
+                </div>
+            </div>
+
+            <div class="question-card" id="q34" data-answer="b,c,e" data-type="multiple">
+                <div class="question-number">Вопрос 34 (10 баллов)</div>
+                <div class="question-text">ВИЧ (вирус иммунодефицита человека) — это ретровирус, который поражает иммунную систему, постепенно разрушая её способность бороться с инфекциями и болезнями. Выберите утверждения, верно характеризующие этот вирус.</div>
+                <div class="options">
+                    <div class="option"><input type="checkbox" name="q34" id="q34a" value="a"><label for="q34a">Содержит ДНК</label></div>
+                    <div class="option"><input type="checkbox" name="q34" id="q34b" value="b"><label for="q34b">Содержит некоторые ферменты</label></div>
+                    <div class="option"><input type="checkbox" name="q34" id="q34c" value="c"><label for="q34c">Имеет липопротеидную оболочку</label></div>
+                    <div class="option"><input type="checkbox" name="q34" id="q34d" value="d"><label for="q34d">Содержит рибосомы для синтеза обратной транскриптазы</label></div>
+                    <div class="option"><input type="checkbox" name="q34" id="q34e" value="e"><label for="q34e">Поражает преимущественно Т-хелперы (лимфоциты, регулирующие работу других клеток иммунной системы)</label></div>
+                </div>
+            </div>
+
+            <div class="question-card" id="q35" data-answer="b,d,e" data-type="multiple">
+                <div class="question-number">Вопрос 35 (10 баллов)</div>
+                <div class="question-text">Выберите клетки организма, геном которых может существенно отличаться от генома гепатоцита.</div>
+                <div class="options">
+                    <div class="option"><input type="checkbox" name="q35" id="q35a" value="a"><label for="q35a">Нервная клетка</label></div>
+                    <div class="option"><input type="checkbox" name="q35" id="q35b" value="b"><label for="q35b">Зрелый Т-лимфоцит</label></div>
+                    <div class="option"><input type="checkbox" name="q35" id="q35c" value="c"><label for="q35c">Оогоний (предшественник женских половых клеток)</label></div>
+                    <div class="option"><input type="checkbox" name="q35" id="q35d" value="d"><label for="q35d">Сперматозоид</label></div>
+                    <div class="option"><input type="checkbox" name="q35" id="q35e" value="e"><label for="q35e">Полярное (редукционное) тельце</label></div>
+                </div>
+            </div>
+
+            <!-- ЧАСТЬ 3 -->
+            <h2 class="section-title" id="section-part3">🔄 Часть 3: Задания на соответствие</h2>
+            <span class="section-subtitle">Установите соответствие. За каждое верное соотнесение — определённый балл.</span>
+
+            <div class="question-card" id="q36" data-answer="1:б,2:б,3:а,4:а,5:б,6:а" data-type="matching">
+                <div class="question-number">Вопрос 36 (18 баллов)</div>
+                <div class="question-text">На рисунках представлены разновидности основных тканей растений. Установите соответствие между разновидностями тканей и их характеристиками.</div>
+                <div class="image-placeholder">📷 Рисунки тканей А и Б (см. оригинальный PDF)</div>
+                <div class="matching-row" data-correct="б">
+                    <label>1. Клетки тонкостенные, заполнены зёрнами крахмала, каплями жира → </label>
+                    <select name="q36_1">
+                        <option value="">Выберите...</option>
+                        <option value="а">Ткань А</option>
+                        <option value="б">Ткань Б</option>
+                    </select>
+                </div>
+                <div class="matching-row" data-correct="б">
+                    <label>2. Располагается в клубнях, плодах, семенах → </label>
+                    <select name="q36_2">
+                        <option value="">Выберите...</option>
+                        <option value="а">Ткань А</option>
+                        <option value="б">Ткань Б</option>
+                    </select>
+                </div>
+                <div class="matching-row" data-correct="а">
+                    <label>3. Расположена в листьях → </label>
+                    <select name="q36_3">
+                        <option value="">Выберите...</option>
+                        <option value="а">Ткань А</option>
+                        <option value="б">Ткань Б</option>
+                    </select>
+                </div>
+                <div class="matching-row" data-correct="а">
+                    <label>4. Столбчатая и губчатая ткань с большим количеством хлоропластов → </label>
+                    <select name="q36_4">
+                        <option value="">Выберите...</option>
+                        <option value="а">Ткань А</option>
+                        <option value="б">Ткань Б</option>
+                    </select>
+                </div>
+                <div class="matching-row" data-correct="б">
+                    <label>5. Функция – отложение запасных питательных веществ → </label>
+                    <select name="q36_5">
+                        <option value="">Выберите...</option>
+                        <option value="а">Ткань А</option>
+                        <option value="б">Ткань Б</option>
+                    </select>
+                </div>
+                <div class="matching-row" data-correct="а">
+                    <label>6. Функция – фотосинтез → </label>
+                    <select name="q36_6">
+                        <option value="">Выберите...</option>
+                        <option value="а">Ткань А</option>
+                        <option value="б">Ткань Б</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="question-card" id="q37" data-answer="1:цапля,2:утка,3:дятел,4:хищник,5:курица,6:воробей" data-type="matching">
+                <div class="question-number">Вопрос 37 (12 баллов)</div>
+                <div class="question-text">У птиц всего две ноги. Ногами птицы хватают, гребут, защищаются и нападают, держатся за ветку. Рассмотрите изображения ног и определите, каким птицам они принадлежат.</div>
+                <div class="image-placeholder">📷 6 изображений лап птиц А-Е (см. оригинальный PDF)</div>
+                <div class="matching-row" data-correct="цапля">
+                    <label>1. Изображение А (длинные тонкие пальцы) → </label>
+                    <select name="q37_1">
+                        <option value="">Выберите...</option>
+                        <option value="цапля">Цапля</option>
+                        <option value="утка">Утка</option>
+                        <option value="дятел">Дятел</option>
+                        <option value="хищник">Хищная птица</option>
+                        <option value="курица">Курица</option>
+                        <option value="воробей">Воробей</option>
+                    </select>
+                </div>
+                <div class="matching-row" data-correct="утка">
+                    <label>2. Изображение Б (перепончатые лапы) → </label>
+                    <select name="q37_2">
+                        <option value="">Выберите...</option>
+                        <option value="цапля">Цапля</option>
+                        <option value="утка">Утка</option>
+                        <option value="дятел">Дятел</option>
+                        <option value="хищник">Хищная птица</option>
+                        <option value="курица">Курица</option>
+                        <option value="воробей">Воробей</option>
+                    </select>
+                </div>
+                <div class="matching-row" data-correct="дятел">
+                    <label>3. Изображение В (зигодактильная стопа) → </label>
+                    <select name="q37_3">
+                        <option value="">Выберите...</option>
+                        <option value="цапля">Цапля</option>
+                        <option value="утка">Утка</option>
+                        <option value="дятел">Дятел</option>
+                        <option value="хищник">Хищная птица</option>
+                        <option value="курица">Курица</option>
+                        <option value="воробей">Воробей</option>
+                    </select>
+                </div>
+                <div class="matching-row" data-correct="хищник">
+                    <label>4. Изображение Г (мощные когти) → </label>
+                    <select name="q37_4">
+                        <option value="">Выберите...</option>
+                        <option value="цапля">Цапля</option>
+                        <option value="утка">Утка</option>
+                        <option value="дятел">Дятел</option>
+                        <option value="хищник">Хищная птица</option>
+                        <option value="курица">Курица</option>
+                        <option value="воробей">Воробей</option>
+                    </select>
+                </div>
+                <div class="matching-row" data-correct="курица">
+                    <label>5. Изображение Д (три пальца вперед, один назад) → </label>
+                    <select name="q37_5">
+                        <option value="">Выберите...</option>
+                        <option value="цапля">Цапля</option>
+                        <option value="утка">Утка</option>
+                        <option value="дятел">Дятел</option>
+                        <option value="хищник">Хищная птица</option>
+                        <option value="курица">Курица</option>
+                        <option value="воробей">Воробей</option>
+                    </select>
+                </div>
+                <div class="matching-row" data-correct="воробей">
+                    <label>6. Изображение Е (тонкие пальцы) → </label>
+                    <select name="q37_6">
+                        <option value="">Выберите...</option>
+                        <option value="цапля">Цапля</option>
+                        <option value="утка">Утка</option>
+                        <option value="дятел">Дятел</option>
+                        <option value="хищник">Хищная птица</option>
+                        <option value="курица">Курица</option>
+                        <option value="воробей">Воробей</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="question-card" id="q38" data-answer="1:а,2:а,3:а,4:а,5:б,6:б" data-type="matching">
+                <div class="question-number">Вопрос 38 (12 баллов)</div>
+                <div class="question-text">Установите соответствие между отделами вегетативной нервной системы, обозначенными на рисунке буквами А (Симпатическая) и Б (Парасимпатическая), и их функциями.</div>
+                <div class="image-placeholder">📷 Схема нервной системы (см. оригинальный PDF)</div>
+                <div class="matching-row" data-correct="а">
+                    <label>1. Вызывает расширение зрачка → </label>
+                    <select name="q38_1">
+                        <option value="">Выберите...</option>
+                        <option value="а">Отдел А</option>
+                        <option value="б">Отдел Б</option>
+                    </select>
+                </div>
+                <div class="matching-row" data-correct="а">
+                    <label>2. Вызывает рост частоты и силы сердечных сокращений → </label>
+                    <select name="q38_2">
+                        <option value="">Выберите...</option>
+                        <option value="а">Отдел А</option>
+                        <option value="б">Отдел Б</option>
+                    </select>
+                </div>
+                <div class="matching-row" data-correct="а">
+                    <label>3. Увеличивает выделение глюкозы в кровь печенью → </label>
+                    <select name="q38_3">
+                        <option value="">Выберите...</option>
+                        <option value="а">Отдел А</option>
+                        <option value="б">Отдел Б</option>
+                    </select>
+                </div>
+                <div class="matching-row" data-correct="а">
+                    <label>4. Вызывает сужение артерий кожи → </label>
+                    <select name="q38_4">
+                        <option value="">Выберите...</option>
+                        <option value="а">Отдел А</option>
+                        <option value="б">Отдел Б</option>
+                    </select>
+                </div>
+                <div class="matching-row" data-correct="б">
+                    <label>5. Вызывает сужение бронхов → </label>
+                    <select name="q38_5">
+                        <option value="">Выберите...</option>
+                        <option value="а">Отдел А</option>
+                        <option value="б">Отдел Б</option>
+                    </select>
+                </div>
+                <div class="matching-row" data-correct="б">
+                    <label>6. Снижает артериальное давление → </label>
+                    <select name="q38_6">
+                        <option value="">Выберите...</option>
+                        <option value="а">Отдел А</option>
+                        <option value="б">Отдел Б</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="question-card" id="q39" data-answer="1:животные,2:животные,3:растительные,4:растительные,5:грибные,6:грибные" data-type="matching">
+                <div class="question-number">Вопрос 39 (18 баллов)</div>
+                <div class="question-text">Установите соответствие между типами клеток и их характеристиками.</div>
+                <div class="matching-row" data-correct="животные">
+                    <label>1. Способны питаться фагоцитозом → </label>
+                    <select name="q39_1">
+                        <option value="">Выберите...</option>
+                        <option value="животные">Животные клетки</option>
+                        <option value="растительные">Растительные клетки</option>
+                        <option value="грибные">Грибные клетки</option>
+                    </select>
+                </div>
+                <div class="matching-row" data-correct="животные">
+                    <label>2. В составе мембран есть холестерол → </label>
+                    <select name="q39_2">
+                        <option value="">Выберите...</option>
+                        <option value="животные">Животные клетки</option>
+                        <option value="растительные">Растительные клетки</option>
+                        <option value="грибные">Грибные клетки</option>
+                    </select>
+                </div>
+                <div class="matching-row" data-correct="растительные">
+                    <label>3. Не нуждаются в дополнительном источнике органических веществ → </label>
+                    <select name="q39_3">
+                        <option value="">Выберите...</option>
+                        <option value="животные">Животные клетки</option>
+                        <option value="растительные">Растительные клетки</option>
+                        <option value="грибные">Грибные клетки</option>
+                    </select>
+                </div>
+                <div class="matching-row" data-correct="растительные">
+                    <label>4. Способны к автотрофному питанию → </label>
+                    <select name="q39_4">
+                        <option value="">Выберите...</option>
+                        <option value="животные">Животные клетки</option>
+                        <option value="растительные">Растительные клетки</option>
+                        <option value="грибные">Грибные клетки</option>
+                    </select>
+                </div>
+                <div class="matching-row" data-correct="грибные">
+                    <label>5. Расщепляют пищу вне клетки, выделяя наружу пищеварительные ферменты → </label>
+                    <select name="q39_5">
+                        <option value="">Выберите...</option>
+                        <option value="животные">Животные клетки</option>
+                        <option value="растительные">Растительные клетки</option>
+                        <option value="грибные">Грибные клетки</option>
+                    </select>
+                </div>
+                <div class="matching-row" data-correct="грибные">
+                    <label>6. Среди них встречаются дикарионы с набором хромосом n+n → </label>
+                    <select name="q39_6">
+                        <option value="">Выберите...</option>
+                        <option value="животные">Животные клетки</option>
+                        <option value="растительные">Растительные клетки</option>
+                        <option value="грибные">Грибные клетки</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- ЧАСТЬ 4 -->
+            <h2 class="section-title" id="section-part4">🔢 Часть 4: Количественные задачи</h2>
+            <span class="section-subtitle">Решите задачи. За каждый верный ответ — 15 баллов. Всего: 30 баллов.</span>
+
+            <div class="question-card" id="q40" data-answer="c" data-type="single">
+                <div class="question-number">Вопрос 40 (15 баллов)</div>
+                <div class="question-text">Из колбы, где размножались бактерии, взяли 1 мл питательной среды и поместили в пробирку с 9 мл воды. Всё размешали, потом уже из этой пробирки отобрали 1 мл в следующую с водой и так ещё четыре раза (см. рисунок). Из последней пробирки 1 мл нанесли на чашку Петри с твёрдой средой и через несколько дней посчитали число колоний. Каждая колония (бляшка) – потомство одной бактерии. Сколько бактерий было в 1 мл среды в колбе?</div>
+                <div class="image-placeholder">📷 Схема разведений (см. оригинальный PDF)</div>
+                <div class="options">
+                    <div class="option"><input type="radio" name="q40" id="q40a" value="a"><label for="q40a">9 000</label></div>
+                    <div class="option"><input type="radio" name="q40" id="q40b" value="b"><label for="q40b">90 000</label></div>
+                    <div class="option"><input type="radio" name="q40" id="q40c" value="c"><label for="q40c">900 000</label></div>
+                    <div class="option"><input type="radio" name="q40" id="q40d" value="d"><label for="q40d">9 000 000</label></div>
+                </div>
+            </div>
+
+            <div class="question-card" id="q41" data-answer="b" data-type="single">
+                <div class="question-number">Вопрос 41 (15 баллов)</div>
+                <div class="question-text">Альвеолярная вентиляция – это объём воздуха, фактически достигающего лёгкого за 1 мин. Чему будет равна альвеолярная вентиляция при частоте дыхания 16 вдохов в минуту, если дыхательный объём составляет 450 мл, а объём мёртвого пространства – 150 мл? Ответ выразите в мл/мин.</div>
+                <div class="options">
+                    <div class="option"><input type="radio" name="q41" id="q41a" value="a"><label for="q41a">3000</label></div>
+                    <div class="option"><input type="radio" name="q41" id="q41b" value="b"><label for="q41b">4800</label></div>
+                    <div class="option"><input type="radio" name="q41" id="q41c" value="c"><label for="q41c">7200</label></div>
+                    <div class="option"><input type="radio" name="q41" id="q41d" value="d"><label for="q41d">9600</label></div>
+                </div>
+            </div>
+
+            <!-- Кнопки управления -->
+            <button class="check-btn" id="checkBtn" onclick="checkAnswers()">✓ Проверить ответы</button>
+
+            <!-- Результаты -->
+            <div class="results" id="results">
+                <h3>📊 Результаты проверки</h3>
+                <div class="score" id="score">0 / 315</div>
+                <div class="score-details" id="details"></div>
+                <button class="reset-btn" onclick="resetTest()">🔄 Пройти ещё раз</button>
+            </div>
+
+            <!-- Раздел с правильными ответами (скрыт по умолчанию) -->
+            <div class="answers-section" id="answersSection">
+                <h3>✅ Правильные ответы</h3>
+                
+                <div class="answer-block">
+                    <h4>Часть 1: Тестовые задания (по 5 баллов)</h4>
+                    <p><strong>1.</strong> <span class="correct-answer">Дивергентная схема с тремя доменами (Бактерии, Археи, Эукариоты)</span></p>
+                    <p><strong>2.</strong> <span class="correct-answer">Обладают вторичной клеточной стенкой</span></p>
+                    <p><strong>3.</strong> <span class="correct-answer">Эндосперм</span></p>
+                    <p><strong>4.</strong> <span class="correct-answer">Из базальной, средней и апикальной</span></p>
+                    <p><strong>5.</strong> <span class="correct-answer">Образуется из гаметы</span></p>
+                    <p><strong>6.</strong> <span class="correct-answer">Рябина</span></p>
+                    <p><strong>7.</strong> <span class="correct-answer">В гипертонической</span></p>
+                    <p><strong>8.</strong> <span class="correct-answer">Растения обеспечивают бактерий органическими соединениями...</span></p>
+                    <p><strong>9.</strong> <span class="correct-answer">Является промежуточным хозяином партеногенетической стадии трематод</span></p>
+                    <p><strong>10.</strong> <span class="correct-answer">Передние крылья кожистые; задние — веерообразные...</span></p>
+                    <p><strong>11.</strong> <span class="correct-answer">двустворчатой раковины</span></p>
+                    <p><strong>12.</strong> <span class="correct-answer">У миноги</span></p>
+                    <p><strong>13.</strong> <span class="correct-answer">У рыбы</span></p>
+                    <p><strong>14.</strong> <span class="correct-answer">Латимерия коморская (Целакантообразные рыбы)</span></p>
+                    <p><strong>15.</strong> <span class="correct-answer">Партеногенез — это адаптация к низкой плотности популяции</span></p>
+                    <p><strong>16.</strong> <span class="correct-answer">Холерой</span></p>
+                    <p><strong>17.</strong> <span class="correct-answer">Увеличивается реабсорбция</span></p>
+                    <p><strong>18.</strong> <span class="correct-answer">Лопатка</span></p>
+                    <p><strong>19.</strong> <span class="correct-answer">9 — 3 — 4 — 6</span></p>
+                    <p><strong>20.</strong> <span class="correct-answer">Желточный мешок</span></p>
+                    <p><strong>21.</strong> <span class="correct-answer">Превращается в пировиноградную кислоту, а затем в глюкозу</span></p>
+                    <p><strong>22.</strong> <span class="correct-answer">Не имеет клеточного строения</span></p>
+                    <p><strong>23.</strong> <span class="correct-answer">Фибрин</span></p>
+                    <p><strong>24.</strong> <span class="correct-answer">Рибосома</span></p>
+                    <p><strong>25.</strong> <span class="correct-answer">В молоке развиваются бактерии, которыми питаются инфузории</span></p>
+                </div>
+
+                <div class="answer-block">
+                    <h4>Часть 2: Множественный выбор (по 10 баллов)</h4>
+                    <p><strong>26.</strong> У зелёной водоросли хламидомонады, У зелёной водоросли улотрикса, У харовой водоросли спирогиры</p>
+                    <p><strong>27.</strong> Среди основных клеток эпидермы видны устьица...; Растение 2 было выращено в теплице с повышенной концентрацией...</p>
+                    <p><strong>28.</strong> Вегетативную клетку, Генеративную клетку, Экзину</p>
+                    <p><strong>29.</strong> Лягушка, Бабочка, Комар</p>
+                    <p><strong>30.</strong> Все перечисленные функции верны</p>
+                    <p><strong>31.</strong> Страус, Эму, Киви</p>
+                    <p><strong>32.</strong> В этой ткани много кровеносных сосудов, много липидов, много митохондрий</p>
+                    <p><strong>33.</strong> Синдром Дауна, Кессонная болезнь</p>
+                    <p><strong>34.</strong> Содержит некоторые ферменты, Имеет липопротеидную оболочку, Поражает преимущественно Т-хелперы</p>
+                    <p><strong>35.</strong> Зрелый Т-лимфоцит, Сперматозоид, Полярное (редукционное) тельце</p>
+                </div>
+
+                <div class="answer-block">
+                    <h4>Часть 3: Соответствие</h4>
+                    <p><strong>36.</strong> 1-Б, 2-Б, 3-А, 4-А, 5-Б, 6-А</p>
+                    <p><strong>37.</strong> 1-Цапля, 2-Утка, 3-Дятел, 4-Хищная птица, 5-Курица, 6-Воробей</p>
+                    <p><strong>38.</strong> 1-А, 2-А, 3-А, 4-А, 5-Б, 6-Б</p>
+                    <p><strong>39.</strong> 1-Животные, 2-Животные, 3-Растительные, 4-Растительные, 5-Грибные, 6-Грибные</p>
+                </div>
+
+                <div class="answer-block">
+                    <h4>Часть 4: Количественные задачи (по 15 баллов)</h4>
+                    <p><strong>40.</strong> <span class="correct-answer">900 000</span></p>
+                    <p><strong>41.</strong> <span class="correct-answer">4800 мл/мин</span></p>
+                </div>
+            </div>
+
+            <!-- Скачать документы (В КОНЦЕ) -->
+            <div class="download-banner">
+                <div>
+                    <h3>📥 Скачать оригинальные документы</h3>
+                    <p style="font-size: 0.9rem; opacity: 0.8; margin-top: 0.3rem;">Официальные материалы олимпиады 2025 года</p>
+                </div>
+                <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
+                    <a href="files/olympiads/olympiad_9_tasks.pdf" class="btn-download" target="_blank">📄 Задания (PDF)</a>
+                    <a href="files/olympiads/olympiad_9_answers.pdf" class="btn-download" target="_blank">✅ Ответы (PDF)</a>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Боковая навигация -->
+        <aside class="side-nav">
+            <h3>📑 Навигация</h3>
+            
+            <div class="nav-section">
+                <h4>⚙️ Настройки</h4>
+                <ul>
+                    <li><a href="#mode-switcher" class="nav-link" onclick="document.querySelector('.mode-switcher').scrollIntoView({behavior: 'smooth'}); return false;">Режим проверки</a></li>
+                </ul>
+            </div>
+
+            <div class="nav-section">
+                <h4>Часть 1: Тест (1–25)</h4>
+                <ul>
+                    <li><a href="#q1" class="nav-link">Вопрос 1</a></li>
+                    <li><a href="#q5" class="nav-link">Вопрос 5</a></li>
+                    <li><a href="#q10" class="nav-link">Вопрос 10</a></li>
+                    <li><a href="#q15" class="nav-link">Вопрос 15</a></li>
+                    <li><a href="#q20" class="nav-link">Вопрос 20</a></li>
+                    <li><a href="#q25" class="nav-link">Вопрос 25</a></li>
+                </ul>
+            </div>
+
+            <div class="nav-section">
+                <h4>Часть 2: Множ. выбор (26–35)</h4>
+                <ul>
+                    <li><a href="#q26" class="nav-link">Вопрос 26</a></li>
+                    <li><a href="#q30" class="nav-link">Вопрос 30</a></li>
+                    <li><a href="#q35" class="nav-link">Вопрос 35</a></li>
+                </ul>
+            </div>
+
+            <div class="nav-section">
+                <h4>Часть 3: Соответствие</h4>
+                <ul>
+                    <li><a href="#q36" class="nav-link">Вопрос 36</a></li>
+                    <li><a href="#q37" class="nav-link">Вопрос 37</a></li>
+                    <li><a href="#q38" class="nav-link">Вопрос 38</a></li>
+                    <li><a href="#q39" class="nav-link">Вопрос 39</a></li>
+                </ul>
+            </div>
+
+            <div class="nav-section">
+                <h4>Часть 4: Задачи</h4>
+                <ul>
+                    <li><a href="#q40" class="nav-link">Вопрос 40</a></li>
+                    <li><a href="#q41" class="nav-link">Вопрос 41</a></li>
+                </ul>
+            </div>
+
+            <div class="nav-section">
+                <h4>📊 Результаты</h4>
+                <ul>
+                    <li><a href="#results" class="nav-link">Мои результаты</a></li>
+                </ul>
+            </div>
+
+            <div class="nav-section">
+                <h4>✅ Ответы</h4>
+                <ul>
+                    <li><a href="#answersSection" class="nav-link">Правильные ответы</a></li>
+                </ul>
+            </div>
+        </aside>
+    </div>
+
+    <!-- Кнопка "Вверх" -->
+    <button class="scroll-top-btn" id="scrollTopBtn" onclick="scrollToTop()" title="Наверх">
+        <svg viewBox="0 0 24 24">
+            <path d="M7.41 15.41L12 10.83l4.59 4.58L18 14l-6-6-6 6z"/>
+        </svg>
+    </button>
+
+    <footer>
+        <p>© 2026 Ресурсный центр «Биология» | Даниленко А.А.</p>
+        <p>Email: zz999an@yandex.by | г. Хойники, школа №3</p>
+    </footer>
+
+    <script>
+        // Текущий режим
+        let currentMode = 'instant'; // 'instant' или 'end'
+        const TOTAL_QUESTIONS = 41;
+
+        // Burger Menu
+        const burger = document.getElementById('burger');
+        const mobileMenu = document.getElementById('mobileMenu');
+        const mobileLinks = document.querySelectorAll('.mobile-link');
+
+        if (burger) {
+            burger.addEventListener('click', () => {
+                burger.classList.toggle('active');
+                mobileMenu.classList.toggle('active');
+                document.body.style.overflow = mobileMenu.classList.contains('active') ? 'hidden' : '';
+            });
+
+            mobileLinks.forEach(link => {
+                link.addEventListener('click', () => {
+                    burger.classList.remove('active');
+                    mobileMenu.classList.remove('active');
+                    document.body.style.overflow = '';
+                });
+            });
+        }
+
+        // Collapsible sections in side nav
+        document.querySelectorAll('.nav-section h4').forEach(header => {
+            header.addEventListener('click', () => {
+                header.parentElement.classList.toggle('collapsed');
+            });
+        });
+
+        // Scroll spy for side navigation
+        const sections = document.querySelectorAll('.question-card, .section-title, .answers-section, .results');
+        const navLinks = document.querySelectorAll('.nav-link');
+
+        window.addEventListener('scroll', () => {
+            let current = '';
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop;
+                if (scrollY >= (sectionTop - 150)) {
+                    current = section.getAttribute('id');
+                }
+            });
+
+            navLinks.forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('href').slice(1) === current) {
+                    link.classList.add('active');
+                    link.closest('.nav-section').classList.remove('collapsed');
+                }
+            });
+
+            // Scroll to top button visibility
+            const scrollTopBtn = document.getElementById('scrollTopBtn');
+            if (window.scrollY > 400) {
+                scrollTopBtn.classList.add('visible');
+            } else {
+                scrollTopBtn.classList.remove('visible');
+            }
+
+            // Update progress
+            updateProgress();
+        });
+
+        // Scroll to top function
+        function scrollToTop() {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // Update progress bar
+        function updateProgress() {
+            let answered = 0;
+            
+            // Single choice questions (1-25, 40-41)
+            for (let i = 1; i <= 25; i++) {
+                const selected = document.querySelector(`input[name="q${i}"]:checked`);
+                if (selected) answered++;
+            }
+            
+            // Multiple choice questions (26-35)
+            for (let i = 26; i <= 35; i++) {
+                const checked = document.querySelectorAll(`input[name="q${i}"]:checked`);
+                if (checked.length > 0) answered++;
+            }
+            
+            // Matching questions (36-39)
+            for (let i = 36; i <= 39; i++) {
+                const selects = document.querySelectorAll(`[name^="q${i}_"]`);
+                let allAnswered = true;
+                selects.forEach(select => {
+                    if (select.value === '') allAnswered = false;
+                });
+                if (allAnswered) answered++;
+            }
+
+            const progressText = document.getElementById('progressText');
+            const progressFill = document.getElementById('progressFill');
+            
+            if (progressText) progressText.textContent = `${answered} / ${TOTAL_QUESTIONS}`;
+            if (progressFill) progressFill.style.width = `${(answered / TOTAL_QUESTIONS) * 100}%`;
+        }
+
+        // Установка режима
+        function setMode(mode) {
+            currentMode = mode;
+            document.querySelectorAll('.mode-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            document.querySelector(`.mode-btn[data-mode="${mode}"]`).classList.add('active');
+
+            const checkBtn = document.getElementById('checkBtn');
+            const answersSection = document.getElementById('answersSection');
+
+            if (mode === 'instant') {
+                checkBtn.textContent = '✓ Показать результаты';
+                answersSection.classList.remove('show');
+            } else {
+                checkBtn.textContent = '✓ Проверить все ответы';
+                answersSection.classList.remove('show');
+            }
+
+            // Сбросить все подсветки при смене режима
+            resetHighlighting();
+        }
+
+        // Сброс подсветки
+        function resetHighlighting() {
+            document.querySelectorAll('.option, .matching-row, .question-card').forEach(el => {
+                el.classList.remove('correct', 'incorrect', 'highlight-unanswered');
+            });
+            document.querySelectorAll('.nav-link').forEach(link => {
+                link.classList.remove('answered-correct', 'answered-wrong', 'unanswered');
+            });
+            document.getElementById('results').classList.remove('show');
+            document.getElementById('answersSection').classList.remove('show');
+        }
+
+        // Мгновенная проверка для одиночного выбора
+        document.querySelectorAll('.question-card[data-type="single"]').forEach(card => {
+            const options = card.querySelectorAll('input[type="radio"]');
+            options.forEach(option => {
+                option.addEventListener('change', function() {
+                    if (currentMode !== 'instant') return;
+
+                    const correctAnswer = card.dataset.answer;
+                    const selectedValue = this.value;
+                    const allOptions = card.querySelectorAll('.option');
+
+                    allOptions.forEach(opt => {
+                        opt.classList.remove('correct', 'incorrect');
+                        const input = opt.querySelector('input');
+                        if (input.value === correctAnswer) {
+                            opt.classList.add('correct');
+                        }
+                        if (input.value === selectedValue && selectedValue !== correctAnswer) {
+                            opt.classList.add('incorrect');
+                        }
+                    });
+
+                    // Обновить навигацию
+                    const questionId = card.id;
+                    const navLink = document.querySelector(`.nav-link[href="#${questionId}"]`);
+                    if (navLink) {
+                        if (selectedValue === correctAnswer) {
+                            navLink.classList.add('answered-correct');
+                            navLink.classList.remove('answered-wrong', 'unanswered');
+                        } else {
+                            navLink.classList.add('answered-wrong');
+                            navLink.classList.remove('answered-correct', 'unanswered');
+                        }
+                    }
+
+                    updateProgress();
+                });
+            });
+        });
+
+        // Мгновенная проверка для множественного выбора
+        document.querySelectorAll('.question-card[data-type="multiple"]').forEach(card => {
+            const checkboxes = card.querySelectorAll('input[type="checkbox"]');
+            checkboxes.forEach(checkbox => {
+                checkbox.addEventListener('change', function() {
+                    if (currentMode !== 'instant') return;
+
+                    const correctAnswers = card.dataset.answer.split(',');
+                    const selected = Array.from(card.querySelectorAll('input[type="checkbox"]:checked')).map(cb => cb.value);
+                    const allOptions = card.querySelectorAll('.option');
+
+                    allOptions.forEach(opt => {
+                        opt.classList.remove('correct', 'incorrect');
+                        const input = opt.querySelector('input');
+                        if (correctAnswers.includes(input.value)) {
+                            opt.classList.add('correct');
+                        }
+                        if (selected.includes(input.value) && !correctAnswers.includes(input.value)) {
+                            opt.classList.add('incorrect');
+                        }
+                    });
+
+                    // Подсчёт баллов
+                    let correct = 0;
+                    let incorrect = 0;
+                    selected.forEach(ans => {
+                        if (correctAnswers.includes(ans)) correct++;
+                        else incorrect++;
+                    });
+                    correctAnswers.forEach(ans => {
+                        if (!selected.includes(ans)) incorrect++;
+                    });
+
+                    const questionScore = Math.max(0, (correct - incorrect) * 2);
+                    const questionId = card.id;
+                    const navLink = document.querySelector(`.nav-link[href="#${questionId}"]`);
+                    if (navLink) {
+                        if (questionScore >= 6) {
+                            navLink.classList.add('answered-correct');
+                            navLink.classList.remove('answered-wrong', 'unanswered');
+                        } else {
+                            navLink.classList.add('answered-wrong');
+                            navLink.classList.remove('answered-correct', 'unanswered');
+                        }
+                    }
+
+                    updateProgress();
+                });
+            });
+        });
+
+        // Мгновенная проверка для соответствия
+        document.querySelectorAll('.question-card[data-type="matching"]').forEach(card => {
+            const selects = card.querySelectorAll('select');
+            selects.forEach(select => {
+                select.addEventListener('change', function() {
+                    if (currentMode !== 'instant') return;
+
+                    const row = this.closest('.matching-row');
+                    const correct = row.dataset.correct;
+                    const selected = this.value;
+
+                    row.classList.remove('correct', 'incorrect');
+                    if (selected === correct) {
+                        row.classList.add('correct');
+                    } else if (selected !== '') {
+                        row.classList.add('incorrect');
+                    }
+
+                    // Подсчёт общих баллов
+                    const allRows = card.querySelectorAll('.matching-row');
+                    let correctMatches = 0;
+                    let answeredCount = 0;
+                    allRows.forEach(r => {
+                        const sel = r.querySelector('select');
+                        if (sel.value === r.dataset.correct) correctMatches++;
+                        if (sel.value !== '') answeredCount++;
+                    });
+
+                    const questionId = card.id;
+                    const navLink = document.querySelector(`.nav-link[href="#${questionId}"]`);
+                    if (navLink && answeredCount === allRows.length) {
+                        if (correctMatches >= Math.ceil(allRows.length * 0.75)) {
+                            navLink.classList.add('answered-correct');
+                            navLink.classList.remove('answered-wrong', 'unanswered');
+                        } else {
+                            navLink.classList.add('answered-wrong');
+                            navLink.classList.remove('answered-correct', 'unanswered');
+                        }
+                    }
+
+                    updateProgress();
+                });
+            });
+        });
+
+        // Полная проверка всех ответов
+        function checkAnswers() {
+            // В режиме "Проверка в конце" - сначала проверяем, все ли вопросы решены
+            if (currentMode === 'end') {
+                const unanswered = findUnansweredQuestions();
+                if (unanswered.length > 0) {
+                    // Подсвечиваем нерешённые вопросы
+                    unanswered.forEach(id => {
+                        const card = document.getElementById(id);
+                        if (card) {
+                            card.classList.add('highlight-unanswered');
+                            setTimeout(() => {
+                                card.classList.remove('highlight-unanswered');
+                            }, 6000);
+                        }
+                        const navLink = document.querySelector(`.nav-link[href="#${id}"]`);
+                        if (navLink) {
+                            navLink.classList.add('unanswered');
+                        }
+                    });
+                    
+                    // Прокручиваем к первому нерешённому вопросу
+                    const firstUnanswered = document.getElementById(unanswered[0]);
+                    if (firstUnanswered) {
+                        firstUnanswered.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                        alert(`⚠️ Вы не ответили на ${unanswered.length} вопрос(ов):\n\n${unanswered.map(id => id.toUpperCase()).join(', ')}\n\nПожалуйста, ответьте на все вопросы перед проверкой!`);
+                    }
+                    return;
+                }
+            }
+
+            let totalScore = 0;
+            let maxScore = 315;
+            let part1Score = 0;
+            let part2Score = 0;
+            let part3Score = 0;
+            let part4Score = 0;
+
+            // Часть 1: одиночный выбор (вопросы 1-25, по 5 баллов)
+            for (let i = 1; i <= 25; i++) {
+                const card = document.getElementById('q' + i);
+                const correctAnswer = card.dataset.answer;
+                const selected = card.querySelector('input[type="radio"]:checked');
+                const options = card.querySelectorAll('.option');
+
+                options.forEach(option => {
+                    const input = option.querySelector('input');
+                    option.classList.remove('correct', 'incorrect');
+
+                    if (input.value === correctAnswer) {
+                        option.classList.add('correct');
+                    }
+
+                    if (selected && input.value === selected.value) {
+                        if (selected.value === correctAnswer) {
+                            part1Score += 5;
+                        } else {
+                            option.classList.add('incorrect');
+                        }
+                    }
+                });
+
+                const navLink = document.querySelector(`.nav-link[href="#q${i}"]`);
+                if (navLink) {
+                    if (selected && selected.value === correctAnswer) {
+                        navLink.classList.add('answered-correct');
+                        navLink.classList.remove('answered-wrong', 'unanswered');
+                    } else {
+                        navLink.classList.add('answered-wrong');
+                        navLink.classList.remove('answered-correct', 'unanswered');
+                    }
+                }
+            }
+
+            // Часть 2: множественный выбор (вопросы 26-35, по 10 баллов)
+            for (let i = 26; i <= 35; i++) {
+                const card = document.getElementById('q' + i);
+                const correctAnswers = card.dataset.answer.split(',');
+                const selected = Array.from(card.querySelectorAll('input[type="checkbox"]:checked')).map(cb => cb.value);
+                const options = card.querySelectorAll('.option');
+
+                options.forEach(option => {
+                    const input = option.querySelector('input');
+                    option.classList.remove('correct', 'incorrect');
+
+                    if (correctAnswers.includes(input.value)) {
+                        option.classList.add('correct');
+                    }
+
+                    if (selected.includes(input.value)) {
+                        if (!correctAnswers.includes(input.value)) {
+                            option.classList.add('incorrect');
+                        }
+                    }
+                });
+
+                let correct = 0;
+                let incorrect = 0;
+                selected.forEach(ans => {
+                    if (correctAnswers.includes(ans)) correct++;
+                    else incorrect++;
+                });
+                correctAnswers.forEach(ans => {
+                    if (!selected.includes(ans)) incorrect++;
+                });
+
+                let questionScore = Math.max(0, (correct - incorrect) * 2);
+                part2Score += questionScore;
+
+                const navLink = document.querySelector(`.nav-link[href="#q${i}"]`);
+                if (navLink) {
+                    if (questionScore >= 6) {
+                        navLink.classList.add('answered-correct');
+                        navLink.classList.remove('answered-wrong', 'unanswered');
+                    } else {
+                        navLink.classList.add('answered-wrong');
+                        navLink.classList.remove('answered-correct', 'unanswered');
+                    }
+                }
+            }
+
+            // Часть 3: соответствие
+            // Вопрос 36 - 6 matching rows (18 баллов)
+            const q36Card = document.getElementById('q36');
+            const q36Rows = q36Card.querySelectorAll('.matching-row');
+            let q36Correct = 0;
+            q36Rows.forEach(row => {
+                const correct = row.dataset.correct;
+                const select = row.querySelector('select');
+                row.classList.remove('correct', 'incorrect');
+                if (select.value === correct) { row.classList.add('correct'); q36Correct++; } 
+                else if (select.value !== '') { row.classList.add('incorrect'); }
+            });
+            part3Score += (q36Correct / 6) * 18;
+
+            // Вопрос 37 - 6 matching rows (12 баллов)
+            const q37Card = document.getElementById('q37');
+            const q37Rows = q37Card.querySelectorAll('.matching-row');
+            let q37Correct = 0;
+            q37Rows.forEach(row => {
+                const correct = row.dataset.correct;
+                const select = row.querySelector('select');
+                row.classList.remove('correct', 'incorrect');
+                if (select.value === correct) { row.classList.add('correct'); q37Correct++; } 
+                else if (select.value !== '') { row.classList.add('incorrect'); }
+            });
+            part3Score += (q37Correct / 6) * 12;
+
+            // Вопрос 38 - 6 matching rows (12 баллов)
+            const q38Card = document.getElementById('q38');
+            const q38Rows = q38Card.querySelectorAll('.matching-row');
+            let q38Correct = 0;
+            q38Rows.forEach(row => {
+                const correct = row.dataset.correct;
+                const select = row.querySelector('select');
+                row.classList.remove('correct', 'incorrect');
+                if (select.value === correct) { row.classList.add('correct'); q38Correct++; } 
+                else if (select.value !== '') { row.classList.add('incorrect'); }
+            });
+            part3Score += (q38Correct / 6) * 12;
+
+            // Вопрос 39 - 6 matching rows (18 баллов)
+            const q39Card = document.getElementById('q39');
+            const q39Rows = q39Card.querySelectorAll('.matching-row');
+            let q39Correct = 0;
+            q39Rows.forEach(row => {
+                const correct = row.dataset.correct;
+                const select = row.querySelector('select');
+                row.classList.remove('correct', 'incorrect');
+                if (select.value === correct) { row.classList.add('correct'); q39Correct++; } 
+                else if (select.value !== '') { row.classList.add('incorrect'); }
+            });
+            part3Score += (q39Correct / 6) * 18;
+
+            // Update navigation for part 3
+            [36, 37, 38, 39].forEach(qNum => {
+                const navLink = document.querySelector(`.nav-link[href="#q${qNum}"]`);
+                let correctMatches = 0;
+                const rows = document.getElementById(`q${qNum}`).querySelectorAll('.matching-row');
+                rows.forEach(row => {
+                    if (row.querySelector('select').value === row.dataset.correct) correctMatches++;
+                });
+                
+                if (navLink) {
+                    if (correctMatches >= Math.ceil(rows.length * 0.75)) {
+                        navLink.classList.add('answered-correct');
+                        navLink.classList.remove('answered-wrong', 'unanswered');
+                    } else {
+                        navLink.classList.add('answered-wrong');
+                        navLink.classList.remove('answered-correct', 'unanswered');
+                    }
+                }
+            });
+
+            // Часть 4: количественные задачи (вопросы 40-41, по 15 баллов)
+            for (let i = 40; i <= 41; i++) {
+                const card = document.getElementById('q' + i);
+                const correctAnswer = card.dataset.answer;
+                const selected = card.querySelector('input[type="radio"]:checked');
+                const options = card.querySelectorAll('.option');
+
+                options.forEach(option => {
+                    const input = option.querySelector('input');
+                    option.classList.remove('correct', 'incorrect');
+
+                    if (input.value === correctAnswer) {
+                        option.classList.add('correct');
+                    }
+
+                    if (selected && input.value === selected.value) {
+                        if (selected.value === correctAnswer) {
+                            part4Score += 15;
+                        } else {
+                            option.classList.add('incorrect');
+                        }
+                    }
+                });
+
+                const navLink = document.querySelector(`.nav-link[href="#q${i}"]`);
+                if (navLink) {
+                    if (selected && selected.value === correctAnswer) {
+                        navLink.classList.add('answered-correct');
+                        navLink.classList.remove('answered-wrong', 'unanswered');
+                    } else {
+                        navLink.classList.add('answered-wrong');
+                        navLink.classList.remove('answered-correct', 'unanswered');
+                    }
+                }
+            }
+
+            totalScore = part1Score + part2Score + part3Score + part4Score;
+
+            // Показываем результаты
+            const resultsDiv = document.getElementById('results');
+            const scoreDiv = document.getElementById('score');
+            const detailsDiv = document.getElementById('details');
+
+            scoreDiv.textContent = `${totalScore} / ${maxScore} баллов`;
+            detailsDiv.innerHTML = `
+                <strong>Часть 1 (тест):</strong> ${part1Score} / 125 баллов<br>
+                <strong>Часть 2 (множественный выбор):</strong> ${part2Score} / 100 баллов<br>
+                <strong>Часть 3 (соответствие):</strong> ${Math.round(part3Score)} / 60 баллов<br>
+                <strong>Часть 4 (задачи):</strong> ${part4Score} / 30 баллов<br><br>
+                <strong>Процент выполнения:</strong> ${Math.round((totalScore/maxScore)*100)}%<br>
+                <strong>Оценка:</strong> ${getGrade(totalScore)}
+            `;
+
+            resultsDiv.classList.add('show');
+            
+            // В режиме "Проверка в конце" показываем ответы
+            if (currentMode === 'end') {
+                document.getElementById('answersSection').classList.add('show');
+            }
+            
+            resultsDiv.scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // Поиск нерешённых вопросов
+        function findUnansweredQuestions() {
+            const unanswered = [];
+            
+            // Single choice (1-25, 40-41)
+            for (let i = 1; i <= 25; i++) {
+                const selected = document.querySelector(`input[name="q${i}"]:checked`);
+                if (!selected) unanswered.push('q' + i);
+            }
+            for (let i = 40; i <= 41; i++) {
+                const selected = document.querySelector(`input[name="q${i}"]:checked`);
+                if (!selected) unanswered.push('q' + i);
+            }
+            
+            // Multiple choice (26-35)
+            for (let i = 26; i <= 35; i++) {
+                const checked = document.querySelectorAll(`input[name="q${i}"]:checked`);
+                if (checked.length === 0) unanswered.push('q' + i);
+            }
+            
+            // Matching (36-39)
+            for (let i = 36; i <= 39; i++) {
+                const selects = document.querySelectorAll(`[name^="q${i}_"]`);
+                let allAnswered = true;
+                selects.forEach(select => {
+                    if (select.value === '') allAnswered = false;
+                });
+                if (!allAnswered) unanswered.push('q' + i);
+            }
+            
+            return unanswered;
+        }
+
+        function getGrade(score) {
+            const percent = (score / 315) * 100;
+            if (percent >= 90) return '🏆 Отлично! Превосходный результат!';
+            if (percent >= 75) return '🥈 Хорошо! Высокий уровень подготовки.';
+            if (percent >= 60) return '🥉 Удовлетворительно. Есть над чем поработать.';
+            if (percent >= 40) return '📚 Необходимо повторить материал.';
+            return '💪 Не сдавайтесь! Изучите теорию и попробуйте снова.';
+        }
+
+        function resetTest() {
+            // Сбрасываем все ответы
+            document.querySelectorAll('input[type="radio"], input[type="checkbox"]').forEach(input => {
+                input.checked = false;
+            });
+            document.querySelectorAll('select').forEach(select => {
+                select.value = '';
+            });
+
+            // Убираем подсветку
+            document.querySelectorAll('.option, .matching-row, .question-card').forEach(el => {
+                el.classList.remove('correct', 'incorrect', 'highlight-unanswered');
+            });
+            document.querySelectorAll('.nav-link').forEach(link => {
+                link.classList.remove('answered-correct', 'answered-wrong', 'unanswered');
+            });
+
+            // Скрываем результаты и ответы
+            document.getElementById('results').classList.remove('show');
+            document.getElementById('answersSection').classList.remove('show');
+
+            // Обновляем прогресс
+            updateProgress();
+
+            // Прокручиваем наверх
+            scrollToTop();
+        }
+
+        // Инициализация прогресса
+        updateProgress();
+    </script>
+</body>
+</html>

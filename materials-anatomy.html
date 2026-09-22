@@ -1,0 +1,645 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Анатомия и физиология человека - Ресурсный центр "Биология"</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Raleway:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        :root {
+            --primary: #0D3B2E; --primary-light: #1B5E5B; --accent: #C9A961;
+            --accent-light: #D4B570; --bg: #FAFAF7; --text: #2B2D42; --white: #FFFFFF;
+        }
+        html { scroll-behavior: smooth; scroll-padding-top: 100px; }
+        body { font-family: 'Raleway', sans-serif; background: var(--bg); color: var(--text); line-height: 1.6; overflow-x: hidden; }
+        h1, h2, h3, h4 { font-family: 'Playfair Display', serif; }
+
+        .nav {
+            position: fixed; top: 0; left: 0; right: 0;
+            background: rgba(255, 255, 255, 0.98); backdrop-filter: blur(15px);
+            padding: 1rem 2rem; box-shadow: 0 2px 20px rgba(13,59,46,0.1); z-index: 1000;
+        }
+        .nav-container { max-width: 1200px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; }
+        .nav-logo { font-family: 'Playfair Display', serif; font-size: 1.3rem; font-weight: 700; color: var(--primary); text-decoration: none; letter-spacing: 1px; z-index: 1001; }
+        .nav-links { display: flex; gap: 2rem; list-style: none; }
+        .nav-links a { color: var(--text); text-decoration: none; font-size: 0.9rem; font-weight: 600; transition: color 0.3s; position: relative; }
+        .nav-links a:after { content: ''; position: absolute; bottom: -4px; left: 0; width: 0; height: 2px; background: var(--accent); transition: width 0.3s; }
+        .nav-links a:hover { color: var(--accent); }
+        .nav-links a:hover:after { width: 100%; }
+
+        .burger { display: none; flex-direction: column; justify-content: space-between; width: 28px; height: 20px; cursor: pointer; z-index: 1001; background: none; border: none; padding: 0; }
+        .burger span { display: block; width: 100%; height: 2px; background: var(--primary); transition: all 0.3s ease; border-radius: 2px; }
+        .burger.active span:nth-child(1) { transform: translateY(9px) rotate(45deg); }
+        .burger.active span:nth-child(2) { opacity: 0; transform: translateX(-10px); }
+        .burger.active span:nth-child(3) { transform: translateY(-9px) rotate(-45deg); }
+
+        .mobile-menu {
+            display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+            z-index: 999; flex-direction: column; justify-content: center; align-items: center; opacity: 0; transition: opacity 0.4s ease;
+        }
+        .mobile-menu.active { display: flex; opacity: 1; }
+        .mobile-menu ul { list-style: none; text-align: center; }
+        .mobile-menu li { margin: 1.5rem 0; transform: translateY(20px); opacity: 0; transition: all 0.4s ease; }
+        .mobile-menu.active li { transform: translateY(0); opacity: 1; }
+        .mobile-menu.active li:nth-child(1) { transition-delay: 0.1s; }
+        .mobile-menu.active li:nth-child(2) { transition-delay: 0.2s; }
+        .mobile-menu.active li:nth-child(3) { transition-delay: 0.3s; }
+        .mobile-menu.active li:nth-child(4) { transition-delay: 0.4s; }
+        .mobile-menu a { color: var(--white); text-decoration: none; font-family: 'Playfair Display', serif; font-size: 2rem; font-weight: 600; letter-spacing: 1px; transition: color 0.3s; position: relative; }
+        .mobile-menu a:hover { color: var(--accent); }
+
+        .header {
+            background: linear-gradient(-45deg, var(--primary), var(--primary-light), #0f4d45, #1a5f5a);
+            background-size: 400% 400%;
+            animation: gradientShift 15s ease infinite;
+            color: var(--white); padding: 8rem 2rem 4rem; text-align: center; position: relative; overflow: hidden;
+        }
+        @keyframes gradientShift { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
+        .header:before { content: ''; position: absolute; top: -50%; right: -10%; width: 600px; height: 600px; background: radial-gradient(circle, rgba(201,169,97,0.15) 0%, transparent 70%); border-radius: 50%; }
+        .header h1 { font-size: 2.8rem; margin-bottom: 1rem; letter-spacing: 2px; position: relative; z-index: 1; text-shadow: 2px 2px 4px rgba(0,0,0,0.3); }
+        .header p { font-size: 1.1rem; opacity: 0.95; font-weight: 300; max-width: 800px; margin: 0 auto; position: relative; z-index: 1; line-height: 1.8; }
+
+        .main-wrapper {
+            display: flex;
+            max-width: 1400px;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        .content { 
+            flex: 1;
+            padding: 4rem 2rem;
+            max-width: 1100px;
+        }
+
+        /* Premium Side Navigation */
+        .side-nav {
+            position: sticky;
+            top: 100px;
+            width: 300px;
+            padding: 2rem 1.5rem;
+            background: var(--white);
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(13,59,46,0.1);
+            margin-left: 2rem;
+            align-self: flex-start;
+            max-height: calc(100vh - 120px);
+            overflow-y: auto;
+        }
+
+        .side-nav h3 {
+            font-size: 1.1rem;
+            color: var(--primary);
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.8rem;
+            border-bottom: 2px solid var(--accent);
+        }
+
+        .nav-section {
+            margin-bottom: 1rem;
+        }
+
+        .nav-section h4 {
+            font-size: 0.95rem;
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 1px solid rgba(201,169,97,0.3);
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: color 0.3s;
+        }
+
+        .nav-section h4:hover {
+            color: var(--accent);
+        }
+
+        .nav-section h4::after {
+            content: '▼';
+            font-size: 0.7rem;
+            transition: transform 0.3s ease;
+        }
+
+        .nav-section.collapsed h4::after {
+            transform: rotate(-90deg);
+        }
+
+        .nav-section ul {
+            list-style: none;
+            padding-left: 0;
+            transition: max-height 0.3s ease, opacity 0.3s ease;
+        }
+
+        .nav-section.collapsed ul {
+            display: none;
+        }
+
+        .nav-section li {
+            margin-bottom: 0.3rem;
+        }
+
+        .nav-section a {
+            display: block;
+            padding: 0.5rem 1rem 0.5rem 1.5rem;
+            color: var(--text);
+            text-decoration: none;
+            border-radius: 6px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            border-left: 3px solid transparent;
+        }
+
+        .nav-section a:hover {
+            background: rgba(201,169,97,0.1);
+            border-left-color: var(--accent);
+            color: var(--primary);
+            transform: translateX(3px);
+        }
+
+        .nav-section a.active {
+            background: rgba(13,59,46,0.1);
+            border-left-color: var(--primary);
+            color: var(--primary);
+            font-weight: 600;
+        }
+
+        .section-title {
+            font-size: 1.8rem; color: var(--primary); margin: 3rem 0 1rem; padding-bottom: 0.8rem;
+            border-bottom: 3px solid var(--accent); display: inline-block; position: relative; scroll-margin-top: 100px;
+        }
+        .section-title:after { content: ''; position: absolute; bottom: -3px; left: 0; width: 100px; height: 3px; background: var(--primary); }
+
+        .section-subtitle {
+            font-size: 1rem; color: var(--text); opacity: 0.7; margin-bottom: 2rem;
+            font-style: italic; display: block;
+        }
+
+        .material-list { display: flex; flex-direction: column; gap: 1.5rem; margin-bottom: 2rem; }
+
+        .material-item {
+            background: var(--white); border-radius: 15px; padding: 2rem;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.06); border-left: 5px solid var(--accent);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1); display: flex; flex-direction: column; gap: 1rem;
+            opacity: 0; transform: translateY(30px); scroll-margin-top: 120px;
+        }
+        .material-item.visible { opacity: 1; transform: translateY(0); }
+        .material-item:hover { transform: translateX(10px); box-shadow: 0 15px 40px rgba(13,59,46,0.12); border-left-color: var(--primary); }
+
+        .material-header { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; }
+        .material-title { font-size: 1.4rem; color: var(--primary); font-weight: 600; flex: 1; }
+        .material-tag {
+            background: linear-gradient(135deg, rgba(201,169,97,0.2), rgba(201,169,97,0.1));
+            color: var(--primary); padding: 0.3rem 1rem; border-radius: 20px; font-size: 0.85rem; font-weight: 600; border: 1px solid rgba(201,169,97,0.3);
+        }
+        .material-tag.lecture {
+            background: linear-gradient(135deg, rgba(13,59,46,0.15), rgba(27,94,91,0.1));
+            border-color: rgba(13,59,46,0.3);
+        }
+
+        .material-desc { font-size: 0.95rem; opacity: 0.85; line-height: 1.7; }
+        .material-desc strong { color: var(--primary); }
+        .material-desc em { color: var(--primary-light); font-style: italic; }
+
+        .material-actions { display: flex; gap: 1rem; flex-wrap: wrap; margin-top: 0.5rem; }
+
+        .btn {
+            display: inline-flex; align-items: center; gap: 0.5rem;
+            padding: 0.8rem 1.5rem; border-radius: 30px; text-decoration: none;
+            font-weight: 600; font-size: 0.9rem; transition: all 0.3s ease;
+        }
+        .btn-primary {
+            background: linear-gradient(135deg, var(--accent), var(--accent-light));
+            color: var(--primary); box-shadow: 0 4px 15px rgba(201,169,97,0.3);
+        }
+        .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 25px rgba(201,169,97,0.5); }
+        .btn-secondary { background: var(--bg); color: var(--primary); border: 1px solid rgba(13,59,46,0.2); }
+        .btn-secondary:hover { background: var(--primary); color: var(--white); }
+
+        footer {
+            background: linear-gradient(135deg, var(--text), #1a1a2e);
+            color: var(--white); text-align: center; padding: 2.5rem; margin-top: 5rem; font-size: 0.9rem; position: relative; overflow: hidden;
+        }
+        footer:before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; background: linear-gradient(90deg, var(--accent), var(--accent-light)); }
+
+        @media (max-width: 1200px) {
+            .side-nav { display: none; }
+            .main-wrapper { max-width: 100%; }
+            .content { max-width: 100%; padding: 3rem 1.5rem; }
+        }
+
+        @media (max-width: 768px) {
+            .nav { padding: 1rem 1.5rem; }
+            .nav-links { display: none; }
+            .burger { display: flex; }
+            .header { padding: 6.5rem 1.5rem 3rem; }
+            .header h1 { font-size: 2.2rem; }
+            .header p { font-size: 1rem; }
+            .material-header { flex-direction: column; align-items: flex-start; }
+            .content { padding: 2rem 1rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <nav class="nav">
+        <div class="nav-container">
+            <a href="index.html" class="nav-logo">🌿 БИОЛОГИЯ</a>
+            <ul class="nav-links">
+                <li><a href="index.html">Главная</a></li>
+                <li><a href="materials.html">← Назад к материалам</a></li>
+                <li><a href="contacts.html">Контакты</a></li>
+            </ul>
+            <button class="burger" id="burger" aria-label="Меню">
+                <span></span><span></span><span></span>
+            </button>
+        </div>
+    </nav>
+
+    <div class="mobile-menu" id="mobileMenu">
+        <ul>
+            <li><a href="index.html">Главная</a></li>
+            <li><a href="materials.html">← Назад к материалам</a></li>
+            <li><a href="contacts.html">Контакты</a></li>
+        </ul>
+    </div>
+
+    <div class="header">
+        <h1>🧬 Анатомия и физиология человека</h1>
+        <p>От клетки до систем органов: мембранные потенциалы, нервная регуляция, кровообращение, дыхание, пищеварение, выделение и эндокринная регуляция.</p>
+    </div>
+
+    <div class="main-wrapper">
+        <div class="content">
+
+            <!-- РАЗДЕЛ 1: ОСНОВЫ ФИЗИОЛОГИИ И МЕТОДЫ -->
+            <h2 class="section-title" id="section-methods">🔬 Основы физиологии и методы исследования</h2>
+            <span class="section-subtitle">Как изучают организм и что такое возбудимость</span>
+            <div class="material-list">
+
+                <div class="material-item" id="topic-methods">
+                    <div class="material-header">
+                        <h3 class="material-title">Методы исследования в физиологии и медицине</h3>
+                        <span class="material-tag">Наблюдение · Эксперимент · Диагностика</span>
+                    </div>
+                    <p class="material-desc">
+                        Обзор методов: острый и хронический эксперимент, экстирпация органов, вживление электродов, радиоактивные изотопы, <strong>ЯМР-томография</strong>, биохимические и биофизические методы, микроскопия. Клинические методы: биохимические анализы, биопсия, <strong>эндоскопия</strong>, УЗИ, рентгенография, КТ, МРТ.
+                    </p>
+                    <div class="material-actions">
+                        <a href="files/anatomy/methods_research.pdf" class="btn btn-primary" target="_blank">📥 Скачать PDF</a>
+                        <a href="files/anatomy/methods_research.pdf" class="btn btn-secondary" target="_blank">👁️ Смотреть онлайн</a>
+                    </div>
+                </div>
+
+                <div class="material-item" id="topic-potential">
+                    <div class="material-header">
+                        <h3 class="material-title">Потенциал покоя и потенциал действия</h3>
+                        <span class="material-tag">Мембранный потенциал · Уравнение Нернста</span>
+                    </div>
+                    <p class="material-desc">
+                        Поляризация мембраны. Роль ионов K⁺, Na⁺, Cl⁻. <strong>Уравнение Нернста</strong> и Нернста-Гольдмана. Na⁺/K⁺-АТФаза. Фазы ПД: деполяризация, овершут, реполяризация, гиперполяризация. М- и Н-ворота натриевых каналов. <strong>Закон «все или ничего»</strong>. Период рефрактерности. Распространение ПД: непрерывное и <strong>сальтаторное</strong> (перехваты Ранвье).
+                    </p>
+                    <div class="material-actions">
+                        <a href="files/anatomy/resting_action_potential.pdf" class="btn btn-primary" target="_blank">📥 Скачать PDF</a>
+                        <a href="files/anatomy/resting_action_potential.pdf" class="btn btn-secondary" target="_blank">👁️ Смотреть онлайн</a>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- РАЗДЕЛ 2: НЕРВНАЯ СИСТЕМА И АНАЛИЗАТОРЫ -->
+            <h2 class="section-title" id="section-nervous">🧠 Нервная система и анализаторы</h2>
+            <span class="section-subtitle">ЦНС, ПНС, синапсы, медиаторы и рефлексы</span>
+            <div class="material-list">
+
+                <div class="material-item" id="topic-nervous">
+                    <div class="material-header">
+                        <h3 class="material-title">Строение и функции нервной системы</h3>
+                        <span class="material-tag">ЦНС · ПНС · ВНС</span>
+                    </div>
+                    <p class="material-desc">
+                        Строение спинного мозга: сегменты, рога, проводящие пути. <strong>Рефлекторная дуга</strong>: моносинаптический и полисинаптический рефлексы. Головной мозг: продолговатый, задний, средний, промежуточный (таламус, гипоталамус, гипофиз, эпифиз), конечный (кора, базальные ганглии). 12 пар ЧМН. <strong>Вегетативная НС</strong>: симпатический и парасимпатический отделы, их эффекты.
+                    </p>
+                    <div class="material-actions">
+                        <a href="files/anatomy/nervous_system.pdf" class="btn btn-primary" target="_blank">📥 Скачать PDF</a>
+                        <a href="files/anatomy/nervous_system.pdf" class="btn btn-secondary" target="_blank">👁️ Смотреть онлайн</a>
+                    </div>
+                </div>
+
+                <div class="material-item" id="topic-synapse">
+                    <div class="material-header">
+                        <h3 class="material-title">Синаптическая передача и медиаторы</h3>
+                        <span class="material-tag lecture">🎓 МГУ · Лекции 02, 04, 05</span>
+                    </div>
+                    <p class="material-desc">
+                        Химические и электрические синапсы. <strong>Квантовое освобождение медиатора</strong>. Комплекс <strong>SNARE</strong>, синаптотагмин, динамин. Канальные (NMDA, ГАМК-А) и метаботропные рецепторы. G-белки (Gs, Gi, Gq), цАМФ, фосфолипазный путь (IP₃, DAG). Основные медиаторы: <strong>ацетилхолин, дофамин, норадреналин, серотонин, глутамат, ГАМК, глицин</strong>, опиоидные пептиды. Принцип Дейла.
+                    </p>
+                    <div class="material-actions">
+                        <a href="files/anatomy/synaptic_mediators.pdf" class="btn btn-primary" target="_blank">📥 Скачать PDF</a>
+                        <a href="files/anatomy/synaptic_mediators.pdf" class="btn btn-secondary" target="_blank">👁️ Смотреть онлайн</a>
+                    </div>
+                </div>
+
+                <div class="material-item" id="topic-cns">
+                    <div class="material-header">
+                        <h3 class="material-title">Интегративные свойства ЦНС и рефлексы</h3>
+                        <span class="material-tag lecture">🎓 МГУ · Лекции 06, 07, 08, 10</span>
+                    </div>
+                    <p class="material-desc">
+                        Суммация (временная и пространственная). Принцип общего конечного пути. <strong>Торможение</strong>: постсинаптическое, пресинаптическое, возвратное (клетки Реншоу), латеральное. Безусловные и условные рефлексы (Павлов, Скиннер). Гамма-петля и сухожильный комплекс Гольджи. Иерархия управления вегетативными функциями.
+                    </p>
+                    <div class="material-actions">
+                        <a href="files/anatomy/cns_integration.pdf" class="btn btn-primary" target="_blank">📥 Скачать PDF</a>
+                        <a href="files/anatomy/cns_integration.pdf" class="btn btn-secondary" target="_blank">👁️ Смотреть онлайн</a>
+                    </div>
+                </div>
+
+                <div class="material-item" id="topic-sensory">
+                    <div class="material-header">
+                        <h3 class="material-title">Физиология анализаторов</h3>
+                        <span class="material-tag lecture">🎓 МГУ · Лекция 09</span>
+                    </div>
+                    <p class="material-desc">
+                        Трансдукция, кодирование, закон Вебера-Фехнера. Адаптация рецепторов. Строение глаза: сетчатка (130 млн фоторецепторов), палочки и колбочки. Механизм фототрансдукции: родопсин → трансдуцин → PDE → цГМФ. Латеральные взаимодействия (горизонтальные и амакриновые клетки). Зрительный путь в кору.
+                    </p>
+                    <div class="material-actions">
+                        <a href="files/anatomy/sensory_systems.pdf" class="btn btn-primary" target="_blank">📥 Скачать PDF</a>
+                        <a href="files/anatomy/sensory_systems.pdf" class="btn btn-secondary" target="_blank">👁️ Смотреть онлайн</a>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- РАЗДЕЛ 3: МЫШЕЧНАЯ СИСТЕМА -->
+            <h2 class="section-title" id="section-muscle">💪 Мышечная система</h2>
+            <span class="section-subtitle">Скелетные, гладкие и сердечные мышцы</span>
+            <div class="material-list">
+
+                <div class="material-item" id="topic-muscle">
+                    <div class="material-header">
+                        <h3 class="material-title">Работа мышц и электромеханическое сопряжение</h3>
+                        <span class="material-tag lecture">🎓 МГУ · Лекция 03</span>
+                    </div>
+                    <p class="material-desc">
+                        Строение скелетной мышцы: саркомер, актин, миозин, тропониновый комплекс. <strong>Гипотеза скользящих нитей Хаксли (1955)</strong>. Цикл работы поперечных мостиков. Электро-механическое сопряжение: Т-трубочки, ДГП-каналы, рианодиновые каналы. Механика сокращения: изотоническое и изометрическое. Типы волокон (I, IIa, IIb). <strong>Гладкие и сердечные мышцы</strong>: отличия, автоматия, вставочные диски.
+                    </p>
+                    <div class="material-actions">
+                        <a href="files/anatomy/muscle_work.pdf" class="btn btn-primary" target="_blank">📥 Скачать PDF</a>
+                        <a href="files/anatomy/muscle_work.pdf" class="btn btn-secondary" target="_blank">👁️ Смотреть онлайн</a>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- РАЗДЕЛ 4: СЕРДЦЕ, КРОВЬ И ИММУНИТЕТ -->
+            <h2 class="section-title" id="section-cardio">❤️ Сердечно-сосудистая система и иммунитет</h2>
+            <span class="section-subtitle">Гемодинамика, группы крови, лейкоциты и антитела</span>
+            <div class="material-list">
+
+                <div class="material-item" id="topic-heart">
+                    <div class="material-header">
+                        <h3 class="material-title">Сердце и гемодинамика</h3>
+                        <span class="material-tag lecture">🎓 МГУ · Лекции 11, 12</span>
+                    </div>
+                    <p class="material-desc">
+                        Строение сердца, клапаны, сердечный цикл. Миогенная автоматия: SA-узел, AV-узел, пучок Гиса. ПД кардиомиоцита: плато, «пусковой» кальций. <strong>Уравнение Пуазейля</strong>. Типы сосудов: резистивные, обменные, емкостные. Силы Старлинга в капиллярах. Механизм Франка-Старлинга. ЭКГ по Эйнтховену (зубцы P, QRS, T).
+                    </p>
+                    <div class="material-actions">
+                        <a href="files/anatomy/heart_hemodynamics.pdf" class="btn btn-primary" target="_blank">📥 Скачать PDF</a>
+                        <a href="files/anatomy/heart_hemodynamics.pdf" class="btn btn-secondary" target="_blank">👁️ Смотреть онлайн</a>
+                    </div>
+                </div>
+
+                <div class="material-item" id="topic-blood">
+                    <div class="material-header">
+                        <h3 class="material-title">Группы крови и резус-фактор</h3>
+                        <span class="material-tag">AB0 · Резус · Бомбейский феномен</span>
+                    </div>
+                    <p class="material-desc">
+                        Система AB0 (Карл Ландштейнер). Гликозилтрансферазы, агглютиногены и агглютинины. Схема переливания крови. <strong>Бомбейский феномен</strong>. Резус-фактор (антиген D). Резус-конфликт при беременности и гемолитическая болезнь новорожденных. Антирезусный иммуноглобулин.
+                    </p>
+                    <div class="material-actions">
+                        <a href="files/anatomy/blood_groups.pdf" class="btn btn-primary" target="_blank">📥 Скачать PDF</a>
+                        <a href="files/anatomy/blood_groups.pdf" class="btn btn-secondary" target="_blank">👁️ Смотреть онлайн</a>
+                    </div>
+                </div>
+
+                <div class="material-item" id="topic-immunity">
+                    <div class="material-header">
+                        <h3 class="material-title">Иммунитет и гистосовместимость</h3>
+                        <span class="material-tag">Лейкоциты · Антитела · ГКГ</span>
+                    </div>
+                    <p class="material-desc">
+                        Врожденный и приобретенный иммунитет. Гранулоциты (нейтрофилы, эозинофилы, базофилы) и агранулоциты (моноциты/макрофаги, лимфоциты). Строение антител (Fab и Fc фрагменты). <strong>Главный комплекс гистосовместимости (ГКГ, MHC)</strong>: ГКГ I и ГКГ II. Презентация антигена Т-хелперам и В-лимфоцитам. Система комплемента.
+                    </p>
+                    <div class="material-actions">
+                        <a href="files/anatomy/immunity.pdf" class="btn btn-primary" target="_blank">📥 Скачать PDF</a>
+                        <a href="files/anatomy/immunity.pdf" class="btn btn-secondary" target="_blank">👁️ Смотреть онлайн</a>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- РАЗДЕЛ 5: ОБМЕН ВЕЩЕСТВ И ВЫДЕЛЕНИЕ -->
+            <h2 class="section-title" id="section-metabolism">🔄 Обмен веществ и выделение</h2>
+            <span class="section-subtitle">Пищеварение, дыхание, почки и витамины</span>
+            <div class="material-list">
+
+                <div class="material-item" id="topic-respiratory">
+                    <div class="material-header">
+                        <h3 class="material-title">Дыхательная система</h3>
+                        <span class="material-tag lecture">🎓 МГУ · Лекция 13</span>
+                    </div>
+                    <p class="material-desc">
+                        5 этапов дыхания. Строение дыхательных путей, альвеолы (300 млн), сурфактант. Дыхательные объемы: ДО, РОвд, РОвыд, <strong>ЖЁЛ</strong>, ООЛ, ОЕЛ. Транспорт O₂ и CO₂: гемоглобин (α₂β₂), миоглобин. <strong>Эффект Бора и Холдейна</strong>. Дифосфоглицерат. Работа «дыхательного центра»: инспираторные и экспираторные нейроны. Рефлекс Геринга-Брейера.
+                    </p>
+                    <div class="material-actions">
+                        <a href="files/anatomy/respiratory_system.pdf" class="btn btn-primary" target="_blank">📥 Скачать PDF</a>
+                        <a href="files/anatomy/respiratory_system.pdf" class="btn btn-secondary" target="_blank">👁️ Смотреть онлайн</a>
+                    </div>
+                </div>
+
+                <div class="material-item" id="topic-digestive">
+                    <div class="material-header">
+                        <h3 class="material-title">Пищеварительная система</h3>
+                        <span class="material-tag lecture">🎓 МГУ · Лекция 15</span>
+                    </div>
+                    <p class="material-desc">
+                        Назначение и состав пищи. Витамины (водо- и жирорастворимые). Строение стенки ЖКТ. Пищеварение в ротовой полости (амилаза, лизоцим), желудке (HCl, пепсиноген, внутренний фактор Касла). Двенадцатиперстная кишка: панкреатический сок (трипсиноген, липаза) и желчь. Всасывание в тонком кишечнике: ворсинки, микроворсинки, гликокаликс. Метасимпатическая НС.
+                    </p>
+                    <div class="material-actions">
+                        <a href="files/anatomy/digestive_system.pdf" class="btn btn-primary" target="_blank">📥 Скачать PDF</a>
+                        <a href="files/anatomy/digestive_system.pdf" class="btn btn-secondary" target="_blank">👁️ Смотреть онлайн</a>
+                    </div>
+                </div>
+
+                <div class="material-item" id="topic-excretory">
+                    <div class="material-header">
+                        <h3 class="material-title">Выделительная система</h3>
+                        <span class="material-tag lecture">🎓 МГУ · Лекция 14</span>
+                    </div>
+                    <p class="material-desc">
+                        Анатомия почки. Нефрон (1 млн): клубочек, капсула Боумена, проксимальный каналец, петля Генле, дистальный каналец. Три слоя клубочкового фильтра. <strong>Ауторегуляция</strong> (эффект Бейлиса, macula densa). Фильтрационное давление. Реабсорбция (Na⁺/K⁺-АТФаза, симпорт глюкозы). Противоточный обмен мочевины. Роль альдостерона и вазопрессина (АДГ).
+                    </p>
+                    <div class="material-actions">
+                        <a href="files/anatomy/excretory_system.pdf" class="btn btn-primary" target="_blank">📥 Скачать PDF</a>
+                        <a href="files/anatomy/excretory_system.pdf" class="btn btn-secondary" target="_blank">👁️ Смотреть онлайн</a>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- РАЗДЕЛ 6: ЭНДОКРИННАЯ СИСТЕМА -->
+            <h2 class="section-title" id="section-endocrine">⚗️ Эндокринная система</h2>
+            <span class="section-subtitle">Гормоны и железы внутренней секреции</span>
+            <div class="material-list">
+
+                <div class="material-item" id="topic-endocrine">
+                    <div class="material-header">
+                        <h3 class="material-title">Эндокринная система человека</h3>
+                        <span class="material-tag">Гипофиз · Щитовидная · Надпочечники</span>
+                    </div>
+                    <p class="material-desc">
+                        Признаки гормонов. <strong>Гипофиз</strong>: аденогипофиз (СТГ, ТТГ, АКТГ, ФСГ, ЛГ, пролактин), нейрогипофиз (вазопрессин, окситоцин). Эпифиз (мелатонин). Щитовидная железа (тироксин, трийодтиронин, кальцитонин) и паращитовидные (паратгормон). Надпочечники: корковое (глюкокортикоиды, минералокортикоиды) и мозговое вещество (адреналин). Половые железы и поджелудочная железа (островки Лангерганса: инсулин, глюкагон).
+                    </p>
+                    <div class="material-actions">
+                        <a href="files/anatomy/endocrine_system.pdf" class="btn btn-primary" target="_blank">📥 Скачать PDF</a>
+                        <a href="files/anatomy/endocrine_system.pdf" class="btn btn-secondary" target="_blank">👁️ Смотреть онлайн</a>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- Premium Side Navigation -->
+        <aside class="side-nav">
+            <h3>📑 Навигация по темам</h3>
+            
+            <div class="nav-section">
+                <h4>🔬 Основы и методы</h4>
+                <ul>
+                    <li><a href="#topic-methods" class="nav-link">Методы исследования</a></li>
+                    <li><a href="#topic-potential" class="nav-link">Потенциал покоя и ПД</a></li>
+                </ul>
+            </div>
+
+            <div class="nav-section">
+                <h4>🧠 Нервная система</h4>
+                <ul>
+                    <li><a href="#topic-nervous" class="nav-link">Строение и функции</a></li>
+                    <li><a href="#topic-synapse" class="nav-link">Синапсы и медиаторы</a></li>
+                    <li><a href="#topic-cns" class="nav-link">Интеграция и рефлексы</a></li>
+                    <li><a href="#topic-sensory" class="nav-link">Анализаторы</a></li>
+                </ul>
+            </div>
+
+            <div class="nav-section">
+                <h4>💪 Мышечная система</h4>
+                <ul>
+                    <li><a href="#topic-muscle" class="nav-link">Работа мышц</a></li>
+                </ul>
+            </div>
+
+            <div class="nav-section">
+                <h4>❤️ Сердце и кровь</h4>
+                <ul>
+                    <li><a href="#topic-heart" class="nav-link">Сердце и гемодинамика</a></li>
+                    <li><a href="#topic-blood" class="nav-link">Группы крови</a></li>
+                    <li><a href="#topic-immunity" class="nav-link">Иммунитет</a></li>
+                </ul>
+            </div>
+
+            <div class="nav-section">
+                <h4>🔄 Обмен веществ</h4>
+                <ul>
+                    <li><a href="#topic-respiratory" class="nav-link">Дыхательная система</a></li>
+                    <li><a href="#topic-digestive" class="nav-link">Пищеварительная система</a></li>
+                    <li><a href="#topic-excretory" class="nav-link">Выделительная система</a></li>
+                </ul>
+            </div>
+
+            <div class="nav-section">
+                <h4>⚗️ Эндокринная система</h4>
+                <ul>
+                    <li><a href="#topic-endocrine" class="nav-link">Железы и гормоны</a></li>
+                </ul>
+            </div>
+        </aside>
+    </div>
+
+    <footer>
+        <p>© 2026 Ресурсный центр «Биология» | Даниленко А.А.</p>
+        <p>Email: zz999an@yandex.by | г. Хойники, школа №3</p>
+    </footer>
+
+    <script>
+        // Burger Menu
+        const burger = document.getElementById('burger');
+        const mobileMenu = document.getElementById('mobileMenu');
+        const mobileLinks = document.querySelectorAll('.mobile-link');
+
+        if (burger) {
+            burger.addEventListener('click', () => {
+                burger.classList.toggle('active');
+                mobileMenu.classList.toggle('active');
+                document.body.style.overflow = mobileMenu.classList.contains('active') ? 'hidden' : '';
+            });
+
+            mobileLinks.forEach(link => {
+                link.addEventListener('click', () => {
+                    burger.classList.remove('active');
+                    mobileMenu.classList.remove('active');
+                    document.body.style.overflow = '';
+                });
+            });
+        }
+
+        // Scroll Animation for Cards
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach((entry, index) => {
+                if (entry.isIntersecting) {
+                    setTimeout(() => entry.target.classList.add('visible'), index * 80);
+                }
+            });
+        }, { threshold: 0.1, rootMargin: "0px 0px -50px 0px" });
+
+        document.querySelectorAll('.material-item').forEach(el => observer.observe(el));
+
+        // Collapsible sections in side nav
+        document.querySelectorAll('.nav-section h4').forEach(header => {
+            header.addEventListener('click', () => {
+                header.parentElement.classList.toggle('collapsed');
+            });
+        });
+
+        // Side navigation active state (Scroll Spy)
+        const sections = document.querySelectorAll('.material-item, .section-title');
+        const navLinks = document.querySelectorAll('.nav-link');
+
+        window.addEventListener('scroll', () => {
+            let current = '';
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop;
+                if (scrollY >= (sectionTop - 150)) {
+                    current = section.getAttribute('id');
+                }
+            });
+
+            navLinks.forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('href').slice(1) === current) {
+                    link.classList.add('active');
+                    // Auto-expand the section if it's collapsed
+                    link.closest('.nav-section').classList.remove('collapsed');
+                }
+            });
+        });
+    </script>
+</body>
+</html>

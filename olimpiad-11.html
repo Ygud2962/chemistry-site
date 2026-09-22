@@ -1,0 +1,1787 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Олимпиада по биологии: 10-11 класс - Интерактивный тест</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Raleway:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        :root {
+            --primary: #0D3B2E; --primary-light: #1B5E5B; --accent: #C9A961;
+            --accent-light: #D4B570; --bg: #FAFAF7; --text: #2B2D42; --white: #FFFFFF;
+            --correct: #28a745; --incorrect: #dc3545;
+        }
+        html { scroll-behavior: smooth; scroll-padding-top: 100px; }
+        body { font-family: 'Raleway', sans-serif; background: var(--bg); color: var(--text); line-height: 1.6; overflow-x: hidden; }
+        h1, h2, h3, h4 { font-family: 'Playfair Display', serif; }
+
+        .nav {
+            position: fixed; top: 0; left: 0; right: 0;
+            background: rgba(255, 255, 255, 0.98); backdrop-filter: blur(15px);
+            padding: 1rem 2rem; box-shadow: 0 2px 20px rgba(13,59,46,0.1); z-index: 1000;
+        }
+        .nav-container { max-width: 1200px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; }
+        .nav-logo { font-family: 'Playfair Display', serif; font-size: 1.3rem; font-weight: 700; color: var(--primary); text-decoration: none; letter-spacing: 1px; z-index: 1001; }
+        .nav-links { display: flex; gap: 2rem; list-style: none; }
+        .nav-links a { color: var(--text); text-decoration: none; font-size: 0.9rem; font-weight: 600; transition: color 0.3s; position: relative; }
+        .nav-links a:after { content: ''; position: absolute; bottom: -4px; left: 0; width: 0; height: 2px; background: var(--accent); transition: width 0.3s; }
+        .nav-links a:hover { color: var(--accent); }
+        .nav-links a:hover:after { width: 100%; }
+
+        .burger { display: none; flex-direction: column; justify-content: space-between; width: 28px; height: 20px; cursor: pointer; z-index: 1001; background: none; border: none; padding: 0; }
+        .burger span { display: block; width: 100%; height: 2px; background: var(--primary); transition: all 0.3s ease; border-radius: 2px; }
+        .burger.active span:nth-child(1) { transform: translateY(9px) rotate(45deg); }
+        .burger.active span:nth-child(2) { opacity: 0; transform: translateX(-10px); }
+        .burger.active span:nth-child(3) { transform: translateY(-9px) rotate(-45deg); }
+
+        .mobile-menu {
+            display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+            z-index: 999; flex-direction: column; justify-content: center; align-items: center; opacity: 0; transition: opacity 0.4s ease;
+        }
+        .mobile-menu.active { display: flex; opacity: 1; }
+        .mobile-menu ul { list-style: none; text-align: center; }
+        .mobile-menu li { margin: 1.5rem 0; transform: translateY(20px); opacity: 0; transition: all 0.4s ease; }
+        .mobile-menu.active li { transform: translateY(0); opacity: 1; }
+        .mobile-menu.active li:nth-child(1) { transition-delay: 0.1s; }
+        .mobile-menu.active li:nth-child(2) { transition-delay: 0.2s; }
+        .mobile-menu.active li:nth-child(3) { transition-delay: 0.3s; }
+        .mobile-menu.active li:nth-child(4) { transition-delay: 0.4s; }
+        .mobile-menu a { color: var(--white); text-decoration: none; font-family: 'Playfair Display', serif; font-size: 2rem; font-weight: 600; letter-spacing: 1px; transition: color 0.3s; position: relative; }
+        .mobile-menu a:hover { color: var(--accent); }
+
+        .header {
+            background: linear-gradient(-45deg, var(--primary), var(--primary-light), #0f4d45, #1a5f5a);
+            background-size: 400% 400%;
+            animation: gradientShift 15s ease infinite;
+            color: var(--white); padding: 8rem 2rem 4rem; text-align: center; position: relative; overflow: hidden;
+        }
+        @keyframes gradientShift { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
+        .header:before { content: ''; position: absolute; top: -50%; right: -10%; width: 600px; height: 600px; background: radial-gradient(circle, rgba(201,169,97,0.15) 0%, transparent 70%); border-radius: 50%; }
+        .header h1 { font-size: 2.8rem; margin-bottom: 1rem; letter-spacing: 2px; position: relative; z-index: 1; text-shadow: 2px 2px 4px rgba(0,0,0,0.3); }
+        .header p { font-size: 1.1rem; opacity: 0.95; font-weight: 300; max-width: 800px; margin: 0 auto; position: relative; z-index: 1; line-height: 1.8; }
+
+        .main-wrapper { display: flex; max-width: 1400px; margin: 0 auto; position: relative; }
+        .content { flex: 1; padding: 2rem 2rem; max-width: 1100px; }
+
+        .side-nav {
+            position: sticky; top: 100px; width: 300px; padding: 2rem 1.5rem;
+            background: var(--white); border-radius: 15px; box-shadow: 0 5px 20px rgba(13,59,46,0.1);
+            margin-left: 2rem; align-self: flex-start; max-height: calc(100vh - 120px); overflow-y: auto;
+        }
+        .side-nav h3 { font-size: 1.1rem; color: var(--primary); margin-bottom: 1.5rem; padding-bottom: 0.8rem; border-bottom: 2px solid var(--accent); }
+        .nav-section { margin-bottom: 1rem; }
+        .nav-section h4 {
+            font-size: 0.95rem; color: var(--primary); margin-bottom: 0.5rem; padding-bottom: 0.5rem;
+            border-bottom: 1px solid rgba(201,169,97,0.3); font-weight: 600; cursor: pointer;
+            display: flex; justify-content: space-between; align-items: center; transition: color 0.3s;
+        }
+        .nav-section h4:hover { color: var(--accent); }
+        .nav-section h4::after { content: '▼'; font-size: 0.7rem; transition: transform 0.3s ease; }
+        .nav-section.collapsed h4::after { transform: rotate(-90deg); }
+        .nav-section ul { list-style: none; padding-left: 0; }
+        .nav-section.collapsed ul { display: none; }
+        .nav-section li { margin-bottom: 0.3rem; }
+        .nav-section a {
+            display: block; padding: 0.5rem 1rem 0.5rem 1.5rem; color: var(--text); text-decoration: none;
+            border-radius: 6px; font-size: 0.85rem; font-weight: 500; transition: all 0.3s ease; border-left: 3px solid transparent;
+        }
+        .nav-section a:hover { background: rgba(201,169,97,0.1); border-left-color: var(--accent); color: var(--primary); transform: translateX(3px); }
+        .nav-section a.active { background: rgba(13,59,46,0.1); border-left-color: var(--primary); color: var(--primary); font-weight: 600; }
+        .nav-section a.answered-correct { border-left-color: var(--correct); }
+        .nav-section a.answered-wrong { border-left-color: var(--incorrect); }
+        .nav-section a.unanswered { border-left-color: #ff9800; }
+
+        .section-title {
+            font-size: 1.8rem; color: var(--primary); margin: 3rem 0 1rem; padding-bottom: 0.8rem;
+            border-bottom: 3px solid var(--accent); display: inline-block; position: relative; scroll-margin-top: 100px;
+        }
+        .section-title:after { content: ''; position: absolute; bottom: -3px; left: 0; width: 100px; height: 3px; background: var(--primary); }
+        .section-subtitle { font-size: 1rem; color: var(--text); opacity: 0.7; margin-bottom: 2rem; font-style: italic; display: block; }
+
+        .question-card {
+            background: var(--white); border-radius: 15px; padding: 2rem;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.06); border-left: 5px solid var(--accent);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1); margin-bottom: 1.5rem;
+            scroll-margin-top: 120px;
+        }
+        .question-card:hover { box-shadow: 0 15px 40px rgba(13,59,46,0.12); }
+        .question-card.correct { border-left-color: var(--correct); }
+        .question-card.incorrect { border-left-color: var(--incorrect); }
+        .question-card.highlight-unanswered { 
+            animation: pulse 2s ease-in-out 3;
+            border-left-color: #ff9800;
+            box-shadow: 0 0 20px rgba(255,152,0,0.4);
+        }
+        @keyframes pulse {
+            0%, 100% { box-shadow: 0 0 20px rgba(255,152,0,0.4); }
+            50% { box-shadow: 0 0 40px rgba(255,152,0,0.8); }
+        }
+
+        .question-number {
+            font-size: 0.9rem; color: var(--accent); font-weight: 600;
+            margin-bottom: 0.5rem; text-transform: uppercase; letter-spacing: 1px;
+        }
+        .question-text {
+            font-size: 1.05rem; color: var(--text); margin-bottom: 1.5rem; line-height: 1.7;
+        }
+        .question-text em { color: var(--primary-light); font-style: italic; }
+        .question-text strong { color: var(--primary); }
+
+        .image-placeholder {
+            background: linear-gradient(135deg, rgba(13,59,46,0.05), rgba(201,169,97,0.08));
+            border: 2px dashed var(--accent);
+            border-radius: 10px;
+            padding: 2rem;
+            text-align: center;
+            margin: 1rem 0;
+            color: var(--primary);
+            font-style: italic;
+        }
+
+        .options { display: flex; flex-direction: column; gap: 0.8rem; }
+        .option {
+            display: flex; align-items: center; padding: 1rem 1.5rem;
+            background: var(--bg); border: 2px solid transparent;
+            border-radius: 10px; cursor: pointer; transition: all 0.3s ease;
+        }
+        .option:hover { background: rgba(201,169,97,0.1); border-color: var(--accent); }
+        .option input[type="radio"],
+        .option input[type="checkbox"] {
+            margin-right: 1rem; width: 20px; height: 20px; cursor: pointer; accent-color: var(--primary);
+        }
+        .option label { cursor: pointer; flex: 1; font-size: 1rem; line-height: 1.5; }
+        .option.correct { background: rgba(40,167,69,0.15); border-color: var(--correct); }
+        .option.incorrect { background: rgba(220,53,69,0.15); border-color: var(--incorrect); }
+        .option.correct label::after { content: ' ✓'; color: var(--correct); font-weight: bold; font-size: 1.2rem; }
+        .option.incorrect label::after { content: ' ✗'; color: var(--incorrect); font-weight: bold; font-size: 1.2rem; }
+
+        .matching-row {
+            display: flex; align-items: center; justify-content: space-between;
+            padding: 0.8rem 1rem; background: var(--bg); border-radius: 8px;
+            margin-bottom: 0.5rem; flex-wrap: wrap; gap: 0.5rem;
+        }
+        .matching-row label { flex: 1; font-weight: 500; }
+        .matching-row select {
+            padding: 0.5rem 1rem; border: 2px solid #e0e0e0; border-radius: 8px;
+            font-size: 0.95rem; font-family: 'Raleway', sans-serif; cursor: pointer;
+            background: var(--white); transition: border-color 0.3s;
+        }
+        .matching-row select:focus { outline: none; border-color: var(--accent); }
+        .matching-row.correct { background: rgba(40,167,69,0.15); border: 2px solid var(--correct); }
+        .matching-row.incorrect { background: rgba(220,53,69,0.15); border: 2px solid var(--incorrect); }
+
+        .mode-switcher {
+            max-width: 1100px;
+            margin: 2rem auto;
+            padding: 1.5rem 2rem;
+            background: var(--white);
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.06);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+        .mode-switcher h3 { color: var(--primary); font-size: 1.2rem; margin-bottom: 0.3rem; }
+        .mode-switcher p { font-size: 0.9rem; opacity: 0.7; }
+        .mode-buttons { display: flex; gap: 0.8rem; flex-wrap: wrap; }
+        .mode-btn {
+            padding: 0.8rem 1.5rem;
+            border: 2px solid var(--accent);
+            background: var(--white);
+            color: var(--primary);
+            border-radius: 30px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: 'Raleway', sans-serif;
+        }
+        .mode-btn:hover { background: rgba(201,169,97,0.1); }
+        .mode-btn.active { background: var(--accent); color: var(--white); }
+
+        .progress-container {
+            max-width: 1100px;
+            margin: 1rem auto;
+            padding: 1rem 2rem;
+            background: var(--white);
+            border-radius: 15px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.05);
+        }
+        .progress-bar {
+            width: 100%;
+            height: 10px;
+            background: #e0e0e0;
+            border-radius: 5px;
+            overflow: hidden;
+            margin-top: 0.5rem;
+        }
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--accent), var(--primary));
+            width: 0%;
+            transition: width 0.5s ease;
+        }
+        .progress-text {
+            font-size: 0.9rem;
+            color: var(--primary);
+            font-weight: 600;
+        }
+
+        .check-btn {
+            display: block; width: 100%; padding: 1.2rem;
+            background: linear-gradient(135deg, var(--accent), var(--accent-light));
+            color: var(--primary); border: none; border-radius: 30px;
+            font-size: 1.1rem; font-weight: 600; cursor: pointer;
+            transition: all 0.3s ease; margin: 2rem 0;
+            font-family: 'Raleway', sans-serif;
+        }
+        .check-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 25px rgba(201,169,97,0.5); }
+
+        .results {
+            background: var(--white); border-radius: 15px; padding: 2rem;
+            margin: 2rem 0; box-shadow: 0 5px 20px rgba(0,0,0,0.06);
+            border-left: 5px solid var(--accent); display: none;
+        }
+        .results.show { display: block; animation: fadeIn 0.5s ease; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        .results h3 { font-size: 1.5rem; color: var(--primary); margin-bottom: 1rem; }
+        .score { font-size: 2.5rem; color: var(--accent); font-weight: 700; margin: 1rem 0; font-family: 'Playfair Display', serif; }
+        .score-details { font-size: 1rem; opacity: 0.85; line-height: 1.8; }
+        .score-details strong { color: var(--primary); }
+        .reset-btn {
+            display: inline-block; padding: 0.8rem 2rem;
+            background: var(--primary); color: var(--white);
+            border: none; border-radius: 30px; cursor: pointer;
+            font-size: 1rem; font-weight: 600; margin-top: 1rem;
+            transition: all 0.3s ease; font-family: 'Raleway', sans-serif;
+        }
+        .reset-btn:hover { background: var(--accent); color: var(--primary); }
+
+        .answers-section {
+            background: var(--white); border-radius: 15px; padding: 2rem;
+            margin: 2rem 0; box-shadow: 0 5px 20px rgba(0,0,0,0.06);
+            border-left: 5px solid var(--accent);
+            display: none;
+        }
+        .answers-section.show { display: block; }
+        .answers-section h3 {
+            font-size: 1.5rem; color: var(--primary); margin-bottom: 1.5rem;
+            padding-bottom: 0.8rem; border-bottom: 2px solid var(--accent);
+        }
+        .answer-block {
+            background: var(--bg); border-radius: 10px; padding: 1.2rem 1.5rem;
+            margin-bottom: 1rem; border-left: 4px solid var(--correct);
+        }
+        .answer-block h4 { color: var(--primary); font-size: 1.1rem; margin-bottom: 0.5rem; }
+        .answer-block p { font-size: 0.95rem; line-height: 1.6; margin-bottom: 0.3rem; }
+        .answer-block .correct-answer { color: var(--correct); font-weight: 600; }
+        .answer-block ul { list-style: none; padding-left: 0; margin-top: 0.5rem; }
+        .answer-block ul li { padding: 0.3rem 0 0.3rem 1.5rem; position: relative; }
+        .answer-block ul li:before { content: '✓'; position: absolute; left: 0; color: var(--correct); font-weight: bold; }
+
+        .legend {
+            background: var(--white); border-radius: 10px; padding: 1rem 1.5rem;
+            margin: 1.5rem 0; display: flex; gap: 1.5rem; flex-wrap: wrap;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.05);
+        }
+        .legend-item { display: flex; align-items: center; gap: 0.5rem; font-size: 0.9rem; }
+        .legend-color { width: 20px; height: 20px; border-radius: 5px; }
+        .legend-color.correct { background: var(--correct); }
+        .legend-color.incorrect { background: var(--incorrect); }
+        .legend-color.unchecked { background: #e0e0e0; }
+
+        .download-banner {
+            background: linear-gradient(135deg, rgba(201,169,97,0.15), rgba(13,59,46,0.08));
+            border: 2px solid var(--accent);
+            border-radius: 15px;
+            padding: 1.5rem 2rem;
+            margin: 2rem auto;
+            max-width: 1100px;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+        .download-banner h3 { color: var(--primary); font-size: 1.2rem; margin-bottom: 0.5rem; }
+        .download-banner .btn-download {
+            display: inline-flex; align-items: center; gap: 0.5rem;
+            padding: 0.8rem 1.5rem; background: var(--primary); color: var(--white);
+            text-decoration: none; border-radius: 30px; font-weight: 600; font-size: 0.9rem;
+            transition: all 0.3s ease;
+        }
+        .download-banner .btn-download:hover { background: var(--accent); color: var(--primary); transform: translateY(-2px); }
+
+        .scroll-top-btn {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--accent), var(--accent-light));
+            color: var(--primary);
+            border: none;
+            cursor: pointer;
+            box-shadow: 0 5px 20px rgba(201,169,97,0.4);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+            z-index: 998;
+        }
+        .scroll-top-btn.visible { opacity: 1; visibility: visible; }
+        .scroll-top-btn:hover { transform: translateY(-5px); box-shadow: 0 10px 30px rgba(201,169,97,0.6); }
+        .scroll-top-btn svg { width: 28px; height: 28px; fill: currentColor; }
+
+        footer {
+            background: linear-gradient(135deg, var(--text), #1a1a2e);
+            color: var(--white); text-align: center; padding: 2.5rem; margin-top: 5rem; font-size: 0.9rem; position: relative; overflow: hidden;
+        }
+        footer:before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; background: linear-gradient(90deg, var(--accent), var(--accent-light)); }
+
+        @media (max-width: 1200px) {
+            .side-nav { display: none; }
+            .main-wrapper { max-width: 100%; }
+            .content { max-width: 100%; padding: 3rem 1.5rem; }
+        }
+        @media (max-width: 768px) {
+            .nav { padding: 1rem 1.5rem; }
+            .nav-links { display: none; }
+            .burger { display: flex; }
+            .header { padding: 6.5rem 1.5rem 3rem; }
+            .header h1 { font-size: 2.2rem; }
+            .header p { font-size: 1rem; }
+            .content { padding: 2rem 1rem; }
+            .mode-switcher { flex-direction: column; align-items: flex-start; }
+            .mode-buttons { width: 100%; justify-content: stretch; }
+            .mode-btn { flex: 1; text-align: center; }
+            .scroll-top-btn { width: 50px; height: 50px; bottom: 20px; right: 20px; }
+        }
+    </style>
+</head>
+<body>
+
+    <nav class="nav">
+        <div class="nav-container">
+            <a href="index.html" class="nav-logo">🌿 БИОЛОГИЯ</a>
+            <ul class="nav-links">
+                <li><a href="index.html">Главная</a></li>
+                <li><a href="materials.html">← Назад к материалам</a></li>
+                <li><a href="contacts.html">Контакты</a></li>
+            </ul>
+            <button class="burger" id="burger" aria-label="Меню">
+                <span></span><span></span><span></span>
+            </button>
+        </div>
+    </nav>
+
+    <div class="mobile-menu" id="mobileMenu">
+        <ul>
+            <li><a href="index.html">Главная</a></li>
+            <li><a href="materials.html">← Назад к материалам</a></li>
+            <li><a href="contacts.html">Контакты</a></li>
+        </ul>
+    </div>
+
+    <div class="header">
+        <h1>🏆 Олимпиада по биологии: 10-11 класс</h1>
+        <p>Всероссийская олимпиада школьников 2025 года. Пригласительный этап. Интерактивный тест с двумя режимами проверки.</p>
+    </div>
+
+    <div class="download-banner">
+        <div>
+            <h3>📥 Скачать оригинальные документы</h3>
+            <p style="font-size: 0.9rem; opacity: 0.8; margin-top: 0.3rem;">Официальные материалы олимпиады 2025 года</p>
+        </div>
+        <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
+            <a href="files/olympiads/olympiad_10-11_tasks.pdf" class="btn-download" target="_blank">📄 Задания (PDF)</a>
+            <a href="files/olympiads/olympiad_10-11_answers.pdf" class="btn-download" target="_blank">✅ Ответы (PDF)</a>
+        </div>
+    </div>
+
+    <div class="mode-switcher">
+        <div>
+            <h3>🎯 Выберите режим прохождения</h3>
+            <p>Режим влияет на то, когда вы увидите правильные ответы</p>
+        </div>
+        <div class="mode-buttons">
+            <button class="mode-btn active" data-mode="instant" onclick="setMode('instant')">⚡ Мгновенная проверка</button>
+            <button class="mode-btn" data-mode="end" onclick="setMode('end')">📋 Проверка в конце</button>
+        </div>
+    </div>
+
+    <div class="progress-container">
+        <div class="progress-text">Прогресс: <span id="progressText">0 / 47</span> вопросов решено</div>
+        <div class="progress-bar">
+            <div class="progress-fill" id="progressFill"></div>
+        </div>
+    </div>
+
+    <div class="main-wrapper">
+        <div class="content">
+
+            <div class="legend">
+                <div class="legend-item"><div class="legend-color unchecked"></div> Не проверено</div>
+                <div class="legend-item"><div class="legend-color correct"></div> Правильно</div>
+                <div class="legend-item"><div class="legend-color incorrect"></div> Неправильно</div>
+            </div>
+
+            <!-- ЧАСТЬ 1 -->
+            <h2 class="section-title" id="section-part1">📝 Часть 1: Тестовые задания</h2>
+            <span class="section-subtitle">Один правильный ответ из четырёх. Максимум 5 баллов за задание. Всего: 150 баллов.</span>
+
+            <div class="question-card" id="q1" data-answer="b" data-type="single">
+                <div class="question-number">Вопрос 1 (5 баллов)</div>
+                <div class="question-text">Какая схема лучше отражает современные представления о происхождении и родстве крупных групп?</div>
+                <div class="options">
+                    <div class="option"><input type="radio" name="q1" id="q1a" value="a"><label for="q1a">Линейная схема эволюции</label></div>
+                    <div class="option"><input type="radio" name="q1" id="q1b" value="b"><label for="q1b">Дивергентная схема с тремя доменами (Бактерии, Археи, Эукариоты)</label></div>
+                    <div class="option"><input type="radio" name="q1" id="q1c" value="c"><label for="q1c">Круговая схема развития</label></div>
+                    <div class="option"><input type="radio" name="q1" id="q1d" value="d"><label for="q1d">Лестничная схема усложнения</label></div>
+                </div>
+            </div>
+
+            <div class="question-card" id="q2" data-answer="b" data-type="single">
+                <div class="question-number">Вопрос 2 (5 баллов)</div>
+                <div class="question-text">Выберите признак, объединяющий представителей аско- и базидиомицетов.</div>
+                <div class="options">
+                    <div class="option"><input type="radio" name="q2" id="q2a" value="a"><label for="q2a">Преобладание дикариотической фазы в жизненном цикле</label></div>
+                    <div class="option"><input type="radio" name="q2" id="q2b" value="b"><label for="q2b">Экзогенное образование спор бесполого размножения – конидий</label></div>
+                    <div class="option"><input type="radio" name="q2" id="q2c" value="c"><label for="q2c">Присутствие трёх видов мицелия с различающимися геномами в одном плодовом теле</label></div>
+                    <div class="option"><input type="radio" name="q2" id="q2d" value="d"><label for="q2d">Способность дрожжевых форм жить за счёт брожения</label></div>
+                </div>
+            </div>
+
+            <div class="question-card" id="q3" data-answer="b" data-type="single">
+                <div class="question-number">Вопрос 3 (5 баллов)</div>
+                <div class="question-text">Нитропласт – органоид некоторых гаптофитовых водорослей, появившийся в результате эндосимбиогенеза с цианобактериями. Какой признак НЕ способствует подтверждению тезы «нитропласт – органоид»?</div>
+                <div class="options">
+                    <div class="option"><input type="radio" name="q3" id="q3a" value="a"><label for="q3a">Экспрессия генов нитропласта в ядре гаптофитовых водорослей</label></div>
+                    <div class="option"><input type="radio" name="q3" id="q3b" value="b"><label for="q3b">Редукция клеточной стенки нитропласта</label></div>
+                    <div class="option"><input type="radio" name="q3" id="q3c" value="c"><label for="q3c">Редукция генетического материала нитропласта</label></div>
+                    <div class="option"><input type="radio" name="q3" id="q3d" value="d"><label for="q3d">Синхронизация деления нитропласта и клеток гаптофитовых водорослей</label></div>
+                </div>
+            </div>
+
+            <div class="question-card" id="q4" data-answer="b" data-type="single">
+                <div class="question-number">Вопрос 4 (5 баллов)</div>
+                <div class="question-text">Замкнутая кровеносная система есть у...</div>
+                <div class="options">
+                    <div class="option"><input type="radio" name="q4" id="q4a" value="a"><label for="q4a">Гидры</label></div>
+                    <div class="option"><input type="radio" name="q4" id="q4b" value="b"><label for="q4b">Дождевого червя</label></div>
+                    <div class="option"><input type="radio" name="q4" id="q4c" value="c"><label for="q4c">Мидии</label></div>
+                    <div class="option"><input type="radio" name="q4" id="q4d" value="d"><label for="q4d">Туалетной губки</label></div>
+                </div>
+            </div>
+
+            <div class="question-card" id="q5" data-answer="d" data-type="single">
+                <div class="question-number">Вопрос 5 (5 баллов)</div>
+                <div class="question-text">Охарактеризуйте образ жизни этого животного (на фото).</div>
+                <div class="image-placeholder">📷 Фотография животного (см. оригинальный PDF)</div>
+                <div class="options">
+                    <div class="option"><input type="radio" name="q5" id="q5a" value="a"><label for="q5a">Нектонный хищник</label></div>
+                    <div class="option"><input type="radio" name="q5" id="q5b" value="b"><label for="q5b">Роющий в толще грунта детритофаг</label></div>
+                    <div class="option"><input type="radio" name="q5" id="q5c" value="c"><label for="q5c">Эррантный (ползающий по субстрату) собиратель</label></div>
+                    <div class="option"><input type="radio" name="q5" id="q5d" value="d"><label for="q5d">Сидячий (малоподвижный) фильтратор</label></div>
+                </div>
+            </div>
+
+            <div class="question-card" id="q6" data-answer="a" data-type="single">
+                <div class="question-number">Вопрос 6 (5 баллов)</div>
+                <div class="question-text">Этот скелет принадлежит...</div>
+                <div class="image-placeholder">📷 Фотография скелета (см. оригинальный PDF)</div>
+                <div class="options">
+                    <div class="option"><input type="radio" name="q6" id="q6a" value="a"><label for="q6a">Хрящевой рыбе</label></div>
+                    <div class="option"><input type="radio" name="q6" id="q6b" value="b"><label for="q6b">Костной рыбе</label></div>
+                    <div class="option"><input type="radio" name="q6" id="q6c" value="c"><label for="q6c">Хвостатой амфибии</label></div>
+                    <div class="option"><input type="radio" name="q6" id="q6d" value="d"><label for="q6d">Бесхвостой амфибии</label></div>
+                </div>
+            </div>
+
+            <div class="question-card" id="q7" data-answer="a" data-type="single">
+                <div class="question-number">Вопрос 7 (5 баллов)</div>
+                <div class="question-text">Почему у некоторых костных рыб уменьшаются или совсем редуцируются сосудистые клубочки в боуменовых капсулах почек?</div>
+                <div class="options">
+                    <div class="option"><input type="radio" name="q7" id="q7a" value="a"><label for="q7a">Эти рыбы живут в солёной воде, и благодаря редукции клубочков они способны сохранять воду внутри организма</label></div>
+                    <div class="option"><input type="radio" name="q7" id="q7b" value="b"><label for="q7b">Эти рыбы живут в солёной воде, и благодаря редукции клубочков они способны сохранять соли внутри организма</label></div>
+                    <div class="option"><input type="radio" name="q7" id="q7c" value="c"><label for="q7c">Эти рыбы живут в пресной воде, и благодаря редукции клубочков они способны сохранять воду внутри организма</label></div>
+                    <div class="option"><input type="radio" name="q7" id="q7d" value="d"><label for="q7d">Эти рыбы живут в пресной воде, и благодаря редукции клубочков они способны сохранять соли внутри организма</label></div>
+                </div>
+            </div>
+
+            <div class="question-card" id="q8" data-answer="c" data-type="single">
+                <div class="question-number">Вопрос 8 (5 баллов)</div>
+                <div class="question-text">Дана последовательность ДНК и её мутантный вариант. Исходная: 5′-ATG CCA GTC TGA-3′. Мутантная: 5′-ATG CCG GTC TGA-3′. Какой тип мутации произошёл?</div>
+                <div class="options">
+                    <div class="option"><input type="radio" name="q8" id="q8a" value="a"><label for="q8a">Нонсенс-мутация</label></div>
+                    <div class="option"><input type="radio" name="q8" id="q8b" value="b"><label for="q8b">Фреймшифт-мутация</label></div>
+                    <div class="option"><input type="radio" name="q8" id="q8c" value="c"><label for="q8c">Транзиция (замена пурина на другой пурин или пиримидина на другой пиримидин)</label></div>
+                    <div class="option"><input type="radio" name="q8" id="q8d" value="d"><label for="q8d">Трансверсия (замена пурина на пиримидин или наоборот)</label></div>
+                </div>
+            </div>
+
+            <div class="question-card" id="q9" data-answer="c" data-type="single">
+                <div class="question-number">Вопрос 9 (5 баллов)</div>
+                <div class="question-text">Учёный проводит эксперимент, в котором клетки подвергаются воздействию вещества, ингибирующего активность аминоацил-тРНК-синтетазы. Какое следствие этого ингибирования можно ожидать?</div>
+                <div class="options">
+                    <div class="option"><input type="radio" name="q9" id="q9a" value="a"><label for="q9a">Отсутствие инициации транскрипции</label></div>
+                    <div class="option"><input type="radio" name="q9" id="q9b" value="b"><label for="q9b">Ошибки в сплайсинге мРНК</label></div>
+                    <div class="option"><input type="radio" name="q9" id="q9c" value="c"><label for="q9c">Прекращение синтеза белков</label></div>
+                    <div class="option"><input type="radio" name="q9" id="q9d" value="d"><label for="q9d">Ускоренный распад рРНК</label></div>
+                </div>
+            </div>
+
+            <div class="question-card" id="q10" data-answer="a" data-type="single">
+                <div class="question-number">Вопрос 10 (5 баллов)</div>
+                <div class="question-text">У одного из видов насекомых сцепленно наследуются два признака: окраска тела и форма крыльев. Расстояние между генами составляет 20 морганид. Были скрещены две чистые линии: особи с тёмным телом и нормальными крыльями с особями, имеющими светлое тело и укороченные крылья. В результате получены гибридные особи с тёмным телом и нормальными крыльями, их затем подвергли анализирующему скрещиванию. В потомстве всего 50 особей. Сколько потомков с тёмным телом и укороченными крыльями можно ожидать?</div>
+                <div class="options">
+                    <div class="option"><input type="radio" name="q10" id="q10a" value="a"><label for="q10a">5</label></div>
+                    <div class="option"><input type="radio" name="q10" id="q10b" value="b"><label for="q10b">10</label></div>
+                    <div class="option"><input type="radio" name="q10" id="q10c" value="c"><label for="q10c">20</label></div>
+                    <div class="option"><input type="radio" name="q10" id="q10d" value="d"><label for="q10d">40</label></div>
+                </div>
+            </div>
+
+            <div class="question-card" id="q11" data-answer="c" data-type="single">
+                <div class="question-number">Вопрос 11 (5 баллов)</div>
+                <div class="question-text">Этот род однодольных цветковых растений занимает пятое место по числу видов среди высших растений. Виды разнообразны по местам обитания, часто доминируют в травянистом ярусе болот, лесов, лугов. Растения этого рода являются корневищными многолетниками, имеющими однополые цветки. Для удобства определения видов род разделён на три морфологические группы: одноколосковые, равноколосковые и разноколосковые. Выберите изображение представителя равноколосковой группы.</div>
+                <div class="image-placeholder">📷 Изображения растений (см. оригинальный PDF)</div>
+                <div class="options">
+                    <div class="option"><input type="radio" name="q11" id="q11a" value="a"><label for="q11a">Вариант А</label></div>
+                    <div class="option"><input type="radio" name="q11" id="q11b" value="b"><label for="q11b">Вариант Б</label></div>
+                    <div class="option"><input type="radio" name="q11" id="q11c" value="c"><label for="q11c">Вариант В</label></div>
+                    <div class="option"><input type="radio" name="q11" id="q11d" value="d"><label for="q11d">Вариант Г</label></div>
+                </div>
+            </div>
+
+            <div class="question-card" id="q12" data-answer="a" data-type="single">
+                <div class="question-number">Вопрос 12 (5 баллов)</div>
+                <div class="question-text">С помощью трансмиссионного электронного микроскопа была получена микрофотография среза некоторой клетки селагинеллы. В этой клетке одно ядро, которое из-за изогнутой формы самой клетки имеет изгиб. Какой клетке может принадлежать данный препарат?</div>
+                <div class="image-placeholder">📷 Микрофотография (см. оригинальный PDF)</div>
+                <div class="options">
+                    <div class="option"><input type="radio" name="q12" id="q12a" value="a"><label for="q12a">Сперматозоиду</label></div>
+                    <div class="option"><input type="radio" name="q12" id="q12b" value="b"><label for="q12b">Зиготе</label></div>
+                    <div class="option"><input type="radio" name="q12" id="q12c" value="c"><label for="q12c">Споре</label></div>
+                    <div class="option"><input type="radio" name="q12" id="q12d" value="d"><label for="q12d">Замыкающей клетке устьица</label></div>
+                </div>
+            </div>
+
+            <div class="question-card" id="q13" data-answer="b" data-type="single">
+                <div class="question-number">Вопрос 13 (5 баллов)</div>
+                <div class="question-text">Растение Ochna serrulata относится к небольшому семейству цветковых растений Охновые. По мере опыления и развития семян структура цветка с двойным околоцветником видоизменяется, что приводит к развитию плодиков и его придатков, напоминающих Микки Мауса. Какое изменение в структуре цветка произошло в результате опыления?</div>
+                <div class="image-placeholder">📷 Фотографии цветков и плодиков (см. оригинальный PDF)</div>
+                <div class="options">
+                    <div class="option"><input type="radio" name="q13" id="q13a" value="a"><label for="q13a">Лепестки отгибаются назад</label></div>
+                    <div class="option"><input type="radio" name="q13" id="q13b" value="b"><label for="q13b">Клетки чашелистиков накапливают каротиноиды</label></div>
+                    <div class="option"><input type="radio" name="q13" id="q13c" value="c"><label for="q13c">Клетки гипантия увеличиваются в объём</label></div>
+                    <div class="option"><input type="radio" name="q13" id="q13d" value="d"><label for="q13d">Основания тычинок разрастаются в рецептакул</label></div>
+                </div>
+            </div>
+
+            <div class="question-card" id="q14" data-answer="b" data-type="single">
+                <div class="question-number">Вопрос 14 (5 баллов)</div>
+                <div class="question-text">Во время интенсивных физических нагрузок клетки скелетных мышц испытывают дефицит кислорода, что приводит к активации анаэробного пути получения энергии. В этом процессе молекула глюкозы подвергается расщеплению с образованием метаболита, который накапливается в мышцах и может вызывать ощущение боли и жжения. Что это за метаболит?</div>
+                <div class="options">
+                    <div class="option"><input type="radio" name="q14" id="q14a" value="a"><label for="q14a">Этанол</label></div>
+                    <div class="option"><input type="radio" name="q14" id="q14b" value="b"><label for="q14b">Лактат</label></div>
+                    <div class="option"><input type="radio" name="q14" id="q14c" value="c"><label for="q14c">Пируват</label></div>
+                    <div class="option"><input type="radio" name="q14" id="q14d" value="d"><label for="q14d">Ацетил-КоА</label></div>
+                </div>
+            </div>
+
+            <div class="question-card" id="q15" data-answer="b" data-type="single">
+                <div class="question-number">Вопрос 15 (5 баллов)</div>
+                <div class="question-text">В лаборатории исследуется новый фермент. Учёные обнаружили, что при добавлении вещества, похожего по структуре на субстрат, активность фермента резко снизилась. Однако при увеличении концентрации субстрата активность фермента восстанавливалась. Какой механизм описывает происходящее?</div>
+                <div class="options">
+                    <div class="option"><input type="radio" name="q15" id="q15a" value="a"><label for="q15a">Неконкурентное ингибирование</label></div>
+                    <div class="option"><input type="radio" name="q15" id="q15b" value="b"><label for="q15b">Обратимое конкурентное ингибирование</label></div>
+                    <div class="option"><input type="radio" name="q15" id="q15c" value="c"><label for="q15c">Аллостерическая регуляция</label></div>
+                    <div class="option"><input type="radio" name="q15" id="q15d" value="d"><label for="q15d">Нет верного ответа</label></div>
+                </div>
+            </div>
+
+            <div class="question-card" id="q16" data-answer="b" data-type="single">
+                <div class="question-number">Вопрос 16 (5 баллов)</div>
+                <div class="question-text">На графике представлена зависимость скорости ферментативной реакции от концентрации субстрата. Видно, что при низких концентрациях субстрата скорость реакции увеличивается, но затем достигает плато и практически не изменяется. Какое объяснение лучше всего подходит для этого явления?</div>
+                <div class="image-placeholder">📷 График (см. оригинальный PDF)</div>
+                <div class="options">
+                    <div class="option"><input type="radio" name="q16" id="q16a" value="a"><label for="q16a">Фермент начинает распадаться из-за высокой концентрации субстрата</label></div>
+                    <div class="option"><input type="radio" name="q16" id="q16b" value="b"><label for="q16b">Активные центры фермента насыщены субстратом</label></div>
+                    <div class="option"><input type="radio" name="q16" id="q16c" value="c"><label for="q16c">Молекулы субстрата реагируют друг с другом</label></div>
+                    <div class="option"><input type="radio" name="q16" id="q16d" value="d"><label for="q16d">Высокая концентрация субстрата изменяет pH среды</label></div>
+                </div>
+            </div>
+
+            <div class="question-card" id="q17" data-answer="c" data-type="single">
+                <div class="question-number">Вопрос 17 (5 баллов)</div>
+                <div class="question-text">На снимке МРТ представлен головной мозг человека, у которого есть некоторая патология ЦНС. Согласно анамнезу, у пациента отмечены боль в шее, снижение концентрации внимания и памяти, сонливость с возможным прогрессированием до комы, расстройство зрения, нарушение координации, утрата контроля за мочеиспусканием. Предположите, что именно происходит с точки зрения физиологии:</div>
+                <div class="image-placeholder">📷 Снимок МРТ (см. оригинальный PDF)</div>
+                <div class="options">
+                    <div class="option"><input type="radio" name="q17" id="q17a" value="a"><label for="q17a">У пациента разрастание мозговой ткани, вероятнее всего глиального происхождения</label></div>
+                    <div class="option"><input type="radio" name="q17" id="q17b" value="b"><label for="q17b">Нарушение проводящих путей от головного мозга к спинному</label></div>
+                    <div class="option"><input type="radio" name="q17" id="q17c" value="c"><label for="q17c">Избыточный синтез ликвора, который сдавливает ткани мозга</label></div>
+                    <div class="option"><input type="radio" name="q17" id="q17d" value="d"><label for="q17d">Нейродегенерация и разрушение нейронов продолговатого мозга</label></div>
+                </div>
+            </div>
+
+            <div class="question-card" id="q18" data-answer="b" data-type="single">
+                <div class="question-number">Вопрос 18 (5 баллов)</div>
+                <div class="question-text">При возбуждении сомы нейронов потенциал также возникает и в дендритах. Чтобы ответить на вопрос о дендритном распределении ионных каналов, учёные добавили тетродотоксин (ТТХ) к зоне дендритов и зафиксировали кривые. Какими ионами обусловлен потенциал, который был записан при добавлении ТТХ? Известно, что это НЕ те ионы, которые перекачиваются через мембрану одним из главных белковых насосов в клетке и обеспечивают потенциал покоя.</div>
+                <div class="options">
+                    <div class="option"><input type="radio" name="q18" id="q18a" value="a"><label for="q18a">K⁺</label></div>
+                    <div class="option"><input type="radio" name="q18" id="q18b" value="b"><label for="q18b">Ca²⁺</label></div>
+                    <div class="option"><input type="radio" name="q18" id="q18c" value="c"><label for="q18c">Mg²⁺</label></div>
+                    <div class="option"><input type="radio" name="q18" id="q18d" value="d"><label for="q18d">Na⁺</label></div>
+                </div>
+            </div>
+
+            <div class="question-card" id="q19" data-answer="c" data-type="single">
+                <div class="question-number">Вопрос 19 (5 баллов)</div>
+                <div class="question-text">Яд скорпиона воздействует на работу нервной системы. При добавлении токсина к неостриарному холинергическому нейрону можно обнаружить очевидное изменение профиля измеряемого потенциала действия. На какой ток влияет данный токсин?</div>
+                <div class="image-placeholder">📷 Графики потенциала действия (см. оригинальный PDF)</div>
+                <div class="options">
+                    <div class="option"><input type="radio" name="q19" id="q19a" value="a"><label for="q19a">INa</label></div>
+                    <div class="option"><input type="radio" name="q19" id="q19b" value="b"><label for="q19b">ICa</label></div>
+                    <div class="option"><input type="radio" name="q19" id="q19c" value="c"><label for="q19c">IK</label></div>
+                    <div class="option"><input type="radio" name="q19" id="q19d" value="d"><label for="q19d">ICl</label></div>
+                </div>
+            </div>
+
+            <div class="question-card" id="q20" data-answer="a" data-type="single">
+                <div class="question-number">Вопрос 20 (5 баллов)</div>
+                <div class="question-text">Французский палеонтолог Луи Долло сформулировал закон необратимости эволюции: если сложный признак был утрачен в ходе эволюции, он не может появиться вновь в идентичной форме у потомков, даже если это дало бы организму преимущество. Какой пример наиболее точно иллюстрирует этот закон?</div>
+                <div class="options">
+                    <div class="option"><input type="radio" name="q20" id="q20a" value="a"><label for="q20a">Современные киты не могут приобрести жабры</label></div>
+                    <div class="option"><input type="radio" name="q20" id="q20b" value="b"><label for="q20b">У тритона не может появиться четырёхкамерное сердце</label></div>
+                    <div class="option"><input type="radio" name="q20" id="q20c" value="c"><label for="q20c">У птиц не могут сформироваться потовые железы</label></div>
+                    <div class="option"><input type="radio" name="q20" id="q20d" value="d"><label for="q20d">У плацентарных может появиться способность откладывать яйца</label></div>
+                </div>
+            </div>
+
+            <div class="question-card" id="q21" data-answer="d" data-type="single">
+                <div class="question-number">Вопрос 21 (5 баллов)</div>
+                <div class="question-text">Клетки большинства многоклеточных организмов имеют схожие размеры, несмотря на различия в размерах самих организмов. Почему клетки не могут расти бесконечно, увеличиваясь вместе с телом?</div>
+                <div class="options">
+                    <div class="option"><input type="radio" name="q21" id="q21a" value="a"><label for="q21a">Сложно поддерживать постоянную температуру внутри клетки</label></div>
+                    <div class="option"><input type="radio" name="q21" id="q21b" value="b"><label for="q21b">Мембрана клетки разрушается при достижении критического размера</label></div>
+                    <div class="option"><input type="radio" name="q21" id="q21c" value="c"><label for="q21c">Ядро не может управлять слишком большой клеткой из-за ограниченного количества ДНК</label></div>
+                    <div class="option"><input type="radio" name="q21" id="q21d" value="d"><label for="q21d">Соотношение площади поверхности клетки к объёму уменьшается, затрудняя обмен веществ</label></div>
+                </div>
+            </div>
+
+            <div class="question-card" id="q22" data-answer="d" data-type="single">
+                <div class="question-number">Вопрос 22 (5 баллов)</div>
+                <div class="question-text">Каждая клетка многоклеточного организма содержит один и тот же набор генов, полученный от зиготы. Однако эти клетки выполняют совершенно разные функции и обладают различной структурой. Какой механизм объясняет это?</div>
+                <div class="options">
+                    <div class="option"><input type="radio" name="q22" id="q22a" value="a"><label for="q22a">Некоторые клетки заимствуют или обмениваются частями ДНК с соседними клетками</label></div>
+                    <div class="option"><input type="radio" name="q22" id="q22b" value="b"><label for="q22b">ДНК каждой клетки постепенно изменяется, и её гены перестраиваются в зависимости от функции клетки</label></div>
+                    <div class="option"><input type="radio" name="q22" id="q22c" value="c"><label for="q22c">В ходе развития клетки теряют ненужные гены, оставляя только те, которые необходимы для их специфической работы</label></div>
+                    <div class="option"><input type="radio" name="q22" id="q22d" value="d"><label for="q22d">Разные клетки активируют только определённые гены, а остальные остаются «выключенными» благодаря регуляторным механизмам</label></div>
+                </div>
+            </div>
+
+            <div class="question-card" id="q23" data-answer="b" data-type="single">
+                <div class="question-number">Вопрос 23 (5 баллов)</div>
+                <div class="question-text">После дождей в одну из рек попало большое количество органических отходов, включая стоки с сельскохозяйственных угодий и животноводческих ферм. Через несколько дней экологи измерили содержание кислорода в воде. Какие результаты они получили?</div>
+                <div class="options">
+                    <div class="option"><input type="radio" name="q23" id="q23a" value="a"><label for="q23a">Органические вещества разлагаются, выделяя кислород, что делает воду чище</label></div>
+                    <div class="option"><input type="radio" name="q23" id="q23b" value="b"><label for="q23b">Бактерии, разлагающие органику, потребляют кислород в процессе дыхания, что приводит к его дефициту в воде</label></div>
+                    <div class="option"><input type="radio" name="q23" id="q23c" value="c"><label for="q23c">Загрязнение не влияет на уровень кислорода, так как он постоянно поступает из воздуха</label></div>
+                    <div class="option"><input type="radio" name="q23" id="q23d" value="d"><label for="q23d">Разлагающаяся органика вызывает бурный рост водорослей, которые насыщают воду кислородом</label></div>
+                </div>
+            </div>
+
+            <div class="question-card" id="q24" data-answer="a" data-type="single">
+                <div class="question-number">Вопрос 24 (5 баллов)</div>
+                <div class="question-text">Интегрируя эволюционные, палеонтологические и палеогеографические данные, можно получать информацию о направлении видообразования и траектории расселения растений в прошлом. На карте отмечено положение находок ископаемых останков пяти видов мезокипариса из семейства Кипарисовые. Изучите обе карты и предположите, какое филогенетическое дерево лучше всего подходит для описания путей эволюции видов мезокипариса:</div>
+                <div class="image-placeholder">📷 Карты и деревья (см. оригинальный PDF)</div>
+                <div class="options">
+                    <div class="option"><input type="radio" name="q24" id="q24a" value="a"><label for="q24a">Вариант А</label></div>
+                    <div class="option"><input type="radio" name="q24" id="q24b" value="b"><label for="q24b">Вариант Б</label></div>
+                    <div class="option"><input type="radio" name="q24" id="q24c" value="c"><label for="q24c">Вариант В</label></div>
+                    <div class="option"><input type="radio" name="q24" id="q24d" value="d"><label for="q24d">Вариант Г</label></div>
+                </div>
+            </div>
+
+            <div class="question-card" id="q25" data-answer="b" data-type="single">
+                <div class="question-number">Вопрос 25 (5 баллов)</div>
+                <div class="question-text">В хлоропласте высших растений встречается большое количество молекул разной химической природы. Вне зависимости от путей синтеза и класса химических соединений молекулы можно разделить на гидрофильные, гидрофобные и амфифильные. Изучите структурные формулы пяти молекул, встречающихся в хлоропласте высших растений, и выберите те, которые можно отнести к группе амфифильных.</div>
+                <div class="image-placeholder">📷 Структурные формулы (см. оригинальный PDF)</div>
+                <div class="options">
+                    <div class="option"><input type="radio" name="q25" id="q25a" value="a"><label for="q25a">Молекулы 1 и 3</label></div>
+                    <div class="option"><input type="radio" name="q25" id="q25b" value="b"><label for="q25b">Молекулы 2 и 4</label></div>
+                    <div class="option"><input type="radio" name="q25" id="q25c" value="c"><label for="q25c">Молекулы 3 и 5</label></div>
+                    <div class="option"><input type="radio" name="q25" id="q25d" value="d"><label for="q25d">Молекулы 1 и 5</label></div>
+                </div>
+            </div>
+
+            <!-- ЧАСТЬ 2 -->
+            <h2 class="section-title" id="section-part2">📋 Часть 2: Множественный выбор</h2>
+            <span class="section-subtitle">Один или несколько верных ответов. За каждый правильно выбранный и правильно невыбранный ответ — 2 балла. Максимум 10 баллов за задание. Всего: 100 баллов.</span>
+
+            <div class="question-card" id="q26" data-answer="a,c,d" data-type="multiple">
+                <div class="question-number">Вопрос 26 (10 баллов)</div>
+                <div class="question-text">Учёные обнаружили населённую живыми организмами экзопланету, законы эволюции на которой похожи на земные. Исследования показали, что популяция местных существ претерпела значительные изменения за последние несколько тысяч лет. Какие из выдвинутых гипотез о механизмах эволюции этих существ могут быть научно обоснованными?</div>
+                <div class="options">
+                    <div class="option"><input type="checkbox" name="q26" id="q26a" value="a"><label for="q26a">В популяции существ периодически возникают случайные изменения в носителе генетической информации, которые могут передаваться потомкам</label></div>
+                    <div class="option"><input type="checkbox" name="q26" id="q26b" value="b"><label for="q26b">Все особи меняются одинаково под воздействием окружающей среды, передавая приобретённые черты следующему поколению</label></div>
+                    <div class="option"><input type="checkbox" name="q26" id="q26c" value="c"><label for="q26c">Организмы, обладающие признаками, дающими преимущество в данных условиях, выживают чаще и оставляют больше потомства</label></div>
+                    <div class="option"><input type="checkbox" name="q26" id="q26d" value="d"><label for="q26d">Популяция может претерпевать значительные изменения, если на протяжении нескольких поколений особи размножаются в условиях изоляции</label></div>
+                    <div class="option"><input type="checkbox" name="q26" id="q26e" value="e"><label for="q26e">Особенности организма передаются неизменными из поколения в поколение, без влияния случайных факторов</label></div>
+                </div>
+            </div>
+
+            <div class="question-card" id="q27" data-answer="b,c,d,e" data-type="multiple">
+                <div class="question-number">Вопрос 27 (10 баллов)</div>
+                <div class="question-text">У млекопитающего цвет шерсти определяется геном, находящимся в X-хромосоме. Этот ген имеет два аллеля, которые взаимодействуют по принципу полного доминирования: Xᴮ даёт тёмную шерсть, Xᵇ даёт светлую шерсть. Выберите верные утверждения, учитывая, что самцы этого вида гетерогаметны.</div>
+                <div class="options">
+                    <div class="option"><input type="checkbox" name="q27" id="q27a" value="a"><label for="q27a">Самец с генотипом XᵇXᵇ будет иметь шерсть светлого окраса</label></div>
+                    <div class="option"><input type="checkbox" name="q27" id="q27b" value="b"><label for="q27b">Самки могут быть как гетерозиготными, так и гомозиготными</label></div>
+                    <div class="option"><input type="checkbox" name="q27" id="q27c" value="c"><label for="q27c">Если гетерозиготная самка скрестится с самцом со светлой окраской, самки со светлой шерстью составят половину от всех самок в потомстве</label></div>
+                    <div class="option"><input type="checkbox" name="q27" id="q27d" value="d"><label for="q27d">Самец не может быть носителем аллеля светлой окраски, не проявляя его фенотипически</label></div>
+                    <div class="option"><input type="checkbox" name="q27" id="q27e" value="e"><label for="q27e">Если самка со светлой шерстью скрестится с самцом с тёмной шерстью, вся женская часть потомства будет гетерозиготами с тёмной шерстью</label></div>
+                </div>
+            </div>
+
+            <div class="question-card" id="q28" data-answer="a,b" data-type="multiple">
+                <div class="question-number">Вопрос 28 (10 баллов)</div>
+                <div class="question-text">Джеральд Даррелл так описывал этих животных: «Спали они обычно на спине, свернувшись в клубок, громко сопя и раздувая при этом большие морщинистые розовые животы...». Рассмотрите изображение части челюсти описанного выше животного и выберите его характеристики.</div>
+                <div class="image-placeholder">📷 Изображение челюсти (см. оригинальный PDF)</div>
+                <div class="options">
+                    <div class="option"><input type="checkbox" name="q28" id="q28a" value="a"><label for="q28a">Принадлежит к классу Млекопитающие</label></div>
+                    <div class="option"><input type="checkbox" name="q28" id="q28b" value="b"><label for="q28b">Рацион включает в основном насекомых и других беспозвоночных</label></div>
+                    <div class="option"><input type="checkbox" name="q28" id="q28c" value="c"><label for="q28c">Рацион включает в основном растительную пищу</label></div>
+                    <div class="option"><input type="checkbox" name="q28" id="q28d" value="d"><label for="q28d">Ареал животного включает в себя Евразию и Африку</label></div>
+                    <div class="option"><input type="checkbox" name="q28" id="q28e" value="e"><label for="q28e">Животное обитает в умеренном климатическом поясе</label></div>
+                </div>
+            </div>
+
+            <div class="question-card" id="q29" data-answer="a,b,e" data-type="multiple">
+                <div class="question-number">Вопрос 29 (10 баллов)</div>
+                <div class="question-text">Какие заболевания могут переносить членистоногие?</div>
+                <div class="options">
+                    <div class="option"><input type="checkbox" name="q29" id="q29a" value="a"><label for="q29a">Боррелиоз</label></div>
+                    <div class="option"><input type="checkbox" name="q29" id="q29b" value="b"><label for="q29b">Малярию</label></div>
+                    <div class="option"><input type="checkbox" name="q29" id="q29c" value="c"><label for="q29c">Описторхоз</label></div>
+                    <div class="option"><input type="checkbox" name="q29" id="q29d" value="d"><label for="q29d">Токсоплазмоз</label></div>
+                    <div class="option"><input type="checkbox" name="q29" id="q29e" value="e"><label for="q29e">Лейшманиоз</label></div>
+                </div>
+            </div>
+
+            <div class="question-card" id="q30" data-answer="a,c" data-type="multiple">
+                <div class="question-number">Вопрос 30 (10 баллов)</div>
+                <div class="question-text">Прокариоты и эукариоты имеют ряд отличий в организации генетического материала, структуре клеток и биохимических процессах. Выберите верные утверждения.</div>
+                <div class="options">
+                    <div class="option"><input type="checkbox" name="q30" id="q30a" value="a"><label for="q30a">В прокариотических клетках обычно отсутствуют гистоны, но их ДНК может быть связана с белками, выполняющими схожие функции</label></div>
+                    <div class="option"><input type="checkbox" name="q30" id="q30b" value="b"><label for="q30b">У прокариот имеются механизмы альтернативного сплайсинга, позволяющие производить разные белки из одного гена</label></div>
+                    <div class="option"><input type="checkbox" name="q30" id="q30c" value="c"><label for="q30c">В эукариотических клетках репликация ДНК происходит только в ядре, а у прокариот – в цитоплазме</label></div>
+                    <div class="option"><input type="checkbox" name="q30" id="q30d" value="d"><label for="q30d">У прокариот отсутствует ядро, их ДНК организована в несколько линейных хромосом, расположенных в цитоплазме</label></div>
+                    <div class="option"><input type="checkbox" name="q30" id="q30e" value="e"><label for="q30e">У бактерий отсутствуют рибосомы, поскольку они не имеют мембранных органелл</label></div>
+                </div>
+            </div>
+
+            <div class="question-card" id="q31" data-answer="b,c,e" data-type="multiple">
+                <div class="question-number">Вопрос 31 (10 баллов)</div>
+                <div class="question-text">Митохондрии – это органеллы, играющие ключевую роль в клеточном дыхании и энергетическом обмене. Выберите верные утверждения.</div>
+                <div class="options">
+                    <div class="option"><input type="checkbox" name="q31" id="q31a" value="a"><label for="q31a">Митохондрии имеют собственную ДНК, которая кодирует все белки, необходимые для их функционирования</label></div>
+                    <div class="option"><input type="checkbox" name="q31" id="q31b" value="b"><label for="q31b">Внутренняя мембрана митохондрий содержит белки цепи переноса электронов, участвующие в окислительном фосфорилировании</label></div>
+                    <div class="option"><input type="checkbox" name="q31" id="q31c" value="c"><label for="q31c">Митохондрии могут делиться независимо от деления клетки, что подтверждает гипотезу об их эндосимбиотическом происхождении</label></div>
+                    <div class="option"><input type="checkbox" name="q31" id="q31d" value="d"><label for="q31d">Главным источником АТФ в митохондриях является процесс гликолиза, происходящий в их матриксе</label></div>
+                    <div class="option"><input type="checkbox" name="q31" id="q31e" value="e"><label for="q31e">Дефекты митохондриальных ферментов могут приводить к заболеваниям, передающимся по материнской линии</label></div>
+                </div>
+            </div>
+
+            <div class="question-card" id="q32" data-answer="b,c,d" data-type="multiple">
+                <div class="question-number">Вопрос 32 (10 баллов)</div>
+                <div class="question-text">Анатолий страдает астмой и постоянно использует различные препараты для бронходилатации. Выберите механизмы, благодаря которым можно быстро убрать бронхоспазм.</div>
+                <div class="options">
+                    <div class="option"><input type="checkbox" name="q32" id="q32a" value="a"><label for="q32a">Использовать препараты для сокращения бронхов, поскольку во время приступа астмы те расширяются</label></div>
+                    <div class="option"><input type="checkbox" name="q32" id="q32b" value="b"><label for="q32b">Использовать адреномиметики, которые воздействуют на адренорецепторы</label></div>
+                    <div class="option"><input type="checkbox" name="q32" id="q32c" value="c"><label for="q32c">Использовать агонисты адренорецепторов</label></div>
+                    <div class="option"><input type="checkbox" name="q32" id="q32d" value="d"><label for="q32d">Использовать блокаторы холинорецепторов</label></div>
+                    <div class="option"><input type="checkbox" name="q32" id="q32e" value="e"><label for="q32e">Использовать агонисты никотиновых ацетилхолинорецепторов</label></div>
+                </div>
+            </div>
+
+            <div class="question-card" id="q33" data-answer="a,b,d,e" data-type="multiple">
+                <div class="question-number">Вопрос 33 (10 баллов)</div>
+                <div class="question-text">Для приготовления варений используется множество разных типов плодов. При этом одревесневшие ткани плода часто оставляют в варенье. В случае использования костянок и многокостянок в варенье попадает одревесневший внутренний слой околоплодника (эндокарпий) с семенем. В варенье из многоорешка «косточки» представлены целыми сухими плодиками – орешками. В каких типах варенья можно обнаружить плодики-орешки?</div>
+                <div class="image-placeholder">📷 Фотографии плодов (см. оригинальный PDF)</div>
+                <div class="options">
+                    <div class="option"><input type="checkbox" name="q33" id="q33a" value="a"><label for="q33a">Варенье из земляники</label></div>
+                    <div class="option"><input type="checkbox" name="q33" id="q33b" value="b"><label for="q33b">Варенье из малины</label></div>
+                    <div class="option"><input type="checkbox" name="q33" id="q33c" value="c"><label for="q33c">Варенье из вишни</label></div>
+                    <div class="option"><input type="checkbox" name="q33" id="q33d" value="d"><label for="q33d">Варенье из ежевики</label></div>
+                    <div class="option"><input type="checkbox" name="q33" id="q33e" value="e"><label for="q33e">Варенье из шиповника</label></div>
+                </div>
+            </div>
+
+            <div class="question-card" id="q34" data-answer="a,c,e" data-type="multiple">
+                <div class="question-number">Вопрос 34 (10 баллов)</div>
+                <div class="question-text">Репликация ДНК – это сложный процесс удвоения генетического материала перед делением клетки. Выберите верные утверждения.</div>
+                <div class="options">
+                    <div class="option"><input type="checkbox" name="q34" id="q34a" value="a"><label for="q34a">Репликация ДНК начинается в одной точке прокариотической хромосомы и в нескольких точках эукариотической хромосомы</label></div>
+                    <div class="option"><input type="checkbox" name="q34" id="q34b" value="b"><label for="q34b">Полимераза ДНК III является основным ферментом эукариот, синтезирующим новую цепь ДНК</label></div>
+                    <div class="option"><input type="checkbox" name="q34" id="q34c" value="c"><label for="q34c">В процессе репликации ведущая цепь синтезируется непрерывно, а отстающая – фрагментами Оказаки</label></div>
+                    <div class="option"><input type="checkbox" name="q34" id="q34d" value="d"><label for="q34d">Хеликаза необходима для устранения ошибок, возникающих при синтезе новой цепи ДНК</label></div>
+                    <div class="option"><input type="checkbox" name="q34" id="q34e" value="e"><label for="q34e">Теломераза предотвращает укорочение хромосом, добавляя повторяющиеся последовательности ДНК к их концам</label></div>
+                </div>
+            </div>
+
+            <div class="question-card" id="q35" data-answer="b,c,d" data-type="multiple">
+                <div class="question-number">Вопрос 35 (10 баллов)</div>
+                <div class="question-text">В хлоропласте высших растений встречается большое количество молекул разной химической природы. Вне зависимости от путей синтеза и класса химических соединений молекулы можно разделить на гидрофильные, гидрофобные и амфифильные. Выберите те молекулы, которые можно отнести к группе амфифильных.</div>
+                <div class="image-placeholder">📷 Структурные формулы (см. оригинальный PDF)</div>
+                <div class="options">
+                    <div class="option"><input type="checkbox" name="q35" id="q35a" value="a"><label for="q35a">Глюкоза</label></div>
+                    <div class="option"><input type="checkbox" name="q35" id="q35b" value="b"><label for="q35b">Фосфатидилглицерин</label></div>
+                    <div class="option"><input type="checkbox" name="q35" id="q35c" value="c"><label for="q35c">Хлорофилл a</label></div>
+                    <div class="option"><input type="checkbox" name="q35" id="q35d" value="d"><label for="q35d">Пластохинон</label></div>
+                    <div class="option"><input type="checkbox" name="q35" id="q35e" value="e"><label for="q35e">АТФ</label></div>
+                </div>
+            </div>
+
+            <!-- ЧАСТЬ 3 -->
+            <h2 class="section-title" id="section-part3">🔄 Часть 3: Задания на соответствие</h2>
+            <span class="section-subtitle">Установите соответствие. За каждое верное соотнесение — определённый балл.</span>
+
+            <div class="question-card" id="q36" data-answer="1:эпистаз,2:кодоминирование,3:плейотропия,4:полимерия,5:цитоплазматическое,6:голандрическое" data-type="matching">
+                <div class="question-number">Вопрос 36 (18 баллов)</div>
+                <div class="question-text">Установите соответствие между генетическими явлениями и их примерами.</div>
+                <div class="matching-row" data-correct="эпистаз">
+                    <label>1. Окраска шерсти у лабрадоров, когда ген E определяет, проявится ли цвет, закодированный геном B, или же собака будет жёлтого цвета → </label>
+                    <select name="q36_1">
+                        <option value="">Выберите...</option>
+                        <option value="эпистаз">Эпистаз</option>
+                        <option value="кодоминирование">Кодоминирование</option>
+                        <option value="плейотропия">Плейотропия</option>
+                        <option value="полимерия">Полимерия</option>
+                        <option value="цитоплазматическое">Цитоплазматическое наследование</option>
+                        <option value="голандрическое">Голандрическое наследование</option>
+                    </select>
+                </div>
+                <div class="matching-row" data-correct="кодоминирование">
+                    <label>2. Система групп крови ABO, при которой у людей с генотипом IAIB проявляются одновременно антигены A и B на эритроцитах → </label>
+                    <select name="q36_2">
+                        <option value="">Выберите...</option>
+                        <option value="эпистаз">Эпистаз</option>
+                        <option value="кодоминирование">Кодоминирование</option>
+                        <option value="плейотропия">Плейотропия</option>
+                        <option value="полимерия">Полимерия</option>
+                        <option value="цитоплазматическое">Цитоплазматическое наследование</option>
+                        <option value="голандрическое">Голандрическое наследование</option>
+                    </select>
+                </div>
+                <div class="matching-row" data-correct="плейотропия">
+                    <label>3. Ген, ответственный за белую окраску и голубые глаза у котов, также вызывает глухоту → </label>
+                    <select name="q36_3">
+                        <option value="">Выберите...</option>
+                        <option value="эпистаз">Эпистаз</option>
+                        <option value="кодоминирование">Кодоминирование</option>
+                        <option value="плейотропия">Плейотропия</option>
+                        <option value="полимерия">Полимерия</option>
+                        <option value="цитоплазматическое">Цитоплазматическое наследование</option>
+                        <option value="голандрическое">Голандрическое наследование</option>
+                    </select>
+                </div>
+                <div class="matching-row" data-correct="полимерия">
+                    <label>4. Цвет кожи человека, который определяется взаимодействием нескольких генов, влияющих на количество пигмента меланина → </label>
+                    <select name="q36_4">
+                        <option value="">Выберите...</option>
+                        <option value="эпистаз">Эпистаз</option>
+                        <option value="кодоминирование">Кодоминирование</option>
+                        <option value="плейотропия">Плейотропия</option>
+                        <option value="полимерия">Полимерия</option>
+                        <option value="цитоплазматическое">Цитоплазматическое наследование</option>
+                        <option value="голандрическое">Голандрическое наследование</option>
+                    </select>
+                </div>
+                <div class="matching-row" data-correct="цитоплазматическое">
+                    <label>5. Наследственные заболевания митохондрий, например, синдром Лебера, приводящий к потере зрения, который передаётся только через материнскую линию → </label>
+                    <select name="q36_5">
+                        <option value="">Выберите...</option>
+                        <option value="эпистаз">Эпистаз</option>
+                        <option value="кодоминирование">Кодоминирование</option>
+                        <option value="плейотропия">Плейотропия</option>
+                        <option value="полимерия">Полимерия</option>
+                        <option value="цитоплазматическое">Цитоплазматическое наследование</option>
+                        <option value="голандрическое">Голандрическое наследование</option>
+                    </select>
+                </div>
+                <div class="matching-row" data-correct="голандрическое">
+                    <label>6. Гипертрихоз ушей у мужчин – наследуемый только по Y-хромосоме признак, передающийся от отца к сыну → </label>
+                    <select name="q36_6">
+                        <option value="">Выберите...</option>
+                        <option value="эпистаз">Эпистаз</option>
+                        <option value="кодоминирование">Кодоминирование</option>
+                        <option value="плейотропия">Плейотропия</option>
+                        <option value="полимерия">Полимерия</option>
+                        <option value="цитоплазматическое">Цитоплазматическое наследование</option>
+                        <option value="голандрическое">Голандрическое наследование</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="question-card" id="q37" data-answer="1:альбумин,2:фибриноген,3:билирубин,4:иммуноглобулин,5:гаптоглобин,6:трансферрин" data-type="matching">
+                <div class="question-number">Вопрос 37 (18 баллов)</div>
+                <div class="question-text">Кровь – это сложная биологическая среда. Установите соответствие между биохимическими компонентами крови и их функциями или характеристиками.</div>
+                <div class="matching-row" data-correct="альбумин">
+                    <label>1. Транспортный белок крови, регулирующий онкотическое давление и переносящий низкомолекулярные вещества, такие как гормоны и жирные кислоты → </label>
+                    <select name="q37_1">
+                        <option value="">Выберите...</option>
+                        <option value="альбумин">Альбумин</option>
+                        <option value="фибриноген">Фибриноген</option>
+                        <option value="билирубин">Билирубин</option>
+                        <option value="иммуноглобулин">Иммуноглобулин</option>
+                        <option value="гаптоглобин">Гаптоглобин</option>
+                        <option value="трансферрин">Трансферрин</option>
+                    </select>
+                </div>
+                <div class="matching-row" data-correct="фибриноген">
+                    <label>2. Белок, участвующий в свёртывании крови путём преобразования в нерастворимую форму при активации каскада коагуляции → </label>
+                    <select name="q37_2">
+                        <option value="">Выберите...</option>
+                        <option value="альбумин">Альбумин</option>
+                        <option value="фибриноген">Фибриноген</option>
+                        <option value="билирубин">Билирубин</option>
+                        <option value="иммуноглобулин">Иммуноглобулин</option>
+                        <option value="гаптоглобин">Гаптоглобин</option>
+                        <option value="трансферрин">Трансферрин</option>
+                    </select>
+                </div>
+                <div class="matching-row" data-correct="билирубин">
+                    <label>3. Продукт распада гемоглобина, его высокая концентрация в крови наблюдается при заболеваниях печени и гемолизе → </label>
+                    <select name="q37_3">
+                        <option value="">Выберите...</option>
+                        <option value="альбумин">Альбумин</option>
+                        <option value="фибриноген">Фибриноген</option>
+                        <option value="билирубин">Билирубин</option>
+                        <option value="иммуноглобулин">Иммуноглобулин</option>
+                        <option value="гаптоглобин">Гаптоглобин</option>
+                        <option value="трансферрин">Трансферрин</option>
+                    </select>
+                </div>
+                <div class="matching-row" data-correct="иммуноглобулин">
+                    <label>4. Белок, играющий ключевую роль в гуморальном иммунитете и связывающий антигены → </label>
+                    <select name="q37_4">
+                        <option value="">Выберите...</option>
+                        <option value="альбумин">Альбумин</option>
+                        <option value="фибриноген">Фибриноген</option>
+                        <option value="билирубин">Билирубин</option>
+                        <option value="иммуноглобулин">Иммуноглобулин</option>
+                        <option value="гаптоглобин">Гаптоглобин</option>
+                        <option value="трансферрин">Трансферрин</option>
+                    </select>
+                </div>
+                <div class="matching-row" data-correct="гаптоглобин">
+                    <label>5. Белок, связывающий свободный гемоглобин в плазме, предотвращая его токсическое воздействие на почки → </label>
+                    <select name="q37_5">
+                        <option value="">Выберите...</option>
+                        <option value="альбумин">Альбумин</option>
+                        <option value="фибриноген">Фибриноген</option>
+                        <option value="билирубин">Билирубин</option>
+                        <option value="иммуноглобулин">Иммуноглобулин</option>
+                        <option value="гаптоглобин">Гаптоглобин</option>
+                        <option value="трансферрин">Трансферрин</option>
+                    </select>
+                </div>
+                <div class="matching-row" data-correct="трансферрин">
+                    <label>6. Белок, ответственный за транспорт ионов железа в крови, необходимый для синтеза гемоглобина → </label>
+                    <select name="q37_6">
+                        <option value="">Выберите...</option>
+                        <option value="альбумин">Альбумин</option>
+                        <option value="фибриноген">Фибриноген</option>
+                        <option value="билирубин">Билирубин</option>
+                        <option value="иммуноглобулин">Иммуноглобулин</option>
+                        <option value="гаптоглобин">Гаптоглобин</option>
+                        <option value="трансферрин">Трансферрин</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="question-card" id="q38" data-answer="1:движущий,2:дизруптивный,3:зависимый,4:групповой,5:стабилизирующий,6:половой" data-type="matching">
+                <div class="question-number">Вопрос 38 (12 баллов)</div>
+                <div class="question-text">Естественный отбор – это основной механизм эволюции. Установите соответствие между типами естественного отбора и их примерами.</div>
+                <div class="matching-row" data-correct="движущий">
+                    <label>1. Среди бактерий, подвергающихся воздействию антибиотиков, со временем выживают и размножаются только те, у которых развилась лекарственная устойчивость → </label>
+                    <select name="q38_1">
+                        <option value="">Выберите...</option>
+                        <option value="движущий">Движущий (направленный) отбор</option>
+                        <option value="дизруптивный">Дизруптивный (разрывающий) отбор</option>
+                        <option value="зависимый">Зависимый от частоты отбор</option>
+                        <option value="групповой">Групповой отбор</option>
+                        <option value="стабилизирующий">Стабилизирующий отбор</option>
+                        <option value="половой">Половой отбор</option>
+                    </select>
+                </div>
+                <div class="matching-row" data-correct="дизруптивный">
+                    <label>2. У популяции птиц, питающихся либо мелкими, либо крупными семенами, клювы среднего размера становятся бесполезными → </label>
+                    <select name="q38_2">
+                        <option value="">Выберите...</option>
+                        <option value="движущий">Движущий (направленный) отбор</option>
+                        <option value="дизруптивный">Дизруптивный (разрывающий) отбор</option>
+                        <option value="зависимый">Зависимый от частоты отбор</option>
+                        <option value="групповой">Групповой отбор</option>
+                        <option value="стабилизирующий">Стабилизирующий отбор</option>
+                        <option value="половой">Половой отбор</option>
+                    </select>
+                </div>
+                <div class="matching-row" data-correct="зависимый">
+                    <label>3. У хищников вырабатывается «охотничий рефлекс» на наиболее распространённую окраску жертвы, поэтому у животных с редкой расцветкой выше шансы выжить → </label>
+                    <select name="q38_3">
+                        <option value="">Выберите...</option>
+                        <option value="движущий">Движущий (направленный) отбор</option>
+                        <option value="дизруптивный">Дизруптивный (разрывающий) отбор</option>
+                        <option value="зависимый">Зависимый от частоты отбор</option>
+                        <option value="групповой">Групповой отбор</option>
+                        <option value="стабилизирующий">Стабилизирующий отбор</option>
+                        <option value="половой">Половой отбор</option>
+                    </select>
+                </div>
+                <div class="matching-row" data-correct="групповой">
+                    <label>4. У социальных насекомых наблюдается альтруистическое поведение → </label>
+                    <select name="q38_4">
+                        <option value="">Выберите...</option>
+                        <option value="движущий">Движущий (направленный) отбор</option>
+                        <option value="дизруптивный">Дизруптивный (разрывающий) отбор</option>
+                        <option value="зависимый">Зависимый от частоты отбор</option>
+                        <option value="групповой">Групповой отбор</option>
+                        <option value="стабилизирующий">Стабилизирующий отбор</option>
+                        <option value="половой">Половой отбор</option>
+                    </select>
+                </div>
+                <div class="matching-row" data-correct="стабилизирующий">
+                    <label>5. У новорождённых слишком маленькая или слишком большая масса тела повышает риск смертности → </label>
+                    <select name="q38_5">
+                        <option value="">Выберите...</option>
+                        <option value="движущий">Движущий (направленный) отбор</option>
+                        <option value="дизруптивный">Дизруптивный (разрывающий) отбор</option>
+                        <option value="зависимый">Зависимый от частоты отбор</option>
+                        <option value="групповой">Групповой отбор</option>
+                        <option value="стабилизирующий">Стабилизирующий отбор</option>
+                        <option value="половой">Половой отбор</option>
+                    </select>
+                </div>
+                <div class="matching-row" data-correct="половой">
+                    <label>6. У павлинов самцы с самыми большими и яркими хвостами чаще привлекают самок несмотря на то, что длинный хвост может мешать полёту → </label>
+                    <select name="q38_6">
+                        <option value="">Выберите...</option>
+                        <option value="движущий">Движущий (направленный) отбор</option>
+                        <option value="дизруптивный">Дизруптивный (разрывающий) отбор</option>
+                        <option value="зависимый">Зависимый от частоты отбор</option>
+                        <option value="групповой">Групповой отбор</option>
+                        <option value="стабилизирующий">Стабилизирующий отбор</option>
+                        <option value="половой">Половой отбор</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="question-card" id="q39" data-answer="1:пцр,2:секвенирование,3:электрофорез,4:стр-анализ,5:секвенирование,6:пцр" data-type="matching">
+                <div class="question-number">Вопрос 39 (18 баллов)</div>
+                <div class="question-text">Установите соответствие между задачей и методом молекулярной биологии, который лучше всего подходит для её выполнения.</div>
+                <div class="matching-row" data-correct="пцр">
+                    <label>1. Определение наличия вируса SARS-CoV-2 в образце мазка из носоглотки → </label>
+                    <select name="q39_1">
+                        <option value="">Выберите...</option>
+                        <option value="электрофорез">Электрофорез</option>
+                        <option value="секвенирование">Секвенирование</option>
+                        <option value="пцр">ПЦР</option>
+                        <option value="стр-анализ">STR-анализ</option>
+                    </select>
+                </div>
+                <div class="matching-row" data-correct="секвенирование">
+                    <label>2. Выявление точечных мутаций в гене BRCA1 у пациентов с подозрением на наследственный рак молочной железы → </label>
+                    <select name="q39_2">
+                        <option value="">Выберите...</option>
+                        <option value="электрофорез">Электрофорез</option>
+                        <option value="секвенирование">Секвенирование</option>
+                        <option value="пцр">ПЦР</option>
+                        <option value="стр-анализ">STR-анализ</option>
+                    </select>
+                </div>
+                <div class="matching-row" data-correct="электрофорез">
+                    <label>3. Определение размера ДНК для проверки успешности клонирования гена → </label>
+                    <select name="q39_3">
+                        <option value="">Выберите...</option>
+                        <option value="электрофорез">Электрофорез</option>
+                        <option value="секвенирование">Секвенирование</option>
+                        <option value="пцр">ПЦР</option>
+                        <option value="стр-анализ">STR-анализ</option>
+                    </select>
+                </div>
+                <div class="matching-row" data-correct="стр-анализ">
+                    <label>4. Быстрое и относительно дешёвое выявление отцовства путём сравнения специфических коротких тандемных повторов (STR) в ДНК ребёнка и предполагаемого отца → </label>
+                    <select name="q39_4">
+                        <option value="">Выберите...</option>
+                        <option value="электрофорез">Электрофорез</option>
+                        <option value="секвенирование">Секвенирование</option>
+                        <option value="пцр">ПЦР</option>
+                        <option value="стр-анализ">STR-анализ</option>
+                    </select>
+                </div>
+                <div class="matching-row" data-correct="секвенирование">
+                    <label>5. Расшифровка полного генома бактерии для изучения новых механизмов антибиотикорезистентности → </label>
+                    <select name="q39_5">
+                        <option value="">Выберите...</option>
+                        <option value="электрофорез">Электрофорез</option>
+                        <option value="секвенирование">Секвенирование</option>
+                        <option value="пцр">ПЦР</option>
+                        <option value="стр-анализ">STR-анализ</option>
+                    </select>
+                </div>
+                <div class="matching-row" data-correct="пцр">
+                    <label>6. Получение большого количества копий гена для их последующей вставки в плазмиду → </label>
+                    <select name="q39_6">
+                        <option value="">Выберите...</option>
+                        <option value="электрофорез">Электрофорез</option>
+                        <option value="секвенирование">Секвенирование</option>
+                        <option value="пцр">ПЦР</option>
+                        <option value="стр-анализ">STR-анализ</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="question-card" id="q40" data-answer="1:спорофит,2:гаметофит,3:спорофит,4:гаметофит,5:спорофит,6:спорофит" data-type="matching">
+                <div class="question-number">Вопрос 40 (12 баллов)</div>
+                <div class="question-text">Жизненный цикл высших растений происходит с чередованием диплоидного и гаплоидного поколений. Установите соответствие между изображениями фрагментов или целых организмов и стадиями жизненного цикла.</div>
+                <div class="image-placeholder">📷 Изображения организмов А-Е (см. оригинальный PDF)</div>
+                <div class="matching-row" data-correct="спорофит">
+                    <label>1. Изображение А → </label>
+                    <select name="q40_1">
+                        <option value="">Выберите...</option>
+                        <option value="спорофит">Спорофит</option>
+                        <option value="гаметофит">Гаметофит</option>
+                    </select>
+                </div>
+                <div class="matching-row" data-correct="гаметофит">
+                    <label>2. Изображение Б → </label>
+                    <select name="q40_2">
+                        <option value="">Выберите...</option>
+                        <option value="спорофит">Спорофит</option>
+                        <option value="гаметофит">Гаметофит</option>
+                    </select>
+                </div>
+                <div class="matching-row" data-correct="спорофит">
+                    <label>3. Изображение В → </label>
+                    <select name="q40_3">
+                        <option value="">Выберите...</option>
+                        <option value="спорофит">Спорофит</option>
+                        <option value="гаметофит">Гаметофит</option>
+                    </select>
+                </div>
+                <div class="matching-row" data-correct="гаметофит">
+                    <label>4. Изображение Г → </label>
+                    <select name="q40_4">
+                        <option value="">Выберите...</option>
+                        <option value="спорофит">Спорофит</option>
+                        <option value="гаметофит">Гаметофит</option>
+                    </select>
+                </div>
+                <div class="matching-row" data-correct="спорофит">
+                    <label>5. Изображение Д → </label>
+                    <select name="q40_5">
+                        <option value="">Выберите...</option>
+                        <option value="спорофит">Спорофит</option>
+                        <option value="гаметофит">Гаметофит</option>
+                    </select>
+                </div>
+                <div class="matching-row" data-correct="спорофит">
+                    <label>6. Изображение Е → </label>
+                    <select name="q40_6">
+                        <option value="">Выберите...</option>
+                        <option value="спорофит">Спорофит</option>
+                        <option value="гаметофит">Гаметофит</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- ЧАСТЬ 4 -->
+            <h2 class="section-title" id="section-part4">🔢 Часть 4: Количественные задачи</h2>
+            <span class="section-subtitle">Решите задачи. За каждый верный ответ — 15 баллов. Всего: 30 баллов.</span>
+
+            <div class="question-card" id="q41" data-answer="173" data-type="single">
+                <div class="question-number">Вопрос 41 (15 баллов)</div>
+                <div class="question-text">В заповеднике ведётся наблюдение за популяцией бобров, изначальное количество которых составляет 120 особей. При благоприятных условиях ежегодный прирост популяции оценивается в 20%. Сколько бобров будет в заповеднике через 2 года, если ежегодный прирост сохранится на прежнем уровне? Для расчёта количества бобров используется формула N(t) = N₀ × (1 + r)ᵗ. Ответ округлите до целых.</div>
+                <div class="options">
+                    <div class="option"><input type="radio" name="q41" id="q41a" value="120"><label for="q41a">120</label></div>
+                    <div class="option"><input type="radio" name="q41" id="q41b" value="144"><label for="q41b">144</label></div>
+                    <div class="option"><input type="radio" name="q41" id="q41c" value="173"><label for="q41c">173</label></div>
+                    <div class="option"><input type="radio" name="q41" id="q41d" value="200"><label for="q41d">200</label></div>
+                </div>
+            </div>
+
+            <div class="question-card" id="q42" data-answer="17.4" data-type="single">
+                <div class="question-number">Вопрос 42 (15 баллов)</div>
+                <div class="question-text">Найдите скорость клубочковой фильтрации при помощи инулина, если известно, что это экзогенное вещество не подвергается секреции и реабсорбции в канальцах нефрона. Количество инулина в крови составляет 5000 мг, объём крови – 5 л, гематокрит – 50%. Объём выделившейся вторичной мочи за сутки составил 1.25 л, масса выделенного инулина – 125 мг. Скорость образования мочи считайте постоянной в течение суток. Ответ выразите в мл/мин, округлите до десятых.</div>
+                <div class="options">
+                    <div class="option"><input type="radio" name="q42" id="q42a" value="12.5"><label for="q42a">12.5</label></div>
+                    <div class="option"><input type="radio" name="q42" id="q42b" value="17.4"><label for="q42b">17.4</label></div>
+                    <div class="option"><input type="radio" name="q42" id="q42c" value="25.0"><label for="q42c">25.0</label></div>
+                    <div class="option"><input type="radio" name="q42" id="q42d" value="50.0"><label for="q42d">50.0</label></div>
+                </div>
+            </div>
+
+            <!-- Кнопки управления -->
+            <button class="check-btn" id="checkBtn" onclick="checkAnswers()">✓ Проверить ответы</button>
+
+            <!-- Результаты -->
+            <div class="results" id="results">
+                <h3>📊 Результаты проверки</h3>
+                <div class="score" id="score">0 / 358</div>
+                <div class="score-details" id="details"></div>
+                <button class="reset-btn" onclick="resetTest()">🔄 Пройти ещё раз</button>
+            </div>
+
+            <!-- Раздел с правильными ответами (скрыт по умолчанию) -->
+            <div class="answers-section" id="answersSection">
+                <h3>✅ Правильные ответы</h3>
+                
+                <div class="answer-block">
+                    <h4>Часть 1: Тестовые задания (по 5 баллов)</h4>
+                    <p><strong>1.</strong> <span class="correct-answer">Дивергентная схема с тремя доменами</span></p>
+                    <p><strong>2.</strong> <span class="correct-answer">Экзогенное образование спор бесполого размножения – конидий</span></p>
+                    <p><strong>3.</strong> <span class="correct-answer">Редукция клеточной стенки нитропласта</span></p>
+                    <p><strong>4.</strong> <span class="correct-answer">Дождевого червя</span></p>
+                    <p><strong>5.</strong> <span class="correct-answer">Сидячий (малоподвижный) фильтратор</span></p>
+                    <p><strong>6.</strong> <span class="correct-answer">Хрящевой рыбе</span></p>
+                    <p><strong>7.</strong> <span class="correct-answer">Эти рыбы живут в солёной воде, и благодаря редукции клубочков они способны сохранять воду внутри организма</span></p>
+                    <p><strong>8.</strong> <span class="correct-answer">Транзиция</span></p>
+                    <p><strong>9.</strong> <span class="correct-answer">Прекращение синтеза белков</span></p>
+                    <p><strong>10.</strong> <span class="correct-answer">5</span></p>
+                    <p><strong>11.</strong> <span class="correct-answer">Вариант В (равноколосковые)</span></p>
+                    <p><strong>12.</strong> <span class="correct-answer">Сперматозоиду</span></p>
+                    <p><strong>13.</strong> <span class="correct-answer">Клетки чашелистиков накапливают каротиноиды</span></p>
+                    <p><strong>14.</strong> <span class="correct-answer">Лактат</span></p>
+                    <p><strong>15.</strong> <span class="correct-answer">Обратимое конкурентное ингибирование</span></p>
+                    <p><strong>16.</strong> <span class="correct-answer">Активные центры фермента насыщены субстратом</span></p>
+                    <p><strong>17.</strong> <span class="correct-answer">Избыточный синтез ликвора, который сдавливает ткани мозга</span></p>
+                    <p><strong>18.</strong> <span class="correct-answer">Ca²⁺</span></p>
+                    <p><strong>19.</strong> <span class="correct-answer">IK</span></p>
+                    <p><strong>20.</strong> <span class="correct-answer">Современные киты не могут приобрести жабры</span></p>
+                    <p><strong>21.</strong> <span class="correct-answer">Соотношение площади поверхности клетки к объёму уменьшается, затрудняя обмен веществ</span></p>
+                    <p><strong>22.</strong> <span class="correct-answer">Разные клетки активируют только определённые гены, а остальные остаются «выключенными»</span></p>
+                    <p><strong>23.</strong> <span class="correct-answer">Бактерии, разлагающие органику, потребляют кислород в процессе дыхания, что приводит к его дефициту в воде</span></p>
+                    <p><strong>24.</strong> <span class="correct-answer">Вариант А</span></p>
+                    <p><strong>25.</strong> <span class="correct-answer">Молекулы 2 и 4</span></p>
+                </div>
+
+                <div class="answer-block">
+                    <h4>Часть 2: Множественный выбор (по 10 баллов)</h4>
+                    <p><strong>26.</strong> В популяции существ периодически возникают случайные изменения...; Организмы, обладающие признаками, дающими преимущество...; Популяция может претерпевать значительные изменения...</p>
+                    <p><strong>27.</strong> Самки могут быть как гетерозиготными, так и гомозиготными; Если гетерозиготная самка скрестится с самцом со светлой окраской...; Самец не может быть носителем аллеля светлой окраски...; Если самка со светлой шерстью скрестится с самцом с тёмной шерстью...</p>
+                    <p><strong>28.</strong> Принадлежит к классу Млекопитающие; Рацион включает в основном насекомых и других беспозвоночных</p>
+                    <p><strong>29.</strong> Боррелиоз, Малярию, Лейшманиоз</p>
+                    <p><strong>30.</strong> В прокариотических клетках обычно отсутствуют гистоны...; В эукариотических клетках репликация ДНК происходит только в ядре...</p>
+                    <p><strong>31.</strong> Внутренняя мембрана митохондрий содержит белки цепи переноса электронов...; Митохондрии могут делиться независимо от деления клетки...; Дефекты митохондриальных ферментов могут приводить к заболеваниям...</p>
+                    <p><strong>32.</strong> Использовать адреномиметики...; Использовать агонисты адренорецепторов; Использовать блокаторы холинорецепторов</p>
+                    <p><strong>33.</strong> Варенье из земляники, Варенье из малины, Варенье из ежевики, Варенье из шиповника</p>
+                    <p><strong>34.</strong> Репликация ДНК начинается в одной точке...; В процессе репликации ведущая цепь синтезируется непрерывно...; Теломераза предотвращает укорочение хромосом...</p>
+                    <p><strong>35.</strong> Фосфатидилглицерин, Хлорофилл a, Пластохинон</p>
+                </div>
+
+                <div class="answer-block">
+                    <h4>Часть 3: Соответствие</h4>
+                    <p><strong>36.</strong> 1-Эпистаз, 2-Кодоминирование, 3-Плейотропия, 4-Полимерия, 5-Цитоплазматическое, 6-Голандрическое</p>
+                    <p><strong>37.</strong> 1-Альбумин, 2-Фибриноген, 3-Билирубин, 4-Иммуноглобулин, 5-Гаптоглобин, 6-Трансферрин</p>
+                    <p><strong>38.</strong> 1-Движущий, 2-Дизруптивный, 3-Зависимый, 4-Групповой, 5-Стабилизирующий, 6-Половой</p>
+                    <p><strong>39.</strong> 1-ПЦР, 2-Секвенирование, 3-Электрофорез, 4-STR-анализ, 5-Секвенирование, 6-ПЦР</p>
+                    <p><strong>40.</strong> 1-Спорофит, 2-Гаметофит, 3-Спорофит, 4-Гаметофит, 5-Спорофит, 6-Спорофит</p>
+                </div>
+
+                <div class="answer-block">
+                    <h4>Часть 4: Количественные задачи (по 15 баллов)</h4>
+                    <p><strong>41.</strong> <span class="correct-answer">173</span></p>
+                    <p><strong>42.</strong> <span class="correct-answer">17.4</span></p>
+                </div>
+            </div>
+
+            <!-- Скачать документы (В КОНЦЕ) -->
+            <div class="download-banner">
+                <div>
+                    <h3>📥 Скачать оригинальные документы</h3>
+                    <p style="font-size: 0.9rem; opacity: 0.8; margin-top: 0.3rem;">Официальные материалы олимпиады 2025 года</p>
+                </div>
+                <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
+                    <a href="files/olympiads/olympiad_10-11_tasks.pdf" class="btn-download" target="_blank">📄 Задания (PDF)</a>
+                    <a href="files/olympiads/olympiad_10-11_answers.pdf" class="btn-download" target="_blank">✅ Ответы (PDF)</a>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Боковая навигация -->
+        <aside class="side-nav">
+            <h3>📑 Навигация</h3>
+            
+            <div class="nav-section">
+                <h4>⚙️ Настройки</h4>
+                <ul>
+                    <li><a href="#mode-switcher" class="nav-link" onclick="document.querySelector('.mode-switcher').scrollIntoView({behavior: 'smooth'}); return false;">Режим проверки</a></li>
+                </ul>
+            </div>
+
+            <div class="nav-section">
+                <h4>Часть 1: Тест (1–25)</h4>
+                <ul>
+                    <li><a href="#q1" class="nav-link">Вопрос 1</a></li>
+                    <li><a href="#q5" class="nav-link">Вопрос 5</a></li>
+                    <li><a href="#q10" class="nav-link">Вопрос 10</a></li>
+                    <li><a href="#q15" class="nav-link">Вопрос 15</a></li>
+                    <li><a href="#q20" class="nav-link">Вопрос 20</a></li>
+                    <li><a href="#q25" class="nav-link">Вопрос 25</a></li>
+                </ul>
+            </div>
+
+            <div class="nav-section">
+                <h4>Часть 2: Множ. выбор (26–35)</h4>
+                <ul>
+                    <li><a href="#q26" class="nav-link">Вопрос 26</a></li>
+                    <li><a href="#q30" class="nav-link">Вопрос 30</a></li>
+                    <li><a href="#q35" class="nav-link">Вопрос 35</a></li>
+                </ul>
+            </div>
+
+            <div class="nav-section">
+                <h4>Часть 3: Соответствие</h4>
+                <ul>
+                    <li><a href="#q36" class="nav-link">Вопрос 36</a></li>
+                    <li><a href="#q38" class="nav-link">Вопрос 38</a></li>
+                    <li><a href="#q40" class="nav-link">Вопрос 40</a></li>
+                </ul>
+            </div>
+
+            <div class="nav-section">
+                <h4>Часть 4: Задачи</h4>
+                <ul>
+                    <li><a href="#q41" class="nav-link">Вопрос 41</a></li>
+                    <li><a href="#q42" class="nav-link">Вопрос 42</a></li>
+                </ul>
+            </div>
+
+            <div class="nav-section">
+                <h4>📊 Результаты</h4>
+                <ul>
+                    <li><a href="#results" class="nav-link">Мои результаты</a></li>
+                </ul>
+            </div>
+
+            <div class="nav-section">
+                <h4>✅ Ответы</h4>
+                <ul>
+                    <li><a href="#answersSection" class="nav-link">Правильные ответы</a></li>
+                </ul>
+            </div>
+        </aside>
+    </div>
+
+    <!-- Кнопка "Вверх" -->
+    <button class="scroll-top-btn" id="scrollTopBtn" onclick="scrollToTop()" title="Наверх">
+        <svg viewBox="0 0 24 24">
+            <path d="M7.41 15.41L12 10.83l4.59 4.58L18 14l-6-6-6 6z"/>
+        </svg>
+    </button>
+
+    <footer>
+        <p>© 2026 Ресурсный центр «Биология» | Даниленко А.А.</p>
+        <p>Email: zz999an@yandex.by | г. Хойники, школа №3</p>
+    </footer>
+
+    <script>
+        let currentMode = 'instant';
+        const TOTAL_QUESTIONS = 42;
+
+        const burger = document.getElementById('burger');
+        const mobileMenu = document.getElementById('mobileMenu');
+        const mobileLinks = document.querySelectorAll('.mobile-link');
+
+        if (burger) {
+            burger.addEventListener('click', () => {
+                burger.classList.toggle('active');
+                mobileMenu.classList.toggle('active');
+                document.body.style.overflow = mobileMenu.classList.contains('active') ? 'hidden' : '';
+            });
+
+            mobileLinks.forEach(link => {
+                link.addEventListener('click', () => {
+                    burger.classList.remove('active');
+                    mobileMenu.classList.remove('active');
+                    document.body.style.overflow = '';
+                });
+            });
+        }
+
+        document.querySelectorAll('.nav-section h4').forEach(header => {
+            header.addEventListener('click', () => {
+                header.parentElement.classList.toggle('collapsed');
+            });
+        });
+
+        const sections = document.querySelectorAll('.question-card, .section-title, .answers-section, .results');
+        const navLinks = document.querySelectorAll('.nav-link');
+
+        window.addEventListener('scroll', () => {
+            let current = '';
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop;
+                if (scrollY >= (sectionTop - 150)) {
+                    current = section.getAttribute('id');
+                }
+            });
+
+            navLinks.forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('href').slice(1) === current) {
+                    link.classList.add('active');
+                    link.closest('.nav-section').classList.remove('collapsed');
+                }
+            });
+
+            const scrollTopBtn = document.getElementById('scrollTopBtn');
+            if (window.scrollY > 400) {
+                scrollTopBtn.classList.add('visible');
+            } else {
+                scrollTopBtn.classList.remove('visible');
+            }
+
+            updateProgress();
+        });
+
+        function scrollToTop() {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function updateProgress() {
+            let answered = 0;
+            for (let i = 1; i <= 25; i++) {
+                if (document.querySelector(`input[name="q${i}"]:checked`)) answered++;
+            }
+            for (let i = 26; i <= 35; i++) {
+                if (document.querySelectorAll(`input[name="q${i}"]:checked`).length > 0) answered++;
+            }
+            for (let i = 36; i <= 40; i++) {
+                let allAnswered = true;
+                document.querySelectorAll(`[name^="q${i}_"]`).forEach(select => {
+                    if (select.value === '') allAnswered = false;
+                });
+                if (allAnswered) answered++;
+            }
+            for (let i = 41; i <= 42; i++) {
+                if (document.querySelector(`input[name="q${i}"]:checked`)) answered++;
+            }
+
+            const progressText = document.getElementById('progressText');
+            const progressFill = document.getElementById('progressFill');
+            if (progressText) progressText.textContent = `${answered} / ${TOTAL_QUESTIONS}`;
+            if (progressFill) progressFill.style.width = `${(answered / TOTAL_QUESTIONS) * 100}%`;
+        }
+
+        function setMode(mode) {
+            currentMode = mode;
+            document.querySelectorAll('.mode-btn').forEach(btn => btn.classList.remove('active'));
+            document.querySelector(`.mode-btn[data-mode="${mode}"]`).classList.add('active');
+            
+            const checkBtn = document.getElementById('checkBtn');
+            const answersSection = document.getElementById('answersSection');
+            if (mode === 'instant') {
+                checkBtn.textContent = '✓ Показать результаты';
+                answersSection.classList.remove('show');
+            } else {
+                checkBtn.textContent = '✓ Проверить все ответы';
+                answersSection.classList.remove('show');
+            }
+            resetHighlighting();
+        }
+
+        function resetHighlighting() {
+            document.querySelectorAll('.option, .matching-row, .question-card').forEach(el => {
+                el.classList.remove('correct', 'incorrect', 'highlight-unanswered');
+            });
+            document.querySelectorAll('.nav-link').forEach(link => {
+                link.classList.remove('answered-correct', 'answered-wrong', 'unanswered');
+            });
+            document.getElementById('results').classList.remove('show');
+            document.getElementById('answersSection').classList.remove('show');
+        }
+
+        document.querySelectorAll('.question-card[data-type="single"]').forEach(card => {
+            card.querySelectorAll('input[type="radio"]').forEach(option => {
+                option.addEventListener('change', function() {
+                    if (currentMode !== 'instant') return;
+                    const correctAnswer = card.dataset.answer;
+                    const selectedValue = this.value;
+                    card.querySelectorAll('.option').forEach(opt => {
+                        opt.classList.remove('correct', 'incorrect');
+                        const input = opt.querySelector('input');
+                        if (input.value === correctAnswer) opt.classList.add('correct');
+                        if (input.value === selectedValue && selectedValue !== correctAnswer) opt.classList.add('incorrect');
+                    });
+                    const navLink = document.querySelector(`.nav-link[href="#${card.id}"]`);
+                    if (navLink) {
+                        if (selectedValue === correctAnswer) {
+                            navLink.classList.add('answered-correct');
+                            navLink.classList.remove('answered-wrong', 'unanswered');
+                        } else {
+                            navLink.classList.add('answered-wrong');
+                            navLink.classList.remove('answered-correct', 'unanswered');
+                        }
+                    }
+                    updateProgress();
+                });
+            });
+        });
+
+        document.querySelectorAll('.question-card[data-type="multiple"]').forEach(card => {
+            card.querySelectorAll('input[type="checkbox"]').forEach(checkbox => {
+                checkbox.addEventListener('change', function() {
+                    if (currentMode !== 'instant') return;
+                    const correctAnswers = card.dataset.answer.split(',');
+                    const selected = Array.from(card.querySelectorAll('input[type="checkbox"]:checked')).map(cb => cb.value);
+                    card.querySelectorAll('.option').forEach(opt => {
+                        opt.classList.remove('correct', 'incorrect');
+                        const input = opt.querySelector('input');
+                        if (correctAnswers.includes(input.value)) opt.classList.add('correct');
+                        if (selected.includes(input.value) && !correctAnswers.includes(input.value)) opt.classList.add('incorrect');
+                    });
+                    let correct = 0, incorrect = 0;
+                    selected.forEach(ans => { if (correctAnswers.includes(ans)) correct++; else incorrect++; });
+                    correctAnswers.forEach(ans => { if (!selected.includes(ans)) incorrect++; });
+                    const questionScore = Math.max(0, (correct - incorrect) * 2);
+                    const navLink = document.querySelector(`.nav-link[href="#${card.id}"]`);
+                    if (navLink) {
+                        if (questionScore >= 6) {
+                            navLink.classList.add('answered-correct');
+                            navLink.classList.remove('answered-wrong', 'unanswered');
+                        } else {
+                            navLink.classList.add('answered-wrong');
+                            navLink.classList.remove('answered-correct', 'unanswered');
+                        }
+                    }
+                    updateProgress();
+                });
+            });
+        });
+
+        document.querySelectorAll('.question-card[data-type="matching"]').forEach(card => {
+            card.querySelectorAll('select').forEach(select => {
+                select.addEventListener('change', function() {
+                    if (currentMode !== 'instant') return;
+                    const row = this.closest('.matching-row');
+                    const correct = row.dataset.correct;
+                    row.classList.remove('correct', 'incorrect');
+                    if (this.value === correct) row.classList.add('correct');
+                    else if (this.value !== '') row.classList.add('incorrect');
+                    
+                    const allRows = card.querySelectorAll('.matching-row');
+                    let correctMatches = 0, answeredCount = 0;
+                    allRows.forEach(r => {
+                        if (r.querySelector('select').value === r.dataset.correct) correctMatches++;
+                        if (r.querySelector('select').value !== '') answeredCount++;
+                    });
+                    const navLink = document.querySelector(`.nav-link[href="#${card.id}"]`);
+                    if (navLink && answeredCount === allRows.length) {
+                        if (correctMatches >= Math.ceil(allRows.length * 0.75)) {
+                            navLink.classList.add('answered-correct');
+                            navLink.classList.remove('answered-wrong', 'unanswered');
+                        } else {
+                            navLink.classList.add('answered-wrong');
+                            navLink.classList.remove('answered-correct', 'unanswered');
+                        }
+                    }
+                    updateProgress();
+                });
+            });
+        });
+
+        function checkAnswers() {
+            if (currentMode === 'end') {
+                const unanswered = [];
+                for (let i = 1; i <= 25; i++) if (!document.querySelector(`input[name="q${i}"]:checked`)) unanswered.push('q' + i);
+                for (let i = 26; i <= 35; i++) if (document.querySelectorAll(`input[name="q${i}"]:checked`).length === 0) unanswered.push('q' + i);
+                for (let i = 36; i <= 40; i++) {
+                    let allAnswered = true;
+                    document.querySelectorAll(`[name^="q${i}_"]`).forEach(select => { if (select.value === '') allAnswered = false; });
+                    if (!allAnswered) unanswered.push('q' + i);
+                }
+                for (let i = 41; i <= 42; i++) if (!document.querySelector(`input[name="q${i}"]:checked`)) unanswered.push('q' + i);
+
+                if (unanswered.length > 0) {
+                    unanswered.forEach(id => {
+                        const card = document.getElementById(id);
+                        if (card) {
+                            card.classList.add('highlight-unanswered');
+                            setTimeout(() => card.classList.remove('highlight-unanswered'), 6000);
+                        }
+                        const navLink = document.querySelector(`.nav-link[href="#${id}"]`);
+                        if (navLink) navLink.classList.add('unanswered');
+                    });
+                    const firstUnanswered = document.getElementById(unanswered[0]);
+                    if (firstUnanswered) {
+                        firstUnanswered.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                        alert(`⚠️ Вы не ответили на ${unanswered.length} вопрос(ов):\n\n${unanswered.map(id => id.toUpperCase()).join(', ')}\n\nПожалуйста, ответьте на все вопросы перед проверкой!`);
+                    }
+                    return;
+                }
+            }
+
+            let totalScore = 0, part1Score = 0, part2Score = 0, part3Score = 0, part4Score = 0;
+
+            for (let i = 1; i <= 25; i++) {
+                const card = document.getElementById('q' + i);
+                const correctAnswer = card.dataset.answer;
+                const selected = card.querySelector('input[type="radio"]:checked');
+                card.querySelectorAll('.option').forEach(option => {
+                    const input = option.querySelector('input');
+                    option.classList.remove('correct', 'incorrect');
+                    if (input.value === correctAnswer) option.classList.add('correct');
+                    if (selected && input.value === selected.value) {
+                        if (selected.value === correctAnswer) part1Score += 5;
+                        else option.classList.add('incorrect');
+                    }
+                });
+                const navLink = document.querySelector(`.nav-link[href="#q${i}"]`);
+                if (navLink) {
+                    if (selected && selected.value === correctAnswer) {
+                        navLink.classList.add('answered-correct');
+                        navLink.classList.remove('answered-wrong', 'unanswered');
+                    } else {
+                        navLink.classList.add('answered-wrong');
+                        navLink.classList.remove('answered-correct', 'unanswered');
+                    }
+                }
+            }
+
+            for (let i = 26; i <= 35; i++) {
+                const card = document.getElementById('q' + i);
+                const correctAnswers = card.dataset.answer.split(',');
+                const selected = Array.from(card.querySelectorAll('input[type="checkbox"]:checked')).map(cb => cb.value);
+                card.querySelectorAll('.option').forEach(option => {
+                    const input = option.querySelector('input');
+                    option.classList.remove('correct', 'incorrect');
+                    if (correctAnswers.includes(input.value)) option.classList.add('correct');
+                    if (selected.includes(input.value) && !correctAnswers.includes(input.value)) option.classList.add('incorrect');
+                });
+                let correct = 0, incorrect = 0;
+                selected.forEach(ans => { if (correctAnswers.includes(ans)) correct++; else incorrect++; });
+                correctAnswers.forEach(ans => { if (!selected.includes(ans)) incorrect++; });
+                part2Score += Math.max(0, (correct - incorrect) * 2);
+                
+                const navLink = document.querySelector(`.nav-link[href="#q${i}"]`);
+                if (navLink) {
+                    const score = Math.max(0, (correct - incorrect) * 2);
+                    if (score >= 6) {
+                        navLink.classList.add('answered-correct');
+                        navLink.classList.remove('answered-wrong', 'unanswered');
+                    } else {
+                        navLink.classList.add('answered-wrong');
+                        navLink.classList.remove('answered-correct', 'unanswered');
+                    }
+                }
+            }
+
+            for (let qNum = 36; qNum <= 40; qNum++) {
+                const card = document.getElementById('q' + qNum);
+                const rows = card.querySelectorAll('.matching-row');
+                let correctMatches = 0;
+                rows.forEach(row => {
+                    const correct = row.dataset.correct;
+                    const select = row.querySelector('select');
+                    row.classList.remove('correct', 'incorrect');
+                    if (select.value === correct) { row.classList.add('correct'); correctMatches++; } 
+                    else if (select.value !== '') { row.classList.add('incorrect'); }
+                });
+                
+                let pointsPerMatch = 3;
+                if (qNum === 38 || qNum === 40) pointsPerMatch = 2;
+                
+                part3Score += correctMatches * pointsPerMatch;
+
+                const navLink = document.querySelector(`.nav-link[href="#q${qNum}"]`);
+                if (navLink) {
+                    if (correctMatches >= Math.ceil(rows.length * 0.75)) {
+                        navLink.classList.add('answered-correct');
+                        navLink.classList.remove('answered-wrong', 'unanswered');
+                    } else {
+                        navLink.classList.add('answered-wrong');
+                        navLink.classList.remove('answered-correct', 'unanswered');
+                    }
+                }
+            }
+
+            for (let i = 41; i <= 42; i++) {
+                const card = document.getElementById('q' + i);
+                const correctAnswer = card.dataset.answer;
+                const selected = card.querySelector('input[type="radio"]:checked');
+                card.querySelectorAll('.option').forEach(option => {
+                    const input = option.querySelector('input');
+                    option.classList.remove('correct', 'incorrect');
+                    if (input.value === correctAnswer) option.classList.add('correct');
+                    if (selected && input.value === selected.value) {
+                        if (selected.value === correctAnswer) part4Score += 15;
+                        else option.classList.add('incorrect');
+                    }
+                });
+                const navLink = document.querySelector(`.nav-link[href="#q${i}"]`);
+                if (navLink) {
+                    if (selected && selected.value === correctAnswer) {
+                        navLink.classList.add('answered-correct');
+                        navLink.classList.remove('answered-wrong', 'unanswered');
+                    } else {
+                        navLink.classList.add('answered-wrong');
+                        navLink.classList.remove('answered-correct', 'unanswered');
+                    }
+                }
+            }
+
+            totalScore = part1Score + part2Score + part3Score + part4Score;
+
+            const resultsDiv = document.getElementById('results');
+            const scoreDiv = document.getElementById('score');
+            const detailsDiv = document.getElementById('details');
+
+            scoreDiv.textContent = `${totalScore} / 358 баллов`;
+            const percent = Math.round((totalScore / 358) * 100);
+            let grade = '';
+            if (percent >= 90) grade = '🏆 Отлично! Превосходный результат!';
+            else if (percent >= 75) grade = '🥈 Хорошо! Высокий уровень подготовки.';
+            else if (percent >= 60) grade = '🥉 Удовлетворительно. Есть над чем поработать.';
+            else if (percent >= 40) grade = '📚 Необходимо повторить материал.';
+            else grade = '💪 Не сдавайтесь! Изучите теорию и попробуйте снова.';
+
+            detailsDiv.innerHTML = `
+                <strong>Часть 1 (тест):</strong> ${part1Score} / 125 баллов<br>
+                <strong>Часть 2 (множественный выбор):</strong> ${part2Score} / 100 баллов<br>
+                <strong>Часть 3 (соответствие):</strong> ${part3Score} / 78 баллов<br>
+                <strong>Часть 4 (задачи):</strong> ${part4Score} / 30 баллов<br><br>
+                <strong>Процент выполнения:</strong> ${percent}%<br>
+                <strong>Оценка:</strong> ${grade}
+            `;
+
+            resultsDiv.classList.add('show');
+            if (currentMode === 'end') document.getElementById('answersSection').classList.add('show');
+            resultsDiv.scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function resetTest() {
+            document.querySelectorAll('input[type="radio"], input[type="checkbox"]').forEach(input => input.checked = false);
+            document.querySelectorAll('select').forEach(select => select.value = '');
+            document.querySelectorAll('.option, .matching-row, .question-card').forEach(el => el.classList.remove('correct', 'incorrect', 'highlight-unanswered'));
+            document.querySelectorAll('.nav-link').forEach(link => link.classList.remove('answered-correct', 'answered-wrong', 'unanswered'));
+            document.getElementById('results').classList.remove('show');
+            document.getElementById('answersSection').classList.remove('show');
+            updateProgress();
+            scrollToTop();
+        }
+
+        updateProgress();
+    </script>
+</body>
+</html>

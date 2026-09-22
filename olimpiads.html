@@ -1,0 +1,557 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Олимпиады по биологии - Ресурсный центр "Биология"</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Raleway:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #0D3B2E;
+            --primary-light: #1B5E5B;
+            --accent: #C9A961;
+            --accent-light: #D4B570;
+            --bg: #FAFAF7;
+            --text: #2B2D42;
+            --white: #FFFFFF;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Raleway', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+        }
+
+        h1, h2, h3 {
+            font-family: 'Playfair Display', serif;
+        }
+
+        /* Navigation - Premium */
+        .nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: rgba(255, 255, 255, 0.98);
+            backdrop-filter: blur(15px);
+            padding: 1rem 2rem;
+            box-shadow: 0 2px 20px rgba(13,59,46,0.1);
+            z-index: 1000;
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .nav-logo {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--primary);
+            letter-spacing: 1px;
+            z-index: 1001;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: var(--text);
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: 600;
+            transition: color 0.3s;
+            position: relative;
+        }
+
+        .nav-links a:after {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--accent);
+            transition: width 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: var(--accent);
+        }
+
+        .nav-links a:hover:after {
+            width: 100%;
+        }
+
+        /* Burger Menu */
+        .burger {
+            display: none;
+            flex-direction: column;
+            justify-content: space-between;
+            width: 28px;
+            height: 20px;
+            cursor: pointer;
+            z-index: 1001;
+            background: none;
+            border: none;
+            padding: 0;
+        }
+
+        .burger span {
+            display: block;
+            width: 100%;
+            height: 2px;
+            background: var(--primary);
+            transition: all 0.3s ease;
+            border-radius: 2px;
+        }
+
+        .burger.active span:nth-child(1) {
+            transform: translateY(9px) rotate(45deg);
+        }
+
+        .burger.active span:nth-child(2) {
+            opacity: 0;
+            transform: translateX(-10px);
+        }
+
+        .burger.active span:nth-child(3) {
+            transform: translateY(-9px) rotate(-45deg);
+        }
+
+        .mobile-menu {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+            z-index: 999;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            transition: opacity 0.4s ease;
+        }
+
+        .mobile-menu.active {
+            display: flex;
+            opacity: 1;
+        }
+
+        .mobile-menu ul {
+            list-style: none;
+            text-align: center;
+        }
+
+        .mobile-menu li {
+            margin: 1.5rem 0;
+            transform: translateY(20px);
+            opacity: 0;
+            transition: all 0.4s ease;
+        }
+
+        .mobile-menu.active li {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        .mobile-menu.active li:nth-child(1) { transition-delay: 0.1s; }
+        .mobile-menu.active li:nth-child(2) { transition-delay: 0.2s; }
+        .mobile-menu.active li:nth-child(3) { transition-delay: 0.3s; }
+        .mobile-menu.active li:nth-child(4) { transition-delay: 0.4s; }
+
+        .mobile-menu a {
+            color: var(--white);
+            text-decoration: none;
+            font-family: 'Playfair Display', serif;
+            font-size: 2rem;
+            font-weight: 600;
+            letter-spacing: 1px;
+            transition: color 0.3s;
+            position: relative;
+        }
+
+        .mobile-menu a:hover {
+            color: var(--accent);
+        }
+
+        .mobile-menu a:after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 0;
+            height: 2px;
+            background: var(--accent);
+            transition: width 0.3s;
+        }
+
+        .mobile-menu a:hover:after {
+            width: 60%;
+        }
+
+        /* Header */
+        .header {
+            background: linear-gradient(135deg, var(--primary), var(--primary-light));
+            color: var(--white);
+            padding: 8rem 2rem 4rem; /* Увеличен отступ сверху, чтобы меню не перекрывало текст */
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2.8rem;
+            margin-bottom: 1rem;
+            letter-spacing: 1px;
+        }
+
+        .header p {
+            font-size: 1.1rem;
+            opacity: 0.95;
+            font-weight: 300;
+        }
+
+        /* Content and Cards */
+        .content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 4rem 2rem;
+        }
+
+        .classes-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2.5rem;
+            margin-top: 2rem;
+        }
+
+        .class-card {
+            background: var(--white);
+            border-radius: 20px;
+            overflow: hidden;
+            text-decoration: none;
+            color: var(--text);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            border: 2px solid transparent;
+            box-shadow: 0 10px 30px rgba(13,59,46,0.08);
+            text-align: center;
+            position: relative;
+            opacity: 0;
+            transform: translateY(30px);
+        }
+
+        .class-card.visible {
+            opacity: 1;
+            transform: translateY(0);
+            transition: all 0.8s ease;
+        }
+
+        .class-card:before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 5px;
+            background: linear-gradient(90deg, var(--primary), var(--accent));
+            transform: scaleX(0);
+            transform-origin: left;
+            transition: transform 0.4s ease;
+        }
+
+        .class-card:hover:before {
+            transform: scaleX(1);
+        }
+
+        .class-card:hover {
+            transform: translateY(-10px);
+            border-color: var(--accent);
+            box-shadow: 0 20px 50px rgba(13,59,46,0.15);
+        }
+
+        .class-header {
+            background: linear-gradient(135deg, var(--primary), var(--primary-light));
+            color: var(--white);
+            padding: 2.5rem 2rem;
+            text-align: center;
+        }
+
+        .class-number {
+            font-size: 4rem;
+            font-weight: 700;
+            color: var(--accent);
+            margin-bottom: 0.5rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            transition: transform 0.3s ease;
+        }
+
+        .class-card:hover .class-number {
+            transform: scale(1.1);
+        }
+
+        .class-header h3 {
+            font-size: 1.5rem;
+            font-weight: 600;
+        }
+
+        .class-body {
+            padding: 2rem;
+            text-align: center;
+        }
+
+        .class-body p {
+            font-size: 0.95rem;
+            opacity: 0.85;
+            margin-bottom: 1rem;
+        }
+
+        .class-years {
+            font-size: 0.9rem;
+            color: var(--primary);
+            font-weight: 600;
+            background: rgba(201,169,97,0.15);
+            display: inline-block;
+            padding: 0.3rem 1rem;
+            border-radius: 20px;
+        }
+
+        footer {
+            background: linear-gradient(135deg, var(--text), #1a1a2e);
+            color: var(--white);
+            text-align: center;
+            padding: 2.5rem;
+            margin-top: 5rem;
+            position: relative;
+        }
+
+        footer:before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--accent), var(--accent-light));
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .nav {
+                padding: 1rem 1.5rem;
+            }
+
+            .nav-links {
+                display: none;
+            }
+
+            .burger {
+                display: flex;
+            }
+
+            .header {
+                padding: 6.5rem 1.5rem 3rem; /* Защита от перекрытия на мобильных */
+            }
+
+            .header h1 {
+                font-size: 2.2rem;
+            }
+
+            .header p {
+                font-size: 1rem;
+            }
+
+            .content {
+                padding: 3rem 1.5rem;
+            }
+
+            .classes-grid {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+            
+            .class-number {
+                font-size: 3.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <nav class="nav">
+        <div class="nav-container">
+            <div class="nav-logo">🌿 БИОЛОГИЯ</div>
+            <ul class="nav-links">
+                <li><a href="index.html">Главная</a></li>
+                <li><a href="index.html#about">О центре</a></li>
+                <li><a href="index.html#sections">Разделы</a></li>
+                <li><a href="contacts.html">Контакты</a></li>
+            </ul>
+            <button class="burger" id="burger" aria-label="Меню">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Мобильное меню -->
+    <div class="mobile-menu" id="mobileMenu">
+        <ul>
+            <li><a href="index.html" class="mobile-link">Главная</a></li>
+            <li><a href="index.html#about" class="mobile-link">О центре</a></li>
+            <li><a href="index.html#sections" class="mobile-link">Разделы</a></li>
+            <li><a href="contacts.html" class="mobile-link">Контакты</a></li>
+        </ul>
+    </div>
+
+    <div class="header">
+        <h1>🏆 Олимпиады по биологии</h1>
+        <p>Задания и решения прошлых лет, разбитые по классам</p>
+    </div>
+
+    <div class="content">
+        <div class="classes-grid">
+            <!-- 6 класс -->
+            <a href="olimpiad-6.html" class="class-card" data-animate>
+                <div class="class-header">
+                    <div class="class-number">6</div>
+                    <h3>6 класс</h3>
+                </div>
+                <div class="class-body">
+                    <p>Задания олимпиад для 6 класса</p>
+                    <span class="class-years">2020-2025</span>
+                </div>
+            </a>
+
+            <!-- 7 класс -->
+            <a href="olimpiad-7.html" class="class-card" data-animate>
+                <div class="class-header">
+                    <div class="class-number">7</div>
+                    <h3>7 класс</h3>
+                </div>
+                <div class="class-body">
+                    <p>Задания олимпиад для 7 класса</p>
+                    <span class="class-years">2020-2025</span>
+                </div>
+            </a>
+
+            <!-- 8 класс -->
+            <a href="olimpiad-8.html" class="class-card" data-animate>
+                <div class="class-header">
+                    <div class="class-number">8</div>
+                    <h3>8 класс</h3>
+                </div>
+                <div class="class-body">
+                    <p>Задания олимпиад для 8 класса</p>
+                    <span class="class-years">2020-2025</span>
+                </div>
+            </a>
+
+            <!-- 9 класс -->
+            <a href="olimpiad-9.html" class="class-card" data-animate>
+                <div class="class-header">
+                    <div class="class-number">9</div>
+                    <h3>9 класс</h3>
+                </div>
+                <div class="class-body">
+                    <p>Задания олимпиад для 9 класса</p>
+                    <span class="class-years">2020-2025</span>
+                </div>
+            </a>
+
+            <!-- 10 класс -->
+            <a href="olimpiad-10.html" class="class-card" data-animate>
+                <div class="class-header">
+                    <div class="class-number">10</div>
+                    <h3>10 класс</h3>
+                </div>
+                <div class="class-body">
+                    <p>Задания олимпиад для 10 класса</p>
+                    <span class="class-years">2020-2025</span>
+                </div>
+            </a>
+
+            <!-- 11 класс -->
+            <a href="olimpiad-11.html" class="class-card" data-animate>
+                <div class="class-header">
+                    <div class="class-number">11</div>
+                    <h3>11 класс</h3>
+                </div>
+                <div class="class-body">
+                    <p>Задания олимпиад для 11 класса</p>
+                    <span class="class-years">2020-2025</span>
+                </div>
+            </a>
+        </div>
+    </div>
+
+    <footer>
+        <p>© 2026 Ресурсный центр «Биология» | Даниленко А.А.</p>
+        <p>Email: zz999an@yandex.by | г. Хойники, школа №3</p>
+    </footer>
+
+    <script>
+        // Burger Menu Logic
+        const burger = document.getElementById('burger');
+        const mobileMenu = document.getElementById('mobileMenu');
+        const mobileLinks = document.querySelectorAll('.mobile-link');
+
+        if (burger) {
+            burger.addEventListener('click', () => {
+                burger.classList.toggle('active');
+                mobileMenu.classList.toggle('active');
+                document.body.style.overflow = mobileMenu.classList.contains('active') ? 'hidden' : '';
+            });
+
+            mobileLinks.forEach(link => {
+                link.addEventListener('click', () => {
+                    burger.classList.remove('active');
+                    mobileMenu.classList.remove('active');
+                    document.body.style.overflow = '';
+                });
+            });
+        }
+
+        // Intersection Observer for animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: "0px 0px -50px 0px"
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach((entry, index) => {
+                if (entry.isIntersecting) {
+                    setTimeout(() => {
+                        entry.target.classList.add('visible');
+                    }, index * 100);
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('[data-animate]').forEach((el) => {
+            observer.observe(el);
+        });
+    </script>
+
+</body>
+</html>

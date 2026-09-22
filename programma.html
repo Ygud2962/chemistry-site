@@ -1,0 +1,1414 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Программа занятий - Ресурсный центр "Биология"</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Raleway:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #0D3B2E;
+            --primary-light: #1B5E5B;
+            --accent: #C9A961;
+            --accent-light: #D4B570;
+            --bg: #FAFAF7;
+            --text: #2B2D42;
+            --white: #FFFFFF;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Raleway', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        h1, h2, h3, h4 {
+            font-family: 'Playfair Display', serif;
+        }
+
+        /* Advanced Animations */
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(40px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes fadeInDown {
+            from { opacity: 0; transform: translateY(-40px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            33% { transform: translateY(-20px) rotate(5deg); }
+            66% { transform: translateY(-10px) rotate(-5deg); }
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.05); opacity: 0.8; }
+        }
+
+        @keyframes shimmer {
+            0% { background-position: -1000px 0; }
+            100% { background-position: 1000px 0; }
+        }
+
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* Navigation - Premium */
+        .nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: rgba(255, 255, 255, 0.98);
+            backdrop-filter: blur(15px);
+            padding: 1rem 2rem;
+            box-shadow: 0 2px 20px rgba(13,59,46,0.1);
+            z-index: 1000;
+            animation: fadeInDown 0.8s ease;
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .nav-logo {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--primary);
+            letter-spacing: 1px;
+            z-index: 1001;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: var(--text);
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: 600;
+            transition: color 0.3s;
+            position: relative;
+        }
+
+        .nav-links a:after {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--accent);
+            transition: width 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: var(--accent);
+        }
+
+        .nav-links a:hover:after {
+            width: 100%;
+        }
+
+        /* Burger Menu */
+        .burger {
+            display: none;
+            flex-direction: column;
+            justify-content: space-between;
+            width: 28px;
+            height: 20px;
+            cursor: pointer;
+            z-index: 1001;
+            background: none;
+            border: none;
+            padding: 0;
+        }
+
+        .burger span {
+            display: block;
+            width: 100%;
+            height: 2px;
+            background: var(--primary);
+            transition: all 0.3s ease;
+            border-radius: 2px;
+        }
+
+        .burger.active span:nth-child(1) {
+            transform: translateY(9px) rotate(45deg);
+        }
+
+        .burger.active span:nth-child(2) {
+            opacity: 0;
+            transform: translateX(-10px);
+        }
+
+        .burger.active span:nth-child(3) {
+            transform: translateY(-9px) rotate(-45deg);
+        }
+
+        .mobile-menu {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+            z-index: 999;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            transition: opacity 0.4s ease;
+        }
+
+        .mobile-menu.active {
+            display: flex;
+            opacity: 1;
+        }
+
+        .mobile-menu ul {
+            list-style: none;
+            text-align: center;
+        }
+
+        .mobile-menu li {
+            margin: 1.5rem 0;
+            transform: translateY(20px);
+            opacity: 0;
+            transition: all 0.4s ease;
+        }
+
+        .mobile-menu.active li {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        .mobile-menu.active li:nth-child(1) { transition-delay: 0.1s; }
+        .mobile-menu.active li:nth-child(2) { transition-delay: 0.2s; }
+        .mobile-menu.active li:nth-child(3) { transition-delay: 0.3s; }
+        .mobile-menu.active li:nth-child(4) { transition-delay: 0.4s; }
+
+        .mobile-menu a {
+            color: var(--white);
+            text-decoration: none;
+            font-family: 'Playfair Display', serif;
+            font-size: 2rem;
+            font-weight: 600;
+            letter-spacing: 1px;
+            transition: color 0.3s;
+            position: relative;
+        }
+
+        .mobile-menu a:hover {
+            color: var(--accent);
+        }
+
+        .mobile-menu a:after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 0;
+            height: 2px;
+            background: var(--accent);
+            transition: width 0.3s;
+        }
+
+        .mobile-menu a:hover:after {
+            width: 60%;
+        }
+
+        /* Header */
+        .header {
+            background: linear-gradient(-45deg, var(--primary), var(--primary-light), #0f4d45, #1a5f5a);
+            background-size: 400% 400%;
+            animation: gradientShift 15s ease infinite;
+            color: var(--white);
+            padding: 8rem 2rem 4rem; /* Увеличен отступ сверху, чтобы меню не перекрывало текст */
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header:before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -10%;
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(201,169,97,0.15) 0%, transparent 70%);
+            animation: float 20s ease-in-out infinite;
+            border-radius: 50%;
+        }
+
+        .header h1 {
+            font-size: 2.8rem;
+            margin-bottom: 1rem;
+            letter-spacing: 2px;
+            animation: fadeInDown 1s ease;
+            position: relative;
+            z-index: 1;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .header p {
+            font-size: 1.1rem;
+            opacity: 0.95;
+            font-weight: 300;
+            max-width: 800px;
+            margin: 0 auto;
+            animation: fadeInUp 1s ease 0.3s both;
+            position: relative;
+            z-index: 1;
+            line-height: 1.8;
+        }
+
+        .content {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 4rem 2rem;
+        }
+
+        /* Goals & Tasks */
+        .goals-section {
+            margin-bottom: 3rem;
+        }
+
+        .goals-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .goal-card {
+            background: var(--white);
+            padding: 2.5rem;
+            border-radius: 20px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.08);
+            border: 1px solid rgba(201,169,97,0.2);
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+            opacity: 0;
+            transform: translateY(30px);
+        }
+
+        .goal-card.visible {
+            opacity: 1;
+            transform: translateY(0);
+            transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .goal-card:before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--accent), var(--accent-light));
+            transform: scaleX(0);
+            transform-origin: left;
+            transition: transform 0.6s ease;
+        }
+
+        .goal-card:hover:before {
+            transform: scaleX(1);
+        }
+
+        .goal-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 60px rgba(13,59,46,0.15);
+            border-color: var(--accent);
+        }
+
+        .goal-icon {
+            font-size: 3rem;
+            margin-bottom: 1.2rem;
+            display: block;
+            animation: pulse 3s ease infinite;
+        }
+
+        .goal-card h2 {
+            color: var(--primary);
+            font-size: 1.6rem;
+            margin-bottom: 1.2rem;
+            font-weight: 600;
+        }
+
+        .goal-card p {
+            font-size: 0.95rem;
+            line-height: 1.7;
+            opacity: 0.85;
+        }
+
+        .goal-card ul {
+            list-style: none;
+            margin-top: 1rem;
+        }
+
+        .goal-card li {
+            padding: 0.6rem 0;
+            padding-left: 2rem;
+            position: relative;
+            font-size: 0.92rem;
+            line-height: 1.6;
+            opacity: 0.85;
+        }
+
+        .goal-card li:before {
+            content: '✓';
+            position: absolute;
+            left: 0;
+            color: var(--accent);
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+
+        /* PDF Button */
+        .pdf-download {
+            text-align: center;
+            margin: 3.5rem 0;
+            padding: 2.5rem;
+            background: linear-gradient(135deg, rgba(201,169,97,0.1), rgba(13,59,46,0.05));
+            border-radius: 20px;
+            border: 2px solid rgba(201,169,97,0.3);
+            position: relative;
+            overflow: hidden;
+            opacity: 0;
+            transform: translateY(30px);
+        }
+
+        .pdf-download.visible {
+            opacity: 1;
+            transform: translateY(0);
+            transition: all 0.8s ease 0.4s;
+        }
+
+        .pdf-download:before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(255,255,255,0.1), transparent);
+            transform: rotate(45deg);
+            animation: shimmer 3s infinite;
+        }
+
+        .pdf-download h3 {
+            color: var(--primary);
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .pdf-download p {
+            font-size: 0.95rem;
+            opacity: 0.8;
+            margin-bottom: 1.5rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .btn-pdf {
+            display: inline-block;
+            padding: 1rem 2.5rem;
+            background: linear-gradient(135deg, var(--accent), var(--accent-light));
+            color: var(--primary);
+            text-decoration: none;
+            border-radius: 30px;
+            font-weight: 600;
+            font-size: 0.95rem;
+            letter-spacing: 0.5px;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 5px 20px rgba(201,169,97,0.3);
+            position: relative;
+            z-index: 1;
+            overflow: hidden;
+        }
+
+        .btn-pdf:before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            transition: left 0.6s;
+        }
+
+        .btn-pdf:hover:before {
+            left: 100%;
+        }
+
+        .btn-pdf:hover {
+            transform: translateY(-3px) scale(1.02);
+            box-shadow: 0 10px 35px rgba(201,169,97,0.5);
+        }
+
+        /* Program Blocks */
+        .program-blocks {
+            margin-top: 4rem;
+        }
+
+        .block-header {
+            text-align: center;
+            margin-bottom: 3rem;
+            opacity: 0;
+            transform: translateY(30px);
+        }
+
+        .block-header.visible {
+            opacity: 1;
+            transform: translateY(0);
+            transition: all 0.8s ease;
+        }
+
+        .block-title {
+            font-size: 2.2rem;
+            color: var(--primary);
+            margin-bottom: 0.8rem;
+            position: relative;
+            display: inline-block;
+        }
+
+        .block-title:after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 3px;
+            background: linear-gradient(90deg, var(--accent), var(--accent-light));
+            border-radius: 2px;
+        }
+
+        .block-subtitle {
+            font-size: 1.05rem;
+            opacity: 0.75;
+            margin-top: 1.5rem;
+            font-weight: 400;
+        }
+
+        /* Topics Grid */
+        .topics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 1.8rem;
+            margin-bottom: 4rem;
+        }
+
+        .topic-card {
+            background: var(--white);
+            border-radius: 16px;
+            padding: 2rem;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.06);
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            border: 2px solid transparent;
+            opacity: 0;
+            transform: translateY(30px) scale(0.95);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .topic-card:before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary), var(--primary-light));
+            transform: scaleX(0);
+            transform-origin: left;
+            transition: transform 0.5s ease;
+        }
+
+        .topic-card.visible {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+        }
+
+        .topic-card:hover:before {
+            transform: scaleX(1);
+        }
+
+        .topic-card:hover {
+            transform: translateY(-8px) scale(1.01);
+            box-shadow: 0 15px 50px rgba(13,59,46,0.15);
+            border-color: var(--accent);
+        }
+
+        .topic-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1.2rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid var(--bg);
+        }
+
+        .topic-number {
+            background: linear-gradient(135deg, var(--primary), var(--primary-light));
+            color: var(--white);
+            width: 42px;
+            height: 42px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 1.1rem;
+            flex-shrink: 0;
+            box-shadow: 0 4px 15px rgba(13,59,46,0.3);
+            transition: transform 0.3s;
+        }
+
+        .topic-card:hover .topic-number {
+            transform: rotate(360deg) scale(1.1);
+        }
+
+        .topic-card h3 {
+            color: var(--primary);
+            font-size: 1.2rem;
+            flex: 1;
+            font-weight: 600;
+        }
+
+        .topic-hours {
+            background: linear-gradient(135deg, rgba(201,169,97,0.2), rgba(201,169,97,0.1));
+            color: var(--primary);
+            padding: 0.3rem 1rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            border: 1px solid rgba(201,169,97,0.3);
+        }
+
+        .topic-content {
+            font-size: 0.9rem;
+            line-height: 1.7;
+        }
+
+        .topic-content h4 {
+            color: var(--primary);
+            font-size: 1rem;
+            margin: 1rem 0 0.6rem;
+            font-family: 'Raleway', sans-serif;
+            font-weight: 600;
+        }
+
+        .topic-content p, .topic-content ul {
+            margin-bottom: 0.7rem;
+        }
+
+        .topic-content ul {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .topic-content li {
+            padding: 0.35rem 0;
+            padding-left: 1.5rem;
+            position: relative;
+            font-size: 0.88rem;
+            line-height: 1.5;
+        }
+
+        .topic-content li:before {
+            content: "–";
+            color: var(--accent);
+            position: absolute;
+            left: 0;
+            font-weight: 600;
+        }
+
+        .objects-list {
+            background: linear-gradient(135deg, var(--bg), rgba(250,250,247,0.8));
+            padding: 1rem;
+            border-radius: 10px;
+            margin-top: 1rem;
+            font-size: 0.87rem;
+            border-left: 4px solid var(--accent);
+            transition: all 0.3s;
+        }
+
+        .objects-list:hover {
+            background: linear-gradient(135deg, rgba(201,169,97,0.1), rgba(250,250,247,0.9));
+            transform: translateX(5px);
+        }
+
+        .objects-list strong {
+            color: var(--primary);
+            display: block;
+            margin-bottom: 0.5rem;
+            font-size: 0.88rem;
+            font-weight: 600;
+        }
+
+        .topic-card.full-width {
+            grid-column: 1 / -1;
+        }
+
+        footer {
+            background: linear-gradient(135deg, var(--text), #1a1a2e);
+            color: var(--white);
+            text-align: center;
+            padding: 2.5rem;
+            margin-top: 5rem;
+            font-size: 0.9rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        footer:before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--accent), var(--accent-light));
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .nav {
+                padding: 1rem 1.5rem;
+            }
+
+            .nav-links {
+                display: none;
+            }
+
+            .burger {
+                display: flex;
+            }
+
+            .header {
+                padding: 6.5rem 1.5rem 3rem; /* Защита от перекрытия на мобильных */
+            }
+
+            .header h1 {
+                font-size: 2.2rem;
+            }
+
+            .header p {
+                font-size: 1rem;
+            }
+
+            .goals-grid {
+                grid-template-columns: 1fr;
+                gap: 1.5rem;
+            }
+
+            .topics-grid {
+                grid-template-columns: 1fr;
+                gap: 1.3rem;
+            }
+
+            .goal-card, .topic-card {
+                padding: 1.8rem;
+            }
+
+            .content {
+                padding: 3rem 1.5rem;
+            }
+        }
+
+        .scroll-animate {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .scroll-animate.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Loading Animation */
+        .loader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--white);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            transition: opacity 0.5s, visibility 0.5s;
+        }
+
+        .loader.hidden {
+            opacity: 0;
+            visibility: hidden;
+        }
+
+        .loader-circle {
+            width: 60px;
+            height: 60px;
+            border: 4px solid var(--bg);
+            border-top-color: var(--accent);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Loader -->
+    <div class="loader" id="loader">
+        <div class="loader-circle"></div>
+    </div>
+
+    <nav class="nav">
+        <div class="nav-container">
+            <div class="nav-logo">🌿 БИОЛОГИЯ</div>
+            <ul class="nav-links">
+                <li><a href="index.html">Главная</a></li>
+                <li><a href="programma.html">Программа</a></li>
+                <li><a href="plan.html">План</a></li>
+                <li><a href="contacts.html">Контакты</a></li>
+            </ul>
+            <button class="burger" id="burger" aria-label="Меню">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Мобильное меню -->
+    <div class="mobile-menu" id="mobileMenu">
+        <ul>
+            <li><a href="index.html" class="mobile-link">Главная</a></li>
+            <li><a href="programma.html" class="mobile-link">Программа</a></li>
+            <li><a href="plan.html" class="mobile-link">План</a></li>
+            <li><a href="contacts.html" class="mobile-link">Контакты</a></li>
+        </ul>
+    </div>
+
+    <div class="header">
+        <h1>📋 Программа занятий</h1>
+        <p>Районный ресурсный центр по подготовке к заключительному этапу республиканской олимпиады по учебному предмету «Биология»</p>
+    </div>
+
+    <div class="content">
+        <!-- Goals and Tasks -->
+        <div class="goals-section">
+            <div class="goals-grid">
+                <div class="goal-card" data-animate>
+                    <span class="goal-icon">🎯</span>
+                    <h2>Цель программы</h2>
+                    <p>Организация работы с одаренными и высокомотивированными учащимися по вовлечению их в олимпиадное движение, повышение качества образования.</p>
+                </div>
+
+                <div class="goal-card" data-animate>
+                    <span class="goal-icon">📌</span>
+                    <h2>Задачи программы</h2>
+                    <ul>
+                        <li>Совершенствовать знания, умения и навыки учащихся в процессе выполнения различных видов заданий повышенного уровня</li>
+                        <li>Совершенствование навыков решения расчетных задач, включающих все типы расчетов, предусмотренные настоящей учебной программой</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- PDF Download -->
+        <div class="pdf-download" data-animate>
+            <h3>📥 Скачать полную программу</h3>
+            <p>Официальный документ в формате PDF со всеми темами и биологическими объектами</p>
+            <a href="http://s3-minsk.cloud.mts.by/datastorage/sh3hoiniki/library/%D0%9F%D1%80%D0%BE%D0%B3%D1%80%D0%B0%D0%BC%D0%BC%D0%B0_%D0%B7%D0%B0%D0%BD%D1%8F%D1%82%D0%B8%D0%B9.pdf?AWSAccessKeyId=3b68d8fb703f1d7de071&Signature=%2BMC4uj2yRO1KuRQgwIzxmmZDfdY%3D&Expires=2103697969" 
+               class="btn-pdf" 
+               target="_blank">
+                Открыть PDF документ
+            </a>
+        </div>
+
+        <div class="program-blocks">
+            <div class="block-header">
+                <h2 class="block-title">IX–XI классы</h2>
+                <p class="block-subtitle">Общий объем: 70 часов</p>
+            </div>
+
+            <div class="topics-grid">
+                <div class="topic-card" data-animate>
+                    <div class="topic-header">
+                        <div class="topic-number">1</div>
+                        <h3>Многообразие органического мира</h3>
+                        <span class="topic-hours">1 час</span>
+                    </div>
+                    <div class="topic-content">
+                        <p><strong>Классификация организмов.</strong> Основные систематические категории: вид, род, семейство, отряд, класс, тип (отдел), царство.</p>
+                        <p><strong>Царства живых организмов:</strong> Бактерии, Протисты, Грибы, Растения, Животные.</p>
+                    </div>
+                </div>
+
+                <div class="topic-card" data-animate>
+                    <div class="topic-header">
+                        <div class="topic-number">2</div>
+                        <h3>Доядерные организмы (прокариоты)</h3>
+                        <span class="topic-hours">1 час</span>
+                    </div>
+                    <div class="topic-content">
+                        <p><strong>Бактерии:</strong> распространение, строение и процессы жизнедеятельности. Роль бактерий в природе и жизни человека. Практическое использование бактерий. Бактерии как возбудители болезней.</p>
+                        <p><strong>Цианобактерии.</strong> Особенности их строения и жизнедеятельности.</p>
+                    </div>
+                </div>
+
+                <div class="topic-card" data-animate>
+                    <div class="topic-header">
+                        <div class="topic-number">3</div>
+                        <h3>Протисты</h3>
+                        <span class="topic-hours">2 часа</span>
+                    </div>
+                    <div class="topic-content">
+                        <p>Особенности среды обитания, внешнего и внутреннего строения, процессов жизнедеятельности протистов.</p>
+                        <h4>Гетеротрофные организмы:</h4>
+                        <ul>
+                            <li>Амеба обыкновенная</li>
+                            <li>Инфузория туфелька</li>
+                        </ul>
+                        <h4>Автотрофные и автогетеротрофные:</h4>
+                        <ul>
+                            <li>Хлорелла (автотрофная)</li>
+                            <li>Эвглена зеленая (автогетеротрофная)</li>
+                        </ul>
+                        <div class="objects-list">
+                            <strong>Биологические объекты:</strong>
+                            амеба обыкновенная, инфузория туфелька, хлорелла, эвглена зеленая, вольвокс, улотрикс, спирогира, ламинария
+                        </div>
+                    </div>
+                </div>
+
+                <div class="topic-card" data-animate>
+                    <div class="topic-header">
+                        <div class="topic-number">4</div>
+                        <h3>Грибы</h3>
+                        <span class="topic-hours">1 час</span>
+                    </div>
+                    <div class="topic-content">
+                        <p>Общая характеристика грибов. Среда обитания, строение и жизнедеятельность.</p>
+                        <h4>Плесневые грибы:</h4>
+                        <ul>
+                            <li>Мукор</li>
+                            <li>Пеницилл</li>
+                            <li>Дрожжи</li>
+                        </ul>
+                        <h4>Шляпочные грибы:</h4>
+                        <ul>
+                            <li>Съедобные и ядовитые грибы</li>
+                        </ul>
+                        <h4>Грибы-паразиты:</h4>
+                        <ul>
+                            <li>Трутовик, головня, спорынья</li>
+                        </ul>
+                        <div class="objects-list">
+                            <strong>Биологические объекты:</strong>
+                            мукор, пеницилл, дрожжи, белый гриб, подосиновик, подберезовик, сыроежка, мухомор, бледная поганка, спорынья, головня, трутовик
+                        </div>
+                    </div>
+                </div>
+
+                <div class="topic-card" data-animate>
+                    <div class="topic-header">
+                        <div class="topic-number">5</div>
+                        <h3>Лишайники</h3>
+                        <span class="topic-hours">1 час</span>
+                    </div>
+                    <div class="topic-content">
+                        <p>Лишайники – симбиотические организмы. Строение, питание и размножение лишайников. Роль лишайников в природе.</p>
+                        <div class="objects-list">
+                            <strong>Биологические объекты:</strong>
+                            цетрария исландская, кладония
+                        </div>
+                    </div>
+                </div>
+
+                <div class="topic-card" data-animate>
+                    <div class="topic-header">
+                        <div class="topic-number">6</div>
+                        <h3>Растения</h3>
+                        <span class="topic-hours">12 часов</span>
+                    </div>
+                    <div class="topic-content">
+                        <h4>Общая характеристика растений (1 час)</h4>
+                        <p>Жизненные формы растений. Ткани и органы растений. Значение растений в природе и жизни человека.</p>
+                        
+                        <h4>Вегетативные органы растений (5 часов)</h4>
+                        <ul>
+                            <li><strong>Корень:</strong> функции, виды корней, корневые системы, строение, зоны корня, видоизменения</li>
+                            <li><strong>Побег:</strong> функции, части побега, почки, развитие побега</li>
+                            <li><strong>Стебель:</strong> разнообразие, рост, внутреннее строение, годичные кольца</li>
+                            <li><strong>Лист:</strong> функции, строение, жилкование, простые и сложные листья</li>
+                            <li><strong>Видоизменения побега:</strong> корневище, клубень, луковица</li>
+                            <li><strong>Вегетативное размножение</strong></li>
+                        </ul>
+
+                        <h4>Споровые растения (1 час)</h4>
+                        <ul>
+                            <li><strong>Мхи:</strong> кукушкин лен, сфагновые мхи</li>
+                            <li><strong>Папоротники:</strong> щитовник мужской</li>
+                        </ul>
+
+                        <h4>Семенные растения (5 часов)</h4>
+                        <ul>
+                            <li><strong>Голосеменные:</strong> сосна, ель, пихта, можжевельник, лиственница</li>
+                            <li><strong>Покрытосеменные:</strong> цветок, соцветия, опыление, двойное оплодотворение</li>
+                            <li><strong>Плоды и семена:</strong> строение, классификация, распространение</li>
+                            <li><strong>Семейства:</strong> Крестоцветные, Розоцветные, Пасленовые, Бобовые, Злаки</li>
+                        </ul>
+
+                        <div class="objects-list">
+                            <strong>Биологические объекты:</strong>
+                            кукушкин лен, сфагнум, щитовник мужской, орляк, сальвиния, сосна, ель, береза, дуб, сирень, смородина, черника, клюква, брусника, горох, фасоль, огурец, капуста, редька, редис, яблоня, груша, вишня, земляника, картофель, перец, томат, кукуруза, пшеница, рожь, ячмень
+                        </div>
+                    </div>
+                </div>
+
+                <div class="topic-card full-width" data-animate>
+                    <div class="topic-header">
+                        <div class="topic-number">7</div>
+                        <h3>Животные</h3>
+                        <span class="topic-hours">17 часов</span>
+                    </div>
+                    <div class="topic-content">
+                        <h4>Общая характеристика и разнообразие животных (1 час)</h4>
+                        
+                        <h4>Тип Кишечнополостные (1 час)</h4>
+                        <p>Пресноводный полип гидра. Многообразие: медузы, коралловые полипы.</p>
+                        <div class="objects-list">
+                            <strong>Объекты:</strong> гидра, аурелия, актиния, коралл
+                        </div>
+
+                        <h4>Тип Плоские черви (1 час)</h4>
+                        <p>Белая планария. Паразитические черви: печеночный сосальщик, бычий цепень.</p>
+                        <div class="objects-list">
+                            <strong>Объекты:</strong> планария, печеночный сосальщик, бычий цепень
+                        </div>
+
+                        <h4>Тип Круглые черви (1 час)</h4>
+                        <p>Аскарида человеческая, детская острица. Профилактика заражения.</p>
+                        <div class="objects-list">
+                            <strong>Объекты:</strong> аскарида, острица, власоглав, трихинелла
+                        </div>
+
+                        <h4>Тип Кольчатые черви (1 час)</h4>
+                        <p>Дождевой червь. Роль в почвообразовании.</p>
+                        <div class="objects-list">
+                            <strong>Объекты:</strong> дождевой червь, пескожил, нереис, медицинская пиявка
+                        </div>
+
+                        <h4>Тип Моллюски (1 час)</h4>
+                        <p>Многообразие моллюсков.</p>
+                        <div class="objects-list">
+                            <strong>Объекты:</strong> прудовик, беззубка, кальмар, слизень
+                        </div>
+
+                        <h4>Тип Членистоногие (3 часа)</h4>
+                        <ul>
+                            <li><strong>Класс Ракообразные:</strong> речной рак, краб, креветка, дафния</li>
+                            <li><strong>Класс Паукообразные:</strong> паук-крестовик, скорпион, клещи</li>
+                            <li><strong>Класс Насекомые:</strong> майский жук, отряды насекомых</li>
+                        </ul>
+                        <div class="objects-list">
+                            <strong>Объекты:</strong> речной рак, паук-крестовик, зеленый кузнечик, саранча, майский жук, колорадский жук, божья коровка, капустная белянка, медоносная пчела, оса, шмель, муравей
+                        </div>
+
+                        <h4>Тип Хордовые (8 часов)</h4>
+                        <ul>
+                            <li><strong>Подтип Бесчерепные:</strong> ланцетник</li>
+                            <li><strong>Надкласс Рыбы:</strong> хрящевые и костные рыбы</li>
+                            <li><strong>Класс Земноводные:</strong> лягушка, тритон</li>
+                            <li><strong>Класс Пресмыкающиеся:</strong> ящерица, змеи, черепахи</li>
+                            <li><strong>Класс Птицы:</strong> экологические группы птиц</li>
+                            <li><strong>Класс Млекопитающие:</strong> отряды млекопитающих</li>
+                        </ul>
+                        <div class="objects-list">
+                            <strong>Объекты:</strong> ланцетник, акула, скат, горбуша, кета, осетр, сельдь, карась, лягушка, жаба, тритон, ящерица, змеи, черепаха, дятел, тетерев, глухарь, соловей, страус, журавль, кряква, аист, лебедь, синица, скворец, голубь, ворона, воробей, сокол, орел, сова, собака, волк, лисица, медведь, кит, дельфин, обезьяны
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="block-header">
+                <h2 class="block-title">Блок 1. Человек</h2>
+                <p class="block-subtitle">17 часов</p>
+            </div>
+
+            <div class="topics-grid">
+                <div class="topic-card" data-animate>
+                    <div class="topic-header">
+                        <div class="topic-number">1</div>
+                        <h3>Общий обзор организма</h3>
+                        <span class="topic-hours">1 час</span>
+                    </div>
+                    <div class="topic-content">
+                        <p>Ткани, их классификация и принципы организации. Органы и системы органов.</p>
+                    </div>
+                </div>
+
+                <div class="topic-card" data-animate>
+                    <div class="topic-header">
+                        <div class="topic-number">2</div>
+                        <h3>Регуляция функций</h3>
+                        <span class="topic-hours">1 час</span>
+                    </div>
+                    <div class="topic-content">
+                        <p>Нервная, гуморальная и нейрогуморальная регуляция. Саморегуляция. Понятие о гомеостазе.</p>
+                    </div>
+                </div>
+
+                <div class="topic-card" data-animate>
+                    <div class="topic-header">
+                        <div class="topic-number">3</div>
+                        <h3>Нервная система</h3>
+                        <span class="topic-hours">2 часа</span>
+                    </div>
+                    <div class="topic-content">
+                        <p>Строение и виды нейронов. Рефлекс. Рефлекторная дуга. Спинной и головной мозг. Вегетативная нервная система. Гигиена нервной системы.</p>
+                    </div>
+                </div>
+
+                <div class="topic-card" data-animate>
+                    <div class="topic-header">
+                        <div class="topic-number">4</div>
+                        <h3>Эндокринная система</h3>
+                        <span class="topic-hours">1 час</span>
+                    </div>
+                    <div class="topic-content">
+                        <p>Гормоны. Железы внутренней секреции: гипофиз, щитовидная железа, надпочечники, поджелудочная железа, половые железы.</p>
+                    </div>
+                </div>
+
+                <div class="topic-card" data-animate>
+                    <div class="topic-header">
+                        <div class="topic-number">5</div>
+                        <h3>Опорно-двигательная система</h3>
+                        <span class="topic-hours">1 час</span>
+                    </div>
+                    <div class="topic-content">
+                        <p>Строение костей. Отделы скелета. Строение и функции мышц. Осанка. Плоскостопие. Первая помощь.</p>
+                    </div>
+                </div>
+
+                <div class="topic-card" data-animate>
+                    <div class="topic-header">
+                        <div class="topic-number">6</div>
+                        <h3>Внутренняя среда организма</h3>
+                        <span class="topic-hours">1 час</span>
+                    </div>
+                    <div class="topic-content">
+                        <p>Кровь, тканевая жидкость, лимфа. Состав крови. Эритроциты, лейкоциты, тромбоциты. Иммунитет. Вакцинация.</p>
+                    </div>
+                </div>
+
+                <div class="topic-card" data-animate>
+                    <div class="topic-header">
+                        <div class="topic-number">7</div>
+                        <h3>Сердечно-сосудистая система</h3>
+                        <span class="topic-hours">1 час</span>
+                    </div>
+                    <div class="topic-content">
+                        <p>Сердце. Кровообращение. Большой и малый круги. Кровяное давление. Лимфатическая система.</p>
+                    </div>
+                </div>
+
+                <div class="topic-card" data-animate>
+                    <div class="topic-header">
+                        <div class="topic-number">8</div>
+                        <h3>Дыхательная система</h3>
+                        <span class="topic-hours">1 час</span>
+                    </div>
+                    <div class="topic-content">
+                        <p>Строение дыхательных путей и легких. Газообмен. Регуляция дыхания. Гигиена дыхания.</p>
+                    </div>
+                </div>
+
+                <div class="topic-card" data-animate>
+                    <div class="topic-header">
+                        <div class="topic-number">9</div>
+                        <h3>Пищеварительная система. Обмен веществ</h3>
+                        <span class="topic-hours">2 часа</span>
+                    </div>
+                    <div class="topic-content">
+                        <p>Органы пищеварения. Пищеварительные процессы. Обмен белков, жиров и углеводов. Витамины.</p>
+                    </div>
+                </div>
+
+                <div class="topic-card" data-animate>
+                    <div class="topic-header">
+                        <div class="topic-number">10</div>
+                        <h3>Выделительная система</h3>
+                        <span class="topic-hours">1 час</span>
+                    </div>
+                    <div class="topic-content">
+                        <p>Почки. Нефрон. Образование мочи. Гигиена мочевыделительной системы.</p>
+                    </div>
+                </div>
+
+                <div class="topic-card" data-animate>
+                    <div class="topic-header">
+                        <div class="topic-number">11</div>
+                        <h3>Покровная система. Кожа</h3>
+                        <span class="topic-hours">1 час</span>
+                    </div>
+                    <div class="topic-content">
+                        <p>Строение кожи. Функции. Терморегуляция. Первая помощь.</p>
+                    </div>
+                </div>
+
+                <div class="topic-card" data-animate>
+                    <div class="topic-header">
+                        <div class="topic-number">12</div>
+                        <h3>Репродуктивная система</h3>
+                        <span class="topic-hours">1 час</span>
+                    </div>
+                    <div class="topic-content">
+                        <p>Половые системы. Оплодотворение. Беременность. Роды.</p>
+                    </div>
+                </div>
+
+                <div class="topic-card" data-animate>
+                    <div class="topic-header">
+                        <div class="topic-number">13</div>
+                        <h3>Сенсорные системы</h3>
+                        <span class="topic-hours">1 час</span>
+                    </div>
+                    <div class="topic-content">
+                        <p>Зрительная и слуховая системы. Строение глаза и уха. Гигиена зрения и слуха.</p>
+                    </div>
+                </div>
+
+                <div class="topic-card" data-animate>
+                    <div class="topic-header">
+                        <div class="topic-number">14</div>
+                        <h3>Поведение и психика</h3>
+                        <span class="topic-hours">1 час</span>
+                    </div>
+                    <div class="topic-content">
+                        <p>Безусловные и условные рефлексы. Сон. Память. Речь и мышление.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="block-header">
+                <h2 class="block-title">Блок 2. Общая биология</h2>
+                <p class="block-subtitle">18 часов</p>
+            </div>
+
+            <div class="topics-grid">
+                <div class="topic-card" data-animate>
+                    <div class="topic-header">
+                        <div class="topic-number">1</div>
+                        <h3>Разнообразие живых организмов</h3>
+                        <span class="topic-hours">1 час</span>
+                    </div>
+                    <div class="topic-content">
+                        <p>Общие свойства живых организмов: клеточное строение, обмен веществ, размножение, наследственность, адаптация.</p>
+                    </div>
+                </div>
+
+                <div class="topic-card" data-animate>
+                    <div class="topic-header">
+                        <div class="topic-number">2</div>
+                        <h3>Химические компоненты живых организмов</h3>
+                        <span class="topic-hours">4 часа</span>
+                    </div>
+                    <div class="topic-content">
+                        <h4>Неорганические вещества:</h4>
+                        <ul>
+                            <li>Вода и ее роль</li>
+                            <li>Минеральные соли</li>
+                        </ul>
+                        <h4>Органические вещества:</h4>
+                        <ul>
+                            <li><strong>Белки:</strong> аминокислоты, структура, функции</li>
+                            <li><strong>Углеводы:</strong> моносахариды, полисахариды</li>
+                            <li><strong>Липиды:</strong> жиры, фосфолипиды</li>
+                            <li><strong>Нуклеиновые кислоты:</strong> ДНК, РНК, АТФ</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="topic-card" data-animate>
+                    <div class="topic-header">
+                        <div class="topic-number">3</div>
+                        <h3>Клетка – единица живого</h3>
+                        <span class="topic-hours">3 часа</span>
+                    </div>
+                    <div class="topic-content">
+                        <p>Клеточная теория. Строение клетки: мембрана, цитоплазма, ядро. Органоиды: митохондрии, рибосомы, ЭПС, комплекс Гольджи, лизосомы, пластиды.</p>
+                        <p><strong>Деление клетки:</strong> митоз, мейоз, амитоз.</p>
+                    </div>
+                </div>
+
+                <div class="topic-card" data-animate>
+                    <div class="topic-header">
+                        <div class="topic-number">4</div>
+                        <h3>Обмен веществ и энергия</h3>
+                        <span class="topic-hours">3 часа</span>
+                    </div>
+                    <div class="topic-content">
+                        <p>Этапы энергетического обмена. Гликолиз. Клеточное дыхание. Фотосинтез: световая и темновая фазы.</p>
+                        <p><strong>Биосинтез белка:</strong> транскрипция, трансляция. Генетический код.</p>
+                    </div>
+                </div>
+
+                <div class="topic-card" data-animate>
+                    <div class="topic-header">
+                        <div class="topic-number">5</div>
+                        <h3>Структурная организация и регуляция</h3>
+                        <span class="topic-hours">1 час</span>
+                    </div>
+                    <div class="topic-content">
+                        <p>Одноклеточные и многоклеточные организмы. Ткани, органы, системы. Нервная и гуморальная регуляция. Иммунитет.</p>
+                    </div>
+                </div>
+
+                <div class="topic-card" data-animate>
+                    <div class="topic-header">
+                        <div class="topic-number">6</div>
+                        <h3>Размножение и развитие</h3>
+                        <span class="topic-hours">3 часа</span>
+                    </div>
+                    <div class="topic-content">
+                        <p><strong>Бесполое размножение:</strong> деление, спорообразование, почкование.</p>
+                        <p><strong>Половое размножение:</strong> образование половых клеток, оплодотворение.</p>
+                        <p><strong>Онтогенез:</strong> эмбриональное и постэмбриональное развитие.</p>
+                    </div>
+                </div>
+
+                <div class="topic-card" data-animate>
+                    <div class="topic-header">
+                        <div class="topic-number">7</div>
+                        <h3>Наследственность и изменчивость</h3>
+                        <span class="topic-hours">3 часа</span>
+                    </div>
+                    <div class="topic-content">
+                        <p><strong>Законы Менделя:</strong> моногибридное и дигибридное скрещивание.</p>
+                        <p><strong>Хромосомная теория:</strong> сцепленное наследование, кроссинговер.</p>
+                        <p><strong>Генетика пола</strong></p>
+                        <p><strong>Изменчивость:</strong> модификационная и мутационная.</p>
+                        <p><strong>Наследственные болезни человека</strong></p>
+                    </div>
+                </div>
+
+                <div class="topic-card" data-animate>
+                    <div class="topic-header">
+                        <div class="topic-number">8</div>
+                        <h3>Селекция и биотехнология</h3>
+                        <span class="topic-hours">1 час</span>
+                    </div>
+                    <div class="topic-content">
+                        <p>Методы селекции: отбор, гибридизация, мутагенез.</p>
+                        <p><strong>Биотехнология:</strong> клеточная и генная инженерия. Трансгенные организмы.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <p>© 2026 Ресурсный центр «Биология» | Даниленко А.А.</p>
+        <p>Email: zz999an@yandex.by | г. Хойники, школа №3</p>
+    </footer>
+
+    <script>
+        // Hide loader
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                document.getElementById('loader').classList.add('hidden');
+            }, 500);
+        });
+
+        // Burger Menu Logic
+        const burger = document.getElementById('burger');
+        const mobileMenu = document.getElementById('mobileMenu');
+        const mobileLinks = document.querySelectorAll('.mobile-link');
+
+        if (burger) {
+            burger.addEventListener('click', () => {
+                burger.classList.toggle('active');
+                mobileMenu.classList.toggle('active');
+                document.body.style.overflow = mobileMenu.classList.contains('active') ? 'hidden' : '';
+            });
+
+            mobileLinks.forEach(link => {
+                link.addEventListener('click', () => {
+                    burger.classList.remove('active');
+                    mobileMenu.classList.remove('active');
+                    document.body.style.overflow = '';
+                });
+            });
+        }
+
+        // Intersection Observer for animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: "0px 0px -50px 0px"
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach((entry, index) => {
+                if (entry.isIntersecting) {
+                    setTimeout(() => {
+                        entry.target.classList.add('visible');
+                    }, index * 100);
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('[data-animate]').forEach((el) => {
+            observer.observe(el);
+        });
+
+        document.querySelectorAll('.scroll-animate').forEach((el) => {
+            observer.observe(el);
+        });
+    </script>
+
+</body>
+</html>
