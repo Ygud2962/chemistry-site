@@ -4,33 +4,40 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Ресурсный центр "Химия"</title>
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Raleway:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Raleway:wght@300;400;600&display=swap" rel="stylesheet">
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
         :root {
             --primary: #0D3B2E;
             --primary-light: #1B5E5B;
             --accent: #C9A961;
-            --accent-light: #D4B570;
             --bg: #FAFAF7;
             --text: #2B2D42;
             --white: #FFFFFF;
         }
 
-        html { scroll-behavior: smooth; }
-        
+        html {
+            scroll-behavior: smooth;
+            scroll-padding-top: 80px;
+        }
+
         body {
             font-family: 'Raleway', sans-serif;
             background: var(--bg);
             color: var(--text);
             line-height: 1.6;
-            overflow-x: hidden;
         }
 
-        h1, h2, h3 { font-family: 'Playfair Display', serif; }
+        h1, h2, h3 {
+            font-family: 'Playfair Display', serif;
+        }
 
-        /* Navigation */
+        /* Navigation - Premium */
         .nav {
             position: fixed;
             top: 0;
@@ -57,7 +64,6 @@
             font-size: 1.3rem;
             font-weight: 700;
             color: var(--primary);
-            text-decoration: none;
             letter-spacing: 1px;
             z-index: 1001;
         }
@@ -88,10 +94,15 @@
             transition: width 0.3s;
         }
 
-        .nav-links a:hover { color: var(--accent); }
-        .nav-links a:hover:after { width: 100%; }
+        .nav-links a:hover {
+            color: var(--accent);
+        }
 
-        /* Burger Menu */
+        .nav-links a:hover:after {
+            width: 100%;
+        }
+
+        /* Burger Menu - Mobile */
         .burger {
             display: none;
             flex-direction: column;
@@ -114,10 +125,20 @@
             border-radius: 2px;
         }
 
-        .burger.active span:nth-child(1) { transform: translateY(9px) rotate(45deg); }
-        .burger.active span:nth-child(2) { opacity: 0; transform: translateX(-10px); }
-        .burger.active span:nth-child(3) { transform: translateY(-9px) rotate(-45deg); }
+        .burger.active span:nth-child(1) {
+            transform: translateY(9px) rotate(45deg);
+        }
 
+        .burger.active span:nth-child(2) {
+            opacity: 0;
+            transform: translateX(-10px);
+        }
+
+        .burger.active span:nth-child(3) {
+            transform: translateY(-9px) rotate(-45deg);
+        }
+
+        /* Mobile Menu Overlay */
         .mobile-menu {
             display: none;
             position: fixed;
@@ -134,100 +155,139 @@
             transition: opacity 0.4s ease;
         }
 
-        .mobile-menu.active { display: flex; opacity: 1; }
-        .mobile-menu ul { list-style: none; text-align: center; }
-        .mobile-menu li { margin: 1.5rem 0; transform: translateY(20px); opacity: 0; transition: all 0.4s ease; }
-        .mobile-menu.active li { transform: translateY(0); opacity: 1; }
+        .mobile-menu.active {
+            display: flex;
+            opacity: 1;
+        }
+
+        .mobile-menu ul {
+            list-style: none;
+            text-align: center;
+        }
+
+        .mobile-menu li {
+            margin: 1.5rem 0;
+            transform: translateY(20px);
+            opacity: 0;
+            transition: all 0.4s ease;
+        }
+
+        .mobile-menu.active li {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
         .mobile-menu.active li:nth-child(1) { transition-delay: 0.1s; }
         .mobile-menu.active li:nth-child(2) { transition-delay: 0.2s; }
         .mobile-menu.active li:nth-child(3) { transition-delay: 0.3s; }
         .mobile-menu.active li:nth-child(4) { transition-delay: 0.4s; }
-        .mobile-menu a { color: var(--white); text-decoration: none; font-family: 'Playfair Display', serif; font-size: 2rem; font-weight: 600; letter-spacing: 1px; }
-        .mobile-menu a:hover { color: var(--accent); }
 
-        /* Hero Section with Particles */
-        .hero {
+        .mobile-menu a {
+            color: var(--white);
+            text-decoration: none;
+            font-family: 'Playfair Display', serif;
+            font-size: 2rem;
+            font-weight: 600;
+            letter-spacing: 1px;
+            transition: color 0.3s;
             position: relative;
+        }
+
+        .mobile-menu a:hover {
+            color: var(--accent);
+        }
+
+        .mobile-menu a:after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 0;
+            height: 2px;
+            background: var(--accent);
+            transition: width 0.3s;
+        }
+
+        .mobile-menu a:hover:after {
+            width: 60%;
+        }
+
+        /* Hero Section */
+        .hero {
+            background: 
+                linear-gradient(135deg, rgba(13,59,46,0.9), rgba(27,94,91,0.85)),
+                url('https://images.unsplash.com/photo-1532094349884-543bc11b234d?w=1920&q=80');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
             min-height: 100vh;
             display: flex;
-            align-items: center;
+            flex-direction: column;
             justify-content: center;
-            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+            align-items: center;
+            text-align: center;
+            color: var(--white);
+            padding: 6rem 2rem 2rem;
+            position: relative;
             overflow: hidden;
         }
 
-        .hero-bg { position: absolute; top: 0; left: 0; width: 100%; height: 100%; overflow: hidden; }
-
-        .molecule {
+        .hero::before {
+            content: '';
             position: absolute;
-            width: 60px;
-            height: 60px;
-            border: 2px solid rgba(201, 169, 97, 0.3);
-            border-radius: 50%;
-            animation: float 20s infinite ease-in-out;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: 
+                radial-gradient(circle at 20% 50%, rgba(201,169,97,0.2) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(201,169,97,0.15) 0%, transparent 50%);
+            animation: float 20s ease-in-out infinite;
         }
-
-        .molecule:nth-child(1) { top: 10%; left: 10%; animation-delay: 0s; }
-        .molecule:nth-child(2) { top: 20%; right: 15%; animation-delay: 2s; width: 80px; height: 80px; }
-        .molecule:nth-child(3) { bottom: 30%; left: 20%; animation-delay: 4s; width: 50px; height: 50px; }
-        .molecule:nth-child(4) { bottom: 20%; right: 10%; animation-delay: 6s; width: 70px; height: 70px; }
-        .molecule:nth-child(5) { top: 50%; left: 50%; animation-delay: 8s; width: 90px; height: 90px; }
 
         @keyframes float {
-            0%, 100% { transform: translate(0, 0) rotate(0deg); opacity: 0.3; }
-            25% { transform: translate(50px, -50px) rotate(90deg); opacity: 0.6; }
-            50% { transform: translate(100px, 0) rotate(180deg); opacity: 0.3; }
-            75% { transform: translate(50px, 50px) rotate(270deg); opacity: 0.6; }
+            0%, 100% { transform: translate(0, 0); }
+            50% { transform: translate(-20px, -20px); }
         }
 
-        .hero-content {
+        .hero h1, .hero .subtitle, .hero .teacher-info, .btn-primary {
             position: relative;
             z-index: 2;
-            text-align: center;
-            color: var(--white);
-            padding: 2rem;
-            animation: fadeInUp 1s ease;
-        }
-
-        @keyframes fadeInUp {
-            from { opacity: 0; transform: translateY(30px); }
-            to { opacity: 1; transform: translateY(0); }
         }
 
         .hero h1 {
-            font-size: 4rem;
+            font-size: 3.5rem;
             margin-bottom: 1rem;
+            font-weight: 700;
             letter-spacing: 2px;
-            text-shadow: 2px 2px 8px rgba(0,0,0,0.3);
-            animation: slideInDown 1s ease 0.3s both;
+            text-shadow: 2px 2px 8px rgba(0,0,0,0.5);
+            animation: fadeInDown 1s ease-out;
         }
-
-        @keyframes slideInDown {
-            from { opacity: 0; transform: translateY(-50px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        .hero .quote {
-            font-size: 1.5rem;
-            font-style: italic;
-            margin-bottom: 2rem;
-            opacity: 0.95;
-            animation: fadeIn 1s ease 0.6s both;
-        }
-
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
         .hero .subtitle {
-            font-size: 1.2rem;
+            font-size: 1.3rem;
+            margin-bottom: 2rem;
+            font-weight: 300;
+            opacity: 0.95;
+            text-shadow: 1px 1px 4px rgba(0,0,0,0.4);
+        }
+
+        .hero .teacher-info {
+            font-size: 1.1rem;
             margin-bottom: 3rem;
             opacity: 0.9;
-            animation: fadeIn 1s ease 0.9s both;
+        }
+
+        @keyframes fadeInDown {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
         .btn-primary {
             display: inline-block;
             padding: 1rem 2.5rem;
-            background: linear-gradient(135deg, var(--accent), var(--accent-light));
+            background: linear-gradient(135deg, var(--accent), #D4B570);
             color: var(--primary);
             text-decoration: none;
             border-radius: 50px;
@@ -237,49 +297,39 @@
             text-transform: uppercase;
             transition: all 0.3s ease;
             box-shadow: 0 10px 30px rgba(201,169,97,0.4);
-            animation: fadeIn 1s ease 1.2s both;
         }
 
         .btn-primary:hover {
-            transform: translateY(-5px);
+            transform: translateY(-3px);
             box-shadow: 0 15px 40px rgba(201,169,97,0.6);
         }
 
-        /* Sections */
-        .section { padding: 6rem 2rem; max-width: 1200px; margin: 0 auto; }
-
-        .section-title {
-            text-align: center;
-            font-size: 2.8rem;
-            color: var(--primary);
-            margin-bottom: 3rem;
-            position: relative;
-            opacity: 0;
-            transform: translateY(30px);
-            transition: all 0.8s ease;
-        }
-
-        .section-title.visible { opacity: 1; transform: translateY(0); }
-
-        .section-title:after {
-            content: '';
+        .scroll-indicator {
             position: absolute;
-            bottom: -15px;
+            bottom: 2rem;
             left: 50%;
             transform: translateX(-50%);
-            width: 100px;
-            height: 4px;
-            background: linear-gradient(90deg, var(--accent), var(--primary));
-            border-radius: 2px;
+            animation: bounce 2s infinite;
+            z-index: 2;
+            color: var(--white);
+            font-size: 2rem;
+            opacity: 0.8;
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% { transform: translateX(-50%) translateY(0); }
+            40% { transform: translateX(-50%) translateY(-10px); }
         }
 
         /* About Section */
         .about {
+            padding: 5rem 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
             display: grid;
             grid-template-columns: 1fr 2fr;
             gap: 4rem;
             align-items: center;
-            margin-bottom: 4rem;
         }
 
         .about-photo {
@@ -289,34 +339,57 @@
             object-fit: cover;
             border: 5px solid var(--accent);
             box-shadow: 0 10px 40px rgba(13,59,46,0.3);
-            opacity: 0;
-            transform: scale(0.8);
-            transition: all 0.8s ease;
         }
 
-        .about-photo.visible { opacity: 1; transform: scale(1); }
-
-        .about-content {
-            opacity: 0;
-            transform: translateX(50px);
-            transition: all 0.8s ease 0.2s;
+        .about-content h2 {
+            font-size: 2.5rem;
+            color: var(--primary);
+            margin-bottom: 1.5rem;
         }
 
-        .about-content.visible { opacity: 1; transform: translateX(0); }
+        .about-content p {
+            font-size: 1.1rem;
+            margin-bottom: 1rem;
+            line-height: 1.8;
+        }
 
-        .about-content h2 { font-size: 2.5rem; color: var(--primary); margin-bottom: 1.5rem; }
-        .about-content p { font-size: 1.1rem; margin-bottom: 1rem; line-height: 1.8; }
+        /* Sections */
+        .sections {
+            padding: 5rem 2rem;
+            background: linear-gradient(180deg, var(--white) 0%, #f0f0eb 100%);
+        }
 
-        /* Sections Grid */
+        .sections-title {
+            text-align: center;
+            font-size: 2.8rem;
+            color: var(--primary);
+            margin-bottom: 3.5rem;
+            font-weight: 700;
+            position: relative;
+        }
+
+        .sections-title:after {
+            content: '';
+            position: absolute;
+            bottom: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 120px;
+            height: 4px;
+            background: linear-gradient(90deg, var(--accent), var(--primary));
+            border-radius: 2px;
+        }
+
         .sections-grid {
+            max-width: 1200px;
+            margin: 0 auto;
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
             gap: 2.5rem;
-            margin-bottom: 4rem;
         }
 
         .section-card {
-            background: var(--white);
+            background: linear-gradient(135deg, var(--white) 0%, #f8f8f3 100%);
             padding: 3rem 2rem;
             border-radius: 20px;
             text-align: center;
@@ -324,14 +397,10 @@
             color: var(--text);
             transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
             border: 2px solid transparent;
-            box-shadow: 0 10px 30px rgba(13,59,46,0.1);
+            box-shadow: 0 8px 30px rgba(13,59,46,0.12);
             position: relative;
             overflow: hidden;
-            opacity: 0;
-            transform: translateY(50px);
         }
-
-        .section-card.visible { opacity: 1; transform: translateY(0); }
 
         .section-card:before {
             content: '';
@@ -346,10 +415,12 @@
             transition: transform 0.4s ease;
         }
 
-        .section-card:hover:before { transform: scaleX(1); }
+        .section-card:hover:before {
+            transform: scaleX(1);
+        }
 
         .section-card:hover {
-            transform: translateY(-15px);
+            transform: translateY(-12px);
             border-color: var(--accent);
             box-shadow: 0 20px 50px rgba(13,59,46,0.2);
         }
@@ -362,169 +433,61 @@
             transition: transform 0.3s ease;
         }
 
-        .section-card:hover .section-icon { transform: scale(1.2) rotate(10deg); }
+        .section-card:hover .section-icon {
+            transform: scale(1.15) rotate(5deg);
+        }
 
-        .section-card h3 { font-size: 1.6rem; color: var(--primary); margin-bottom: 1rem; font-weight: 700; }
-        .section-card p { font-size: 1rem; color: var(--text); opacity: 0.85; line-height: 1.6; }
+        .section-card h3 {
+            font-size: 1.6rem;
+            color: var(--primary);
+            margin-bottom: 1rem;
+            font-weight: 700;
+        }
 
-        /* Schedule Section */
-        .schedule-section {
+        .section-card p {
+            font-size: 1rem;
+            color: var(--text);
+            opacity: 0.85;
+            line-height: 1.6;
+        }
+
+        /* Quote Section */
+        .quote {
+            padding: 5rem 2rem;
             background: linear-gradient(135deg, var(--primary), var(--primary-light));
-            padding: 4rem 2rem;
-            border-radius: 20px;
             color: var(--white);
-            margin-bottom: 4rem;
-            opacity: 0;
-            transform: translateY(30px);
-            transition: all 0.8s ease;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
         }
 
-        .schedule-section.visible { opacity: 1; transform: translateY(0); }
-
-        .schedule-section h2 { text-align: center; font-size: 2.5rem; margin-bottom: 3rem; }
-
-        .schedule-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 2rem;
-            max-width: 1000px;
-            margin: 0 auto;
+        .quote:before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -10%;
+            width: 500px;
+            height: 500px;
+            background: radial-gradient(circle, rgba(201,169,97,0.1) 0%, transparent 70%);
+            border-radius: 50%;
         }
 
-        .schedule-card {
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(10px);
-            padding: 2rem;
-            border-radius: 15px;
-            border: 1px solid rgba(201, 169, 97, 0.3);
-            transition: all 0.3s ease;
-        }
-
-        .schedule-card:hover {
-            transform: translateY(-10px);
-            background: rgba(255, 255, 255, 0.15);
-            border-color: var(--accent);
-        }
-
-        .schedule-card h3 { font-size: 1.5rem; margin-bottom: 1rem; color: var(--accent); }
-        .schedule-card .time { font-size: 1.2rem; margin-bottom: 0.5rem; }
-        .schedule-card .location { font-size: 1rem; opacity: 0.9; }
-
-        /* Students Section */
-        .students-section { margin-bottom: 4rem; }
-
-        .students-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 2rem;
+        .quote-text {
+            font-size: 2.2rem;
+            font-family: 'Playfair Display', serif;
+            font-style: italic;
             max-width: 900px;
-            margin: 0 auto;
+            margin: 0 auto 1rem;
+            line-height: 1.4;
+            position: relative;
+            z-index: 1;
         }
 
-        .student-card {
-            background: var(--white);
-            padding: 2rem;
-            border-radius: 15px;
-            text-align: center;
-            box-shadow: 0 10px 30px rgba(13,59,46,0.1);
-            transition: all 0.3s ease;
-            border: 2px solid transparent;
-            opacity: 0;
-            transform: scale(0.8);
-        }
-
-        .student-card.visible { opacity: 1; transform: scale(1); }
-
-        .student-card:hover {
-            transform: translateY(-10px);
-            border-color: var(--accent);
-            box-shadow: 0 15px 40px rgba(13,59,46,0.2);
-        }
-
-        .student-card .grade {
-            display: inline-block;
-            background: linear-gradient(135deg, var(--accent), var(--accent-light));
-            color: var(--primary);
-            padding: 0.3rem 1rem;
-            border-radius: 20px;
-            font-size: 0.9rem;
-            font-weight: 600;
-            margin-top: 1rem;
-        }
-
-        .student-card h3 { font-size: 1.3rem; color: var(--primary); margin-bottom: 0.5rem; }
-
-        /* Goals Section */
-        .goals-section { margin-bottom: 4rem; }
-
-        .goals-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 2rem;
-        }
-
-        .goal-card {
-            background: var(--white);
-            padding: 2rem;
-            border-radius: 15px;
-            border-left: 5px solid var(--accent);
-            box-shadow: 0 5px 20px rgba(13,59,46,0.1);
-            transition: all 0.3s ease;
-            opacity: 0;
-            transform: translateX(-30px);
-        }
-
-        .goal-card.visible { opacity: 1; transform: translateX(0); }
-
-        .goal-card:hover {
-            transform: translateX(10px);
-            box-shadow: 0 10px 30px rgba(13,59,46,0.15);
-        }
-
-        .goal-card p { font-size: 1rem; line-height: 1.7; }
-
-        /* Links Section */
-        .links-section {
-            background: linear-gradient(135deg, var(--primary), var(--primary-light));
-            padding: 4rem 2rem;
-            border-radius: 20px;
-            text-align: center;
-            color: var(--white);
-            margin-bottom: 4rem;
-            opacity: 0;
-            transform: translateY(30px);
-            transition: all 0.8s ease;
-        }
-
-        .links-section.visible { opacity: 1; transform: translateY(0); }
-
-        .links-section h2 { font-size: 2.2rem; margin-bottom: 2rem; }
-
-        .links-container {
-            display: flex;
-            justify-content: center;
-            gap: 2rem;
-            flex-wrap: wrap;
-        }
-
-        .link-btn {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-            padding: 1rem 2rem;
-            background: var(--white);
-            color: var(--primary);
-            text-decoration: none;
-            border-radius: 50px;
-            font-weight: 600;
-            transition: all 0.3s ease;
-        }
-
-        .link-btn:hover {
-            background: var(--accent);
-            color: var(--white);
-            transform: translateY(-5px);
-            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        .quote-author {
+            font-size: 1.1rem;
+            opacity: 0.9;
+            position: relative;
+            z-index: 1;
         }
 
         /* Footer */
@@ -532,199 +495,197 @@
             background: linear-gradient(135deg, var(--text), #1a1a2e);
             color: var(--white);
             text-align: center;
-            padding: 3rem 2rem;
-            position: relative;
+            padding: 2.5rem;
+            font-size: 0.9rem;
         }
 
-        footer:before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 3px;
-            background: linear-gradient(90deg, var(--accent), var(--accent-light));
-        }
-
-        /* Responsive */
+        /* Mobile Responsive */
         @media (max-width: 768px) {
-            .nav-links { display: none; }
-            .burger { display: flex; }
-            .hero h1 { font-size: 2.5rem; }
-            .hero .quote { font-size: 1.2rem; }
-            .about { grid-template-columns: 1fr; text-align: center; }
-            .about-photo { margin: 0 auto; }
-            .section { padding: 4rem 1.5rem; }
-            .section-title { font-size: 2.2rem; }
+            .nav {
+                padding: 1rem 1.5rem;
+            }
+
+            .nav-logo {
+                font-size: 1.2rem;
+            }
+
+            .nav-links {
+                display: none;
+            }
+
+            .burger {
+                display: flex;
+            }
+
+            .hero {
+                padding: 5rem 1.5rem 2rem;
+                min-height: 90vh;
+            }
+
+            .hero h1 {
+                font-size: 2.2rem;
+                letter-spacing: 1px;
+            }
+
+            .hero .subtitle {
+                font-size: 1.1rem;
+            }
+
+            .hero .teacher-info {
+                font-size: 1rem;
+            }
+
+            .btn-primary {
+                padding: 0.9rem 2rem;
+                font-size: 0.9rem;
+            }
+
+            .about {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+                padding: 3rem 1.5rem;
+                text-align: center;
+            }
+
+            .about-photo {
+                width: 220px;
+                height: 220px;
+                margin: 0 auto;
+            }
+
+            .about-content h2 {
+                font-size: 2rem;
+            }
+
+            .about-content p {
+                font-size: 1rem;
+            }
+
+            .sections {
+                padding: 4rem 1.5rem;
+            }
+
+            .sections-title {
+                font-size: 2.2rem;
+                margin-bottom: 3rem;
+            }
+
+            .sections-grid {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+
+            .section-card {
+                padding: 2.5rem 2rem;
+            }
+
+            .section-icon {
+                font-size: 4rem;
+            }
+
+            .section-card h3 {
+                font-size: 1.5rem;
+            }
+
+            .quote {
+                padding: 4rem 1.5rem;
+            }
+
+            .quote-text {
+                font-size: 1.7rem;
+            }
         }
     </style>
 </head>
 <body>
 
+    <!-- Navigation -->
     <nav class="nav">
         <div class="nav-container">
-            <a href="index.html" class="nav-logo">️ ХИМИЯ</a>
+            <div class="nav-logo">⚗️ ХИМИЯ</div>
             <ul class="nav-links">
                 <li><a href="#about">О центре</a></li>
                 <li><a href="#sections">Разделы</a></li>
-                <li><a href="#schedule">Расписание</a></li>
                 <li><a href="contacts.html">Контакты</a></li>
             </ul>
             <button class="burger" id="burger" aria-label="Меню">
-                <span></span><span></span><span></span>
+                <span></span>
+                <span></span>
+                <span></span>
             </button>
         </div>
     </nav>
 
+    <!-- Mobile Menu -->
     <div class="mobile-menu" id="mobileMenu">
         <ul>
             <li><a href="#about" class="mobile-link">О центре</a></li>
             <li><a href="#sections" class="mobile-link">Разделы</a></li>
-            <li><a href="#schedule" class="mobile-link">Расписание</a></li>
             <li><a href="contacts.html" class="mobile-link">Контакты</a></li>
+            <li><a href="mailto:zz999an@yandex.by" class="mobile-link">Написать</a></li>
         </ul>
     </div>
 
+    <!-- Hero Section -->
     <section class="hero">
-        <div class="hero-bg">
-            <div class="molecule"></div>
-            <div class="molecule"></div>
-            <div class="molecule"></div>
-            <div class="molecule"></div>
-            <div class="molecule"></div>
-        </div>
-        <div class="hero-content">
-            <h1>РЕСУРСНЫЙ ЦЕНТР<br>«ХИМИЯ»</h1>
-            <p class="quote">«Химия — это искусство понимать невидимое.»</p>
-            <p class="subtitle">Подготовка к олимпиадам и углубленное изучение химии</p>
-            <a href="#sections" class="btn-primary">Начать обучение</a>
+        <h1>РЕСУРСНЫЙ ЦЕНТР<br>«ХИМИЯ»</h1>
+        <p class="subtitle">Погружение в мир химических превращений</p>
+        <p class="teacher-info">Корольчук Ольга Григорьевна<br>Учитель химии высшей категории</p>
+        <a href="#sections" class="btn-primary">Начать обучение</a>
+        <a href="#sections" class="scroll-indicator">↓</a>
+    </section>
+
+    <!-- About Section -->
+    <section class="about" id="about">
+        <img src="https://github.com/Ygud2962/chemistry-site/blob/main/images/teacher.jpg?raw=true" alt="Учитель" class="about-photo">
+        <div class="about-content">
+            <h2>Добро пожаловать!</h2>
+            <p>Меня зовут <strong>Корольчук Ольга Григорьевна</strong>, и я рада приветствовать вас в нашем ресурсном центре по химии.</p>
+            <p>Работаю с учащимися 9, 10 и 11 классов, помогая им постигать удивительный мир химических реакций, строения веществ и молекулярных процессов. Моя цель — сделать изучение химии интересным, понятным и эффективным для каждого ученика, подготовить их к олимпиадам различного уровня.</p>
+            <p>Здесь вы найдёте материалы для подготовки к урокам, олимпиадам и просто для расширения кругозора. Занятия проходят по субботам с 10:00 до 12:00 в аудитории 3-24 на базе ГУО «Средняя школа №3 г. Хойники».</p>
         </div>
     </section>
 
-    <section class="section" id="about">
-        <h2 class="section-title">О ресурсном центре</h2>
-        <div class="about">
-            <img src="https://github.com/Ygud2962/chemistry-site/blob/main/images/teacher.jpg?raw=true" alt="Учитель" class="about-photo">
-            <div class="about-content">
-                <h2>Добро пожаловать!</h2>
-                <p>Меня зовут <strong>Корольчук Ольга Григорьевна</strong>, и я рада приветствовать вас в нашем ресурсном центре по химии.</p>
-                <p>Работаю с учащимися 9, 10 и 11 классов, помогая им постигать удивительный мир химических превращений, строения веществ и молекулярных процессов. Моя цель — сделать изучение химии интересным, понятным и эффективным для каждого ученика, подготовить их к олимпиадам различного уровня.</p>
-                <p>Здесь вы найдёте материалы для подготовки к урокам, олимпиадам и просто для расширения кругозора в области химии. Занятия проходят по субботам с 10:00 до 12:00 в аудитории 3-24 на базе ГУО «Средняя школа №3 г. Хойники».</p>
-            </div>
-        </div>
-    </section>
-
-    <section class="section" id="sections">
-        <h2 class="section-title">Разделы ресурсного центра</h2>
+    <!-- Sections Grid -->
+    <section class="sections" id="sections">
+        <h2 class="sections-title">Разделы ресурсного центра</h2>
         <div class="sections-grid">
             <a href="programma.html" class="section-card">
-                <span class="section-icon">📋</span>
+                <div class="section-icon">📋</div>
                 <h3>Программа занятий</h3>
                 <p>Учебная программа и тематическое планирование</p>
             </a>
 
             <a href="plan.html" class="section-card">
-                <span class="section-icon">📅</span>
+                <div class="section-icon">📅</div>
                 <h3>План занятий</h3>
                 <p>Расписание уроков и контрольных работ</p>
             </a>
 
             <a href="materials.html" class="section-card">
-                <span class="section-icon">🧪</span>
+                <div class="section-icon">🧪</div>
                 <h3>Материалы для самоподготовки</h3>
                 <p>Учебные материалы по темам и классам</p>
             </a>
 
             <a href="olimpiads.html" class="section-card">
-                <span class="section-icon">🏆</span>
+                <div class="section-icon">🏆</div>
                 <h3>Олимпиады прошлых лет</h3>
                 <p>Задания и решения олимпиад разных лет</p>
             </a>
         </div>
     </section>
 
-    <section class="section" id="schedule">
-        <div class="schedule-section">
-            <h2>📅 Расписание занятий</h2>
-            <div class="schedule-grid">
-                <div class="schedule-card">
-                    <h3>9 класс</h3>
-                    <div class="time">🕐 Суббота: 10:00 – 12:00</div>
-                    <div class="location">📍 Кабинет 3-24</div>
-                </div>
-                <div class="schedule-card">
-                    <h3>10 класс</h3>
-                    <div class="time">🕐 Суббота: 10:00 – 12:00</div>
-                    <div class="location">📍 Кабинет 3-24</div>
-                </div>
-                <div class="schedule-card">
-                    <h3>11 класс</h3>
-                    <div class="time">🕐 Суббота: 10:00 – 12:00</div>
-                    <div class="location">📍 Кабинет 3-24</div>
-                </div>
-            </div>
-        </div>
+    <!-- Quote Section -->
+    <section class="quote">
+        <p class="quote-text">«Химия — это искусство понимать невидимое.»</p>
+        <p class="quote-author">— Жозеф Пруст</p>
     </section>
 
-    <section class="section students-section">
-        <h2 class="section-title">Наши учащиеся</h2>
-        <div class="students-grid">
-            <div class="student-card">
-                <h3>Добыш Евгения</h3>
-                <span class="grade">9 класс</span>
-            </div>
-            <div class="student-card">
-                <h3>Резников Владислав</h3>
-                <span class="grade">10 класс</span>
-            </div>
-            <div class="student-card">
-                <h3>Назаренко Ирина</h3>
-                <span class="grade">11 класс</span>
-            </div>
-        </div>
-    </section>
-
-    <section class="section goals-section">
-        <h2 class="section-title">Цели и задачи программы</h2>
-        <div class="goals-grid">
-            <div class="goal-card">
-                <p>🎯 <strong>Главная цель:</strong> Расширение и углубление знаний по химии для успешной подготовки и участия в олимпиадах по химии</p>
-            </div>
-            <div class="goal-card">
-                <p>📚 Освоение фундаментальных знаний об основных понятиях и законах химии</p>
-            </div>
-            <div class="goal-card">
-                <p>🔬 Развитие навыков проведения химического эксперимента и расчетов</p>
-            </div>
-            <div class="goal-card">
-                <p>🧠 Развитие интеллектуальных способностей в процессе решения нестандартных задач</p>
-            </div>
-            <div class="goal-card">
-                <p>🌱 Формирование устойчивого научного интереса к химии</p>
-            </div>
-            <div class="goal-card">
-                <p>🛡️ Применение знаний для безопасного использования веществ в быту и на производстве</p>
-            </div>
-        </div>
-    </section>
-
-    <section class="section">
-        <div class="links-section">
-            <h2>🔗 Полезные ресурсы</h2>
-            <div class="links-container">
-                <a href="https://adu.by/ru/uchenikam/respublikanskaya-olimpiada-po-uchebnym-predmetam.html" target="_blank" class="link-btn">
-                    🏆 Республиканские олимпиады
-                </a>
-                <a href="https://goiro.by/nauchno-metodicheskaya-rabota/organizatsiya-raboty-s-vysokomotivirovannymi-i-intellektualno-odarennymi-uchashchimisya.html" target="_blank" class="link-btn">
-                    📈 Областные олимпиады
-                </a>
-            </div>
-        </div>
-    </section>
-
+    <!-- Footer -->
     <footer>
         <p>© 2026 Ресурсный центр «Химия» | Корольчук О.Г.</p>
-        <p>ГУО «Средняя школа №3 г. Хойники»</p>
+        <p>Email: zz999an@yandex.by | г. Хойники, школа №3</p>
     </footer>
 
     <script>
@@ -733,50 +694,17 @@
         const mobileMenu = document.getElementById('mobileMenu');
         const mobileLinks = document.querySelectorAll('.mobile-link');
 
-        if (burger) {
-            burger.addEventListener('click', () => {
-                burger.classList.toggle('active');
-                mobileMenu.classList.toggle('active');
-                document.body.style.overflow = mobileMenu.classList.contains('active') ? 'hidden' : '';
-            });
-
-            mobileLinks.forEach(link => {
-                link.addEventListener('click', () => {
-                    burger.classList.remove('active');
-                    mobileMenu.classList.remove('active');
-                    document.body.style.overflow = '';
-                });
-            });
-        }
-
-        // Intersection Observer for animations
-        const observerOptions = { threshold: 0.1, rootMargin: "0px 0px -100px 0px" };
-
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add('visible');
-                }
-            });
-        }, observerOptions);
-
-        document.querySelectorAll('.section-title, .about-photo, .about-content, .section-card, .schedule-section, .student-card, .goal-card, .links-section').forEach(el => {
-            observer.observe(el);
+        burger.addEventListener('click', () => {
+            burger.classList.toggle('active');
+            mobileMenu.classList.toggle('active');
+            document.body.style.overflow = mobileMenu.classList.contains('active') ? 'hidden' : '';
         });
 
-        // Staggered animation for cards
-        document.querySelectorAll('.section-card, .student-card, .goal-card').forEach((card, index) => {
-            card.style.transitionDelay = `${index * 0.1}s`;
-        });
-
-        // Smooth scroll for navigation links
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function (e) {
-                e.preventDefault();
-                const target = document.querySelector(this.getAttribute('href'));
-                if (target) {
-                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                }
+        mobileLinks.forEach(link => {
+            link.addEventListener('click', () => {
+                burger.classList.remove('active');
+                mobileMenu.classList.remove('active');
+                document.body.style.overflow = '';
             });
         });
     </script>
