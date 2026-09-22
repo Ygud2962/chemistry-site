@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Материалы для самоподготовки - Ресурсный центр "Биология"</title>
+    <title>Материалы для самоподготовки - Ресурсный центр "Химия"</title>
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Raleway:wght@300;400;500;600&display=swap" rel="stylesheet">
     <style>
         * {
@@ -231,7 +231,7 @@
             font-weight: 300;
         }
 
-        /* Content and Cards - ОДИН РЯД */
+        /* Content and Cards */
         .content {
             max-width: 1400px;
             margin: 0 auto;
@@ -345,6 +345,91 @@
             font-size: 1rem;
         }
 
+        /* Download Banner */
+        .download-banner {
+            background: linear-gradient(135deg, rgba(201,169,97,0.15), rgba(13,59,46,0.08));
+            border: 2px solid var(--accent);
+            border-radius: 15px;
+            padding: 2rem;
+            margin: 3rem auto;
+            max-width: 1200px;
+            text-align: center;
+        }
+
+        .download-banner h2 {
+            color: var(--primary);
+            margin-bottom: 1rem;
+            font-size: 1.8rem;
+        }
+
+        .download-banner p {
+            font-size: 1rem;
+            opacity: 0.9;
+            margin-bottom: 1.5rem;
+        }
+
+        .download-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+
+        .download-item {
+            background: var(--white);
+            border-radius: 12px;
+            padding: 1.2rem;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .download-item:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(13,59,46,0.12);
+        }
+
+        .download-icon {
+            font-size: 2.5rem;
+            flex-shrink: 0;
+        }
+
+        .download-info {
+            text-align: left;
+            flex-grow: 1;
+        }
+
+        .download-info h4 {
+            color: var(--primary);
+            font-size: 1rem;
+            margin-bottom: 0.3rem;
+        }
+
+        .download-info p {
+            font-size: 0.85rem;
+            opacity: 0.8;
+            margin: 0;
+        }
+
+        .download-item a {
+            display: inline-block;
+            padding: 0.5rem 1rem;
+            background: var(--accent);
+            color: var(--white);
+            text-decoration: none;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .download-item a:hover {
+            background: var(--primary);
+            transform: scale(1.05);
+        }
+
         footer {
             background: linear-gradient(135deg, var(--text), #1a1a2e);
             color: var(--white);
@@ -412,6 +497,10 @@
             .topic-emoji {
                 font-size: 3rem;
             }
+
+            .download-grid {
+                grid-template-columns: 1fr;
+            }
         }
 
         @media (max-width: 480px) {
@@ -426,7 +515,7 @@
 
     <nav class="nav">
         <div class="nav-container">
-            <div class="nav-logo">🌿 БИОЛОГИЯ</div>
+            <div class="nav-logo">⚗️ ХИМИЯ</div>
             <ul class="nav-links">
                 <li><a href="index.html">Главная</a></li>
                 <li><a href="index.html#about">О центре</a></li>
@@ -452,69 +541,113 @@
     </div>
 
     <div class="header">
-        <h1>📚 Материалы для самоподготовки</h1>
-        <p>Выберите тему для углубленного изучения и подготовки к олимпиадам</p>
+        <h1> Материалы для самоподготовки</h1>
+        <p>Учебники, задачники и теоретические материалы для подготовки к олимпиадам по химии</p>
     </div>
 
     <div class="content">
         <div class="topics-grid">
-            <!-- Ботаника -->
-            <a href="materials-botany.html" class="topic-card botany">
-                <span class="topic-emoji">🌱</span>
-                <h3>Ботаника</h3>
-                <p>Наука о растениях и их жизнедеятельности</p>
+            <!-- Общая химия -->
+            <a href="materials-general-chemistry.html" class="topic-card">
+                <span class="topic-emoji">⚛️</span>
+                <h3>Общая химия</h3>
+                <p>Фундаментальные законы и принципы</p>
                 <ul>
-                    <li>Морфология и анатомия</li>
-                    <li>Систематика растений</li>
-                    <li>Физиология (фотосинтез)</li>
-                    <li>Экология растений</li>
+                    <li>Строение атома и ПСХЭ</li>
+                    <li>Химическая связь</li>
+                    <li>Химическая термодинамика</li>
+                    <li>Химическая кинетика</li>
                 </ul>
             </a>
 
-            <!-- Зоология -->
-            <a href="materials-zoology.html" class="topic-card zoology">
-                <span class="topic-emoji">🦋</span>
-                <h3>Зоология</h3>
-                <p>Многообразие животного мира</p>
+            <!-- Неорганическая химия -->
+            <a href="materials-inorganic.html" class="topic-card">
+                <span class="topic-emoji">🧪</span>
+                <h3>Неорганическая химия</h3>
+                <p>Свойства элементов и их соединений</p>
                 <ul>
-                    <li>Паразитология</li>
-                    <li>Беспозвоночные</li>
-                    <li>Позвоночные</li>
-                    <li>Практикум</li>
+                    <li>Классы неорганических соединений</li>
+                    <li>Окислительно-восстановительные реакции</li>
+                    <li>Комплексные соединения</li>
+                    <li>Металлы и неметаллы</li>
                 </ul>
             </a>
 
-            <!-- Анатомия и физиология человека -->
-            <a href="materials-anatomy.html" class="topic-card anatomy">
-                <span class="topic-emoji">🧬</span>
-                <h3>Анатомия и физиология</h3>
-                <p>Строение человеческого организма</p>
+            <!-- Органическая химия -->
+            <a href="materials-organic.html" class="topic-card">
+                <span class="topic-emoji"></span>
+                <h3>Органическая химия</h3>
+                <p>Углеродные соединения и их превращения</p>
                 <ul>
-                    <li>Физиология клеток</li>
-                    <li>Нервная система</li>
-                    <li>Кровь и иммунитет</li>
-                    <li>Системы органов</li>
+                    <li>Углеводороды и стереохимия</li>
+                    <li>Кислород- и азотсодержащие соединения</li>
+                    <li>Биополимеры (белки, углеводы)</li>
+                    <li>Генетическая связь между классами</li>
                 </ul>
             </a>
 
-            <!-- Общая биология -->
-            <a href="materials-general.html" class="topic-card general">
-                <span class="topic-emoji">🔬</span>
-                <h3>Общая биология</h3>
-                <p>Фундаментальные основы</p>
+            <!-- Задачник -->
+            <a href="materials-problems.html" class="topic-card">
+                <span class="topic-emoji"></span>
+                <h3>Задачник</h3>
+                <p>Задачи с решениями и эталонами</p>
                 <ul>
-                    <li>Генетика</li>
-                    <li>Цитология</li>
-                    <li>Эволюция</li>
-                    <li>Экология</li>
+                    <li>Расчётные задачи</li>
+                    <li>Цепочки превращений</li>
+                    <li>Качественные реакции</li>
+                    <li>Олимпиадные задачи</li>
                 </ul>
             </a>
+        </div>
+
+        <!-- Баннер с учебными материалами -->
+        <div class="download-banner">
+            <h2>📖 Учебные пособия</h2>
+            <p>Фундаментальные учебники и задачники для углублённого изучения химии</p>
+            
+            <div class="download-grid">
+                <div class="download-item">
+                    <span class="download-icon">📘</span>
+                    <div class="download-info">
+                        <h4>Органическая химия. Том 1</h4>
+                        <p>В.Ф. Травень. Алканы, алкены, алкины, стереохимия</p>
+                    </div>
+                    <a href="files/textbooks/traven_organic_chemistry_vol1.pdf" target="_blank">Скачать</a>
+                </div>
+
+                <div class="download-item">
+                    <span class="download-icon">📗</span>
+                    <div class="download-info">
+                        <h4>Органическая химия. Том 2</h4>
+                        <p>В.Ф. Травень. Ароматические соединения, спирты, альдегиды</p>
+                    </div>
+                    <a href="files/textbooks/traven_organic_chemistry_vol2.pdf" target="_blank">Скачать</a>
+                </div>
+
+                <div class="download-item">
+                    <span class="download-icon">📕</span>
+                    <div class="download-info">
+                        <h4>Органическая химия. Том 3</h4>
+                        <p>В.Ф. Травень. Карбоновые кислоты, амины, биополимеры</p>
+                    </div>
+                    <a href="files/textbooks/traven_organic_chemistry_vol3.pdf" target="_blank">Скачать</a>
+                </div>
+
+                <div class="download-item">
+                    <span class="download-icon">📙</span>
+                    <div class="download-info">
+                        <h4>Сборник задач по общей и неорганической химии</h4>
+                        <p>И.А. Передерина и др. Задачи с эталонами решений</p>
+                    </div>
+                    <a href="files/textbooks/perederina_problems_general_inorganic.pdf" target="_blank">Скачать</a>
+                </div>
+            </div>
         </div>
     </div>
 
     <footer>
-        <p>© 2026 Ресурсный центр «Биология» | Даниленко А.А.</p>
-        <p>Email: zz999an@yandex.by | г. Хойники, школа №3</p>
+        <p>© 2026 Ресурсный центр «Химия» | Корольчук О.Г.</p>
+        <p>ГУО «Средняя школа №3 г. Хойники»</p>
     </footer>
 
     <script>
