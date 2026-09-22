@@ -91,6 +91,60 @@
         .nav-links a:hover { color: var(--accent); }
         .nav-links a:hover:after { width: 100%; }
 
+        /* Burger Menu */
+        .burger {
+            display: none;
+            flex-direction: column;
+            justify-content: space-between;
+            width: 28px;
+            height: 20px;
+            cursor: pointer;
+            z-index: 1001;
+            background: none;
+            border: none;
+            padding: 0;
+        }
+
+        .burger span {
+            display: block;
+            width: 100%;
+            height: 2px;
+            background: var(--primary);
+            transition: all 0.3s ease;
+            border-radius: 2px;
+        }
+
+        .burger.active span:nth-child(1) { transform: translateY(9px) rotate(45deg); }
+        .burger.active span:nth-child(2) { opacity: 0; transform: translateX(-10px); }
+        .burger.active span:nth-child(3) { transform: translateY(-9px) rotate(-45deg); }
+
+        .mobile-menu {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+            z-index: 999;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            transition: opacity 0.4s ease;
+        }
+
+        .mobile-menu.active { display: flex; opacity: 1; }
+        .mobile-menu ul { list-style: none; text-align: center; }
+        .mobile-menu li { margin: 1.5rem 0; transform: translateY(20px); opacity: 0; transition: all 0.4s ease; }
+        .mobile-menu.active li { transform: translateY(0); opacity: 1; }
+        .mobile-menu.active li:nth-child(1) { transition-delay: 0.1s; }
+        .mobile-menu.active li:nth-child(2) { transition-delay: 0.2s; }
+        .mobile-menu.active li:nth-child(3) { transition-delay: 0.3s; }
+        .mobile-menu.active li:nth-child(4) { transition-delay: 0.4s; }
+        .mobile-menu a { color: var(--white); text-decoration: none; font-family: 'Playfair Display', serif; font-size: 2rem; font-weight: 600; letter-spacing: 1px; }
+        .mobile-menu a:hover { color: var(--accent); }
+
         /* Hero Section with Particles */
         .hero {
             position: relative;
@@ -102,14 +156,7 @@
             overflow: hidden;
         }
 
-        .hero-bg {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            overflow: hidden;
-        }
+        .hero-bg { position: absolute; top: 0; left: 0; width: 100%; height: 100%; overflow: hidden; }
 
         .molecule {
             position: absolute;
@@ -168,10 +215,7 @@
             animation: fadeIn 1s ease 0.6s both;
         }
 
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
         .hero .subtitle {
             font-size: 1.2rem;
@@ -202,11 +246,7 @@
         }
 
         /* Sections */
-        .section {
-            padding: 6rem 2rem;
-            max-width: 1200px;
-            margin: 0 auto;
-        }
+        .section { padding: 6rem 2rem; max-width: 1200px; margin: 0 auto; }
 
         .section-title {
             text-align: center;
@@ -219,10 +259,7 @@
             transition: all 0.8s ease;
         }
 
-        .section-title.visible {
-            opacity: 1;
-            transform: translateY(0);
-        }
+        .section-title.visible { opacity: 1; transform: translateY(0); }
 
         .section-title:after {
             content: '';
@@ -257,10 +294,7 @@
             transition: all 0.8s ease;
         }
 
-        .about-photo.visible {
-            opacity: 1;
-            transform: scale(1);
-        }
+        .about-photo.visible { opacity: 1; transform: scale(1); }
 
         .about-content {
             opacity: 0;
@@ -268,22 +302,10 @@
             transition: all 0.8s ease 0.2s;
         }
 
-        .about-content.visible {
-            opacity: 1;
-            transform: translateX(0);
-        }
+        .about-content.visible { opacity: 1; transform: translateX(0); }
 
-        .about-content h2 {
-            font-size: 2.5rem;
-            color: var(--primary);
-            margin-bottom: 1.5rem;
-        }
-
-        .about-content p {
-            font-size: 1.1rem;
-            margin-bottom: 1rem;
-            line-height: 1.8;
-        }
+        .about-content h2 { font-size: 2.5rem; color: var(--primary); margin-bottom: 1.5rem; }
+        .about-content p { font-size: 1.1rem; margin-bottom: 1rem; line-height: 1.8; }
 
         /* Sections Grid */
         .sections-grid {
@@ -309,10 +331,7 @@
             transform: translateY(50px);
         }
 
-        .section-card.visible {
-            opacity: 1;
-            transform: translateY(0);
-        }
+        .section-card.visible { opacity: 1; transform: translateY(0); }
 
         .section-card:before {
             content: '';
@@ -343,23 +362,10 @@
             transition: transform 0.3s ease;
         }
 
-        .section-card:hover .section-icon {
-            transform: scale(1.2) rotate(10deg);
-        }
+        .section-card:hover .section-icon { transform: scale(1.2) rotate(10deg); }
 
-        .section-card h3 {
-            font-size: 1.6rem;
-            color: var(--primary);
-            margin-bottom: 1rem;
-            font-weight: 700;
-        }
-
-        .section-card p {
-            font-size: 1rem;
-            color: var(--text);
-            opacity: 0.85;
-            line-height: 1.6;
-        }
+        .section-card h3 { font-size: 1.6rem; color: var(--primary); margin-bottom: 1rem; font-weight: 700; }
+        .section-card p { font-size: 1rem; color: var(--text); opacity: 0.85; line-height: 1.6; }
 
         /* Schedule Section */
         .schedule-section {
@@ -373,16 +379,9 @@
             transition: all 0.8s ease;
         }
 
-        .schedule-section.visible {
-            opacity: 1;
-            transform: translateY(0);
-        }
+        .schedule-section.visible { opacity: 1; transform: translateY(0); }
 
-        .schedule-section h2 {
-            text-align: center;
-            font-size: 2.5rem;
-            margin-bottom: 3rem;
-        }
+        .schedule-section h2 { text-align: center; font-size: 2.5rem; margin-bottom: 3rem; }
 
         .schedule-grid {
             display: grid;
@@ -407,26 +406,12 @@
             border-color: var(--accent);
         }
 
-        .schedule-card h3 {
-            font-size: 1.5rem;
-            margin-bottom: 1rem;
-            color: var(--accent);
-        }
-
-        .schedule-card .time {
-            font-size: 1.2rem;
-            margin-bottom: 0.5rem;
-        }
-
-        .schedule-card .location {
-            font-size: 1rem;
-            opacity: 0.9;
-        }
+        .schedule-card h3 { font-size: 1.5rem; margin-bottom: 1rem; color: var(--accent); }
+        .schedule-card .time { font-size: 1.2rem; margin-bottom: 0.5rem; }
+        .schedule-card .location { font-size: 1rem; opacity: 0.9; }
 
         /* Students Section */
-        .students-section {
-            margin-bottom: 4rem;
-        }
+        .students-section { margin-bottom: 4rem; }
 
         .students-grid {
             display: grid;
@@ -448,10 +433,7 @@
             transform: scale(0.8);
         }
 
-        .student-card.visible {
-            opacity: 1;
-            transform: scale(1);
-        }
+        .student-card.visible { opacity: 1; transform: scale(1); }
 
         .student-card:hover {
             transform: translateY(-10px);
@@ -470,16 +452,10 @@
             margin-top: 1rem;
         }
 
-        .student-card h3 {
-            font-size: 1.3rem;
-            color: var(--primary);
-            margin-bottom: 0.5rem;
-        }
+        .student-card h3 { font-size: 1.3rem; color: var(--primary); margin-bottom: 0.5rem; }
 
         /* Goals Section */
-        .goals-section {
-            margin-bottom: 4rem;
-        }
+        .goals-section { margin-bottom: 4rem; }
 
         .goals-grid {
             display: grid;
@@ -498,20 +474,14 @@
             transform: translateX(-30px);
         }
 
-        .goal-card.visible {
-            opacity: 1;
-            transform: translateX(0);
-        }
+        .goal-card.visible { opacity: 1; transform: translateX(0); }
 
         .goal-card:hover {
             transform: translateX(10px);
             box-shadow: 0 10px 30px rgba(13,59,46,0.15);
         }
 
-        .goal-card p {
-            font-size: 1rem;
-            line-height: 1.7;
-        }
+        .goal-card p { font-size: 1rem; line-height: 1.7; }
 
         /* Links Section */
         .links-section {
@@ -526,15 +496,9 @@
             transition: all 0.8s ease;
         }
 
-        .links-section.visible {
-            opacity: 1;
-            transform: translateY(0);
-        }
+        .links-section.visible { opacity: 1; transform: translateY(0); }
 
-        .links-section h2 {
-            font-size: 2.2rem;
-            margin-bottom: 2rem;
-        }
+        .links-section h2 { font-size: 2.2rem; margin-bottom: 2rem; }
 
         .links-container {
             display: flex;
@@ -585,6 +549,7 @@
         /* Responsive */
         @media (max-width: 768px) {
             .nav-links { display: none; }
+            .burger { display: flex; }
             .hero h1 { font-size: 2.5rem; }
             .hero .quote { font-size: 1.2rem; }
             .about { grid-template-columns: 1fr; text-align: center; }
@@ -605,8 +570,20 @@
                 <li><a href="#schedule">Расписание</a></li>
                 <li><a href="contacts.html">Контакты</a></li>
             </ul>
+            <button class="burger" id="burger" aria-label="Меню">
+                <span></span><span></span><span></span>
+            </button>
         </div>
     </nav>
+
+    <div class="mobile-menu" id="mobileMenu">
+        <ul>
+            <li><a href="#about" class="mobile-link">О центре</a></li>
+            <li><a href="#sections" class="mobile-link">Разделы</a></li>
+            <li><a href="#schedule" class="mobile-link">Расписание</a></li>
+            <li><a href="contacts.html" class="mobile-link">Контакты</a></li>
+        </ul>
+    </div>
 
     <section class="hero">
         <div class="hero-bg">
@@ -678,11 +655,11 @@
                 <div class="schedule-card">
                     <h3>10 класс</h3>
                     <div class="time">🕐 Суббота: 10:00 – 12:00</div>
-                    <div class="location"> Кабинет 3-24</div>
+                    <div class="location">📍 Кабинет 3-24</div>
                 </div>
                 <div class="schedule-card">
                     <h3>11 класс</h3>
-                    <div class="time"> Суббота: 10:00 – 12:00</div>
+                    <div class="time">🕐 Суббота: 10:00 – 12:00</div>
                     <div class="location">📍 Кабинет 3-24</div>
                 </div>
             </div>
@@ -711,7 +688,7 @@
         <h2 class="section-title">Цели и задачи программы</h2>
         <div class="goals-grid">
             <div class="goal-card">
-                <p> <strong>Главная цель:</strong> Расширение и углубление знаний по химии для успешной подготовки и участия в олимпиадах по химии</p>
+                <p>🎯 <strong>Главная цель:</strong> Расширение и углубление знаний по химии для успешной подготовки и участия в олимпиадах по химии</p>
             </div>
             <div class="goal-card">
                 <p>📚 Освоение фундаментальных знаний об основных понятиях и законах химии</p>
@@ -751,11 +728,29 @@
     </footer>
 
     <script>
+        // Burger Menu
+        const burger = document.getElementById('burger');
+        const mobileMenu = document.getElementById('mobileMenu');
+        const mobileLinks = document.querySelectorAll('.mobile-link');
+
+        if (burger) {
+            burger.addEventListener('click', () => {
+                burger.classList.toggle('active');
+                mobileMenu.classList.toggle('active');
+                document.body.style.overflow = mobileMenu.classList.contains('active') ? 'hidden' : '';
+            });
+
+            mobileLinks.forEach(link => {
+                link.addEventListener('click', () => {
+                    burger.classList.remove('active');
+                    mobileMenu.classList.remove('active');
+                    document.body.style.overflow = '';
+                });
+            });
+        }
+
         // Intersection Observer for animations
-        const observerOptions = {
-            threshold: 0.1,
-            rootMargin: "0px 0px -100px 0px"
-        };
+        const observerOptions = { threshold: 0.1, rootMargin: "0px 0px -100px 0px" };
 
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
@@ -765,7 +760,6 @@
             });
         }, observerOptions);
 
-        // Observe all animated elements
         document.querySelectorAll('.section-title, .about-photo, .about-content, .section-card, .schedule-section, .student-card, .goal-card, .links-section').forEach(el => {
             observer.observe(el);
         });
