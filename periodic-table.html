@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Интерактивная таблица Менделеева - Ресурсный центр "Химия"</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Raleway:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        :root {
+            --primary: #0D3B2E; --primary-light: #1B5E5B; --accent: #C9A961;
+            --accent-light: #D4B570; --bg: #FAFAF7; --text: #2B2D42; --white: #FFFFFF;
+        }
+        html { scroll-behavior: smooth; }
+        body { font-family: 'Raleway', sans-serif; background: var(--bg); color: var(--text); line-height: 1.6; }
+        h1, h2, h3 { font-family: 'Playfair Display', serif; }
+
+        .nav {
+            position: fixed; top: 0; left: 0; right: 0;
+            background: rgba(255, 255, 255, 0.98); backdrop-filter: blur(15px);
+            padding: 1rem 2rem; box-shadow: 0 2px 20px rgba(13,59,46,0.1); z-index: 1000;
+        }
+        .nav-container { max-width: 1200px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; }
+        .nav-logo { font-family: 'Playfair Display', serif; font-size: 1.3rem; font-weight: 700; color: var(--primary); text-decoration: none; letter-spacing: 1px; }
+        .nav-links { display: flex; gap: 2rem; list-style: none; }
+        .nav-links a { color: var(--text); text-decoration: none; font-size: 0.9rem; font-weight: 600; transition: color 0.3s; }
+        .nav-links a:hover { color: var(--accent); }
+
+        .header {
+            background: linear-gradient(135deg, var(--primary), var(--primary-light));
+            color: var(--white); padding: 8rem 2rem 4rem; text-align: center;
+        }
+        .header h1 { font-size: 2.8rem; margin-bottom: 1rem; }
+        .header p { font-size: 1.1rem; opacity: 0.95; }
+
+        .content { max-width: 1400px; margin: 0 auto; padding: 4rem 2rem; }
+
+        /* Таблица Менделеева */
+        .periodic-table {
+            display: grid;
+            grid-template-columns: repeat(18, 1fr);
+            gap: 4px;
+            margin: 2rem 0;
+            overflow-x: auto;
+            padding: 2rem;
+            background: var(--white);
+            border-radius: 20px;
+            box-shadow: 0 10px 40px rgba(13,59,46,0.1);
+        }
+
+        .element {
+            aspect-ratio: 1;
+            border-radius: 8px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.75rem;
+            font-weight: 600;
+            position: relative;
+            min-width: 50px;
+            border: 2px solid transparent;
+        }
+
+        .element:hover {
+            transform: scale(1.2);
+            z-index: 10;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+            border-color: var(--accent);
+        }
+
+        .element .number { font-size: 0.65rem; opacity: 0.8; }
+        .element .symbol { font-size: 1.1rem; font-weight: 700; }
+        .element .name { font-size: 0.6rem; opacity: 0.9; text-align: center; }
+
+        /* Цвета групп */
+        .alkali { background: linear-gradient(135deg, #FF6B6B, #EE5A5A); color: white; }
+        .alkaline { background: linear-gradient(135deg, #FFA502, #FF8C00); color: white; }
+        .transition { background: linear-gradient(135deg, #4ECDC4, #44A3AA); color: white; }
+        .post-transition { background: linear-gradient(135deg, #95E1D3, #6FC3A8); color: var(--text); }
+        .metalloid { background: linear-gradient(135deg, #F38181, #E06C6C); color: white; }
+        .nonmetal { background: linear-gradient(135deg, #AA96DA, #8B7CC8); color: white; }
+        .halogen { background: linear-gradient(135deg, #FCB69F, #F89B82); color: var(--text); }
+        .noble { background: linear-gradient(135deg, #7FDBFF, #5AC8EB); color: var(--text); }
+        .lanthanide { background: linear-gradient(135deg, #F9CA24, #F0932B); color: var(--text); }
+        .actinide { background: linear-gradient(135deg, #6C5CE7, #5F4DB8); color: white; }
+
+        /* Информационная панель */
+        .element-info {
+            background: var(--white);
+            padding: 3rem;
+            border-radius: 20px;
+            margin-top: 2rem;
+            box-shadow: 0 10px 40px rgba(13,59,46,0.1);
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .element-info.active { display: block; }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .element-info-header {
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .element-info-symbol {
+            width: 120px;
+            height: 120px;
+            border-radius: 15px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            font-size: 3rem;
+            font-weight: 700;
+            color: white;
+        }
+
+        .element-info-details h2 { font-size: 2.5rem; color: var(--primary); margin-bottom: 0.5rem; }
+        .element-info-details p { font-size: 1.1rem; opacity: 0.8; }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .info-card {
+            background: linear-gradient(135deg, var(--bg), rgba(250,250,247,0.8));
+            padding: 1.5rem;
+            border-radius: 12px;
+            border-left: 4px solid var(--accent);
+        }
+
+        .info-card h3 { color: var(--primary); margin-bottom: 0.5rem; font-size: 1rem; }
+        .info-card p { font-size: 1.2rem; font-weight: 600; color: var(--text); }
+
+        /* Легенда */
+        .legend {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            justify-content: center;
+            margin: 2rem 0;
+            padding: 2rem;
+            background: var(--white);
+            border-radius: 15px;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.85rem;
+        }
+
+        .legend-color {
+            width: 20px;
+            height: 20px;
+            border-radius: 4px;
+        }
+
+        footer {
+            background: linear-gradient(135deg, var(--text), #1a1a2e);
+            color: var(--white);
+            text-align: center;
+            padding: 2.5rem;
+            margin-top: 5rem;
+        }
+
+        @media (max-width: 1200px) {
+            .periodic-table {
+                grid-template-columns: repeat(18, minmax(45px, 1fr));
+            }
+        }
+
+        @media (max-width: 768px) {
+            .nav-links { display: none; }
+            .header { padding: 6.5rem 1.5rem 3rem; }
+            .header h1 { font-size: 2rem; }
+            .periodic-table { padding: 1rem; gap: 2px; }
+            .element { min-width: 40px; font-size: 0.65rem; }
+            .element-info-header { flex-direction: column; text-align: center; }
+        }
+    </style>
+</head>
+<body>
+
+    <nav class="nav">
+        <div class="nav-container">
+            <a href="index.html" class="nav-logo">⚗️ ХИМИЯ</a>
+            <ul class="nav-links">
+                <li><a href="index.html">Главная</a></li>
+                <li><a href="materials.html">Материалы</a></li>
+                <li><a href="contacts.html">Контакты</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="header">
+        <h1>🧪 Интерактивная таблица Менделеева</h1>
+        <p>Нажмите на любой элемент, чтобы узнать подробную информацию</p>
+    </div>
+
+    <div class="content">
+        <!-- Легенда -->
+        <div class="legend">
+            <div class="legend-item"><div class="legend-color alkali"></div>Щелочные металлы</div>
+            <div class="legend-item"><div class="legend-color alkaline"></div>Щёлочноземельные</div>
+            <div class="legend-item"><div class="legend-color transition"></div>Переходные металлы</div>
+            <div class="legend-item"><div class="legend-color post-transition"></div>Постпереходные</div>
+            <div class="legend-item"><div class="legend-color metalloid"></div>Полуметаллы</div>
+            <div class="legend-item"><div class="legend-color nonmetal"></div>Неметаллы</div>
+            <div class="legend-item"><div class="legend-color halogen"></div>Галогены</div>
+            <div class="legend-item"><div class="legend-color noble"></div>Благородные газы</div>
+        </div>
+
+        <!-- Таблица -->
+        <div class="periodic-table" id="periodicTable"></div>
+
+        <!-- Информационная панель -->
+        <div class="element-info" id="elementInfo">
+            <div class="element-info-header">
+                <div class="element-info-symbol" id="infoSymbol">
+                    <span id="infoNumber">1</span>
+                    <span id="infoSymbolText">H</span>
+                </div>
+                <div class="element-info-details">
+                    <h2 id="infoName">Водород</h2>
+                    <p id="infoCategory">Неметалл</p>
+                </div>
+            </div>
+            <div class="info-grid">
+                <div class="info-card">
+                    <h3>Атомная масса</h3>
+                    <p id="infoMass">1.008 а.е.м.</p>
+                </div>
+                <div class="info-card">
+                    <h3>Электронная конфигурация</h3>
+                    <p id="infoConfig">1s¹</p>
+                </div>
+                <div class="info-card">
+                    <h3>Атомный радиус</h3>
+                    <p id="infoRadius">53 пм</p>
+                </div>
+                <div class="info-card">
+                    <h3>Степени окисления</h3>
+                    <p id="infoOxidation">-1, +1</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <p>© 2026 Ресурсный центр «Химия» | Корольчук О.Г.</p>
+        <p>ГУО «Средняя школа №3 г. Хойники»</p>
+    </footer>
+
+    <script>
+        // Данные элементов (первые 20 + некоторые важные)
+        const elements = [
+            { number: 1, symbol: 'H', name: 'Водород', mass: '1.008', category: 'nonmetal', config: '1s¹', radius: '53 пм', oxidation: '-1, +1', row: 0, col: 0 },
+            { number: 2, symbol: 'He', name: 'Гелий', mass: '4.003', category: 'noble', config: '1s²', radius: '31 пм', oxidation: '0', row: 0, col: 17 },
+            { number: 3, symbol: 'Li', name: 'Литий', mass: '6.941', category: 'alkali', config: '[He] 2s¹', radius: '167 пм', oxidation: '+1', row: 1, col: 0 },
+            { number: 4, symbol: 'Be', name: 'Бериллий', mass: '9.012', category: 'alkaline', config: '[He] 2s²', radius: '112 пм', oxidation: '+2', row: 1, col: 1 },
+            { number: 5, symbol: 'B', name: 'Бор', mass: '10.81', category: 'metalloid', config: '[He] 2s² 2p¹', radius: '87 пм', oxidation: '+3', row: 1, col: 12 },
+            { number: 6, symbol: 'C', name: 'Углерод', mass: '12.01', category: 'nonmetal', config: '[He] 2s² 2p²', radius: '67 пм', oxidation: '-4, +2, +4', row: 1, col: 13 },
+            { number: 7, symbol: 'N', name: 'Азот', mass: '14.01', category: 'nonmetal', config: '[He] 2s² 2p³', radius: '56 пм', oxidation: '-3, +3, +5', row: 1, col: 14 },
+            { number: 8, symbol: 'O', name: 'Кислород', mass: '16.00', category: 'nonmetal', config: '[He] 2s² 2p⁴', radius: '48 пм', oxidation: '-2', row: 1, col: 15 },
+            { number: 9, symbol: 'F', name: 'Фтор', mass: '19.00', category: 'halogen', config: '[He] 2s² 2p⁵', radius: '42 пм', oxidation: '-1', row: 1, col: 16 },
+            { number: 10, symbol: 'Ne', name: 'Неон', mass: '20.18', category: 'noble', config: '[He] 2s² 2p⁶', radius: '38 пм', oxidation: '0', row: 1, col: 17 },
+            { number: 11, symbol: 'Na', name: 'Натрий', mass: '22.99', category: 'alkali', config: '[Ne] 3s¹', radius: '190 пм', oxidation: '+1', row: 2, col: 0 },
+            { number: 12, symbol: 'Mg', name: 'Магний', mass: '24.31', category: 'alkaline', config: '[Ne] 3s²', radius: '145 пм', oxidation: '+2', row: 2, col: 1 },
+            { number: 13, symbol: 'Al', name: 'Алюминий', mass: '26.98', category: 'post-transition', config: '[Ne] 3s² 3p¹', radius: '118 пм', oxidation: '+3', row: 2, col: 12 },
+            { number: 14, symbol: 'Si', name: 'Кремний', mass: '28.09', category: 'metalloid', config: '[Ne] 3s² 3p²', radius: '111 пм', oxidation: '-4, +4', row: 2, col: 13 },
+            { number: 15, symbol: 'P', name: 'Фосфор', mass: '30.97', category: 'nonmetal', config: '[Ne] 3s² 3p³', radius: '98 пм', oxidation: '-3, +3, +5', row: 2, col: 14 },
+            { number: 16, symbol: 'S', name: 'Сера', mass: '32.07', category: 'nonmetal', config: '[Ne] 3s² 3p⁴', radius: '88 пм', oxidation: '-2, +4, +6', row: 2, col: 15 },
+            { number: 17, symbol: 'Cl', name: 'Хлор', mass: '35.45', category: 'halogen', config: '[Ne] 3s² 3p⁵', radius: '79 пм', oxidation: '-1, +1, +5, +7', row: 2, col: 16 },
+            { number: 18, symbol: 'Ar', name: 'Аргон', mass: '39.95', category: 'noble', config: '[Ne] 3s² 3p⁶', radius: '71 пм', oxidation: '0', row: 2, col: 17 },
+            { number: 19, symbol: 'K', name: 'Калий', mass: '39.10', category: 'alkali', config: '[Ar] 4s¹', radius: '243 пм', oxidation: '+1', row: 3, col: 0 },
+            { number: 20, symbol: 'Ca', name: 'Кальций', mass: '40.08', category: 'alkaline', config: '[Ar] 4s²', radius: '194 пм', oxidation: '+2', row: 3, col: 1 },
+        ];
+
+        const table = document.getElementById('periodicTable');
+        const elementInfo = document.getElementById('elementInfo');
+
+        // Создание таблицы
+        elements.forEach(el => {
+            const cell = document.createElement('div');
+            cell.className = `element ${el.category}`;
+            cell.style.gridColumn = el.col + 1;
+            cell.style.gridRow = el.row + 1;
+            cell.innerHTML = `
+                <span class="number">${el.number}</span>
+                <span class="symbol">${el.symbol}</span>
+                <span class="name">${el.name}</span>
+            `;
+            cell.addEventListener('click', () => showElementInfo(el));
+            table.appendChild(cell);
+        });
+
+        // Показ информации
+        function showElementInfo(el) {
+            document.getElementById('infoNumber').textContent = el.number;
+            document.getElementById('infoSymbolText').textContent = el.symbol;
+            document.getElementById('infoName').textContent = el.name;
+            document.getElementById('infoMass').textContent = `${el.mass} а.е.м.`;
+            document.getElementById('infoConfig').textContent = el.config;
+            document.getElementById('infoRadius').textContent = el.radius;
+            document.getElementById('infoOxidation').textContent = el.oxidation;
+            
+            const categoryNames = {
+                'alkali': 'Щелочной металл',
+                'alkaline': 'Щёлочноземельный металл',
+                'transition': 'Переходный металл',
+                'post-transition': 'Постпереходный металл',
+                'metalloid': 'Полуметалл',
+                'nonmetal': 'Неметалл',
+                'halogen': 'Галоген',
+                'noble': 'Благородный газ'
+            };
+            document.getElementById('infoCategory').textContent = categoryNames[el.category] || el.category;
+            
+            const symbolDiv = document.getElementById('infoSymbol');
+            symbolDiv.className = `element-info-symbol ${el.category}`;
+            
+            elementInfo.classList.add('active');
+            elementInfo.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }
+    </script>
+</body>
+</html>
