@@ -6,508 +6,98 @@
     <title>Материалы для самоподготовки - Ресурсный центр "Химия"</title>
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Raleway:wght@300;400;500;600&display=swap" rel="stylesheet">
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
+        * { margin: 0; padding: 0; box-sizing: border-box; }
         :root {
-            --primary: #0D3B2E;
-            --primary-light: #1B5E5B;
-            --accent: #C9A961;
-            --accent-light: #D4B570;
-            --bg: #FAFAF7;
-            --text: #2B2D42;
-            --white: #FFFFFF;
+            --primary: #0D3B2E; --primary-light: #1B5E5B; --accent: #C9A961;
+            --accent-light: #D4B570; --bg: #FAFAF7; --text: #2B2D42; --white: #FFFFFF;
         }
+        html { scroll-behavior: smooth; }
+        body { font-family: 'Raleway', sans-serif; background: var(--bg); color: var(--text); line-height: 1.6; }
+        h1, h2, h3 { font-family: 'Playfair Display', serif; }
 
-        html {
-            scroll-behavior: smooth;
-        }
-
-        body {
-            font-family: 'Raleway', sans-serif;
-            background: var(--bg);
-            color: var(--text);
-            line-height: 1.6;
-        }
-
-        h1, h2, h3 {
-            font-family: 'Playfair Display', serif;
-        }
-
-        /* Navigation - Premium */
         .nav {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            background: rgba(255, 255, 255, 0.98);
-            backdrop-filter: blur(15px);
-            padding: 1rem 2rem;
-            box-shadow: 0 2px 20px rgba(13,59,46,0.1);
-            z-index: 1000;
+            position: fixed; top: 0; left: 0; right: 0;
+            background: rgba(255, 255, 255, 0.98); backdrop-filter: blur(15px);
+            padding: 1rem 2rem; box-shadow: 0 2px 20px rgba(13,59,46,0.1); z-index: 1000;
         }
+        .nav-container { max-width: 1200px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; }
+        .nav-logo { font-family: 'Playfair Display', serif; font-size: 1.3rem; font-weight: 700; color: var(--primary); text-decoration: none; letter-spacing: 1px; }
+        .nav-links { display: flex; gap: 2rem; list-style: none; }
+        .nav-links a { color: var(--text); text-decoration: none; font-size: 0.9rem; font-weight: 600; transition: color 0.3s; position: relative; }
+        .nav-links a:after { content: ''; position: absolute; bottom: -4px; left: 0; width: 0; height: 2px; background: var(--accent); transition: width 0.3s; }
+        .nav-links a:hover { color: var(--accent); }
+        .nav-links a:hover:after { width: 100%; }
 
-        .nav-container {
-            max-width: 1200px;
-            margin: 0 auto;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .nav-logo {
-            font-family: 'Playfair Display', serif;
-            font-size: 1.3rem;
-            font-weight: 700;
-            color: var(--primary);
-            letter-spacing: 1px;
-            z-index: 1001;
-        }
-
-        .nav-links {
-            display: flex;
-            gap: 2rem;
-            list-style: none;
-        }
-
-        .nav-links a {
-            color: var(--text);
-            text-decoration: none;
-            font-size: 0.9rem;
-            font-weight: 600;
-            transition: color 0.3s;
-            position: relative;
-        }
-
-        .nav-links a:after {
-            content: '';
-            position: absolute;
-            bottom: -4px;
-            left: 0;
-            width: 0;
-            height: 2px;
-            background: var(--accent);
-            transition: width 0.3s;
-        }
-
-        .nav-links a:hover {
-            color: var(--accent);
-        }
-
-        .nav-links a:hover:after {
-            width: 100%;
-        }
-
-        /* Burger Menu */
-        .burger {
-            display: none;
-            flex-direction: column;
-            justify-content: space-between;
-            width: 28px;
-            height: 20px;
-            cursor: pointer;
-            z-index: 1001;
-            background: none;
-            border: none;
-            padding: 0;
-        }
-
-        .burger span {
-            display: block;
-            width: 100%;
-            height: 2px;
-            background: var(--primary);
-            transition: all 0.3s ease;
-            border-radius: 2px;
-        }
-
-        .burger.active span:nth-child(1) {
-            transform: translateY(9px) rotate(45deg);
-        }
-
-        .burger.active span:nth-child(2) {
-            opacity: 0;
-            transform: translateX(-10px);
-        }
-
-        .burger.active span:nth-child(3) {
-            transform: translateY(-9px) rotate(-45deg);
-        }
+        .burger { display: none; flex-direction: column; justify-content: space-between; width: 28px; height: 20px; cursor: pointer; z-index: 1001; background: none; border: none; padding: 0; }
+        .burger span { display: block; width: 100%; height: 2px; background: var(--primary); transition: all 0.3s ease; border-radius: 2px; }
+        .burger.active span:nth-child(1) { transform: translateY(9px) rotate(45deg); }
+        .burger.active span:nth-child(2) { opacity: 0; transform: translateX(-10px); }
+        .burger.active span:nth-child(3) { transform: translateY(-9px) rotate(-45deg); }
 
         .mobile-menu {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
+            display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0;
             background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
-            z-index: 999;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            opacity: 0;
-            transition: opacity 0.4s ease;
+            z-index: 999; flex-direction: column; justify-content: center; align-items: center; opacity: 0; transition: opacity 0.4s ease;
         }
-
-        .mobile-menu.active {
-            display: flex;
-            opacity: 1;
-        }
-
-        .mobile-menu ul {
-            list-style: none;
-            text-align: center;
-        }
-
-        .mobile-menu li {
-            margin: 1.5rem 0;
-            transform: translateY(20px);
-            opacity: 0;
-            transition: all 0.4s ease;
-        }
-
-        .mobile-menu.active li {
-            transform: translateY(0);
-            opacity: 1;
-        }
-
+        .mobile-menu.active { display: flex; opacity: 1; }
+        .mobile-menu ul { list-style: none; text-align: center; }
+        .mobile-menu li { margin: 1.5rem 0; transform: translateY(20px); opacity: 0; transition: all 0.4s ease; }
+        .mobile-menu.active li { transform: translateY(0); opacity: 1; }
         .mobile-menu.active li:nth-child(1) { transition-delay: 0.1s; }
         .mobile-menu.active li:nth-child(2) { transition-delay: 0.2s; }
         .mobile-menu.active li:nth-child(3) { transition-delay: 0.3s; }
         .mobile-menu.active li:nth-child(4) { transition-delay: 0.4s; }
+        .mobile-menu a { color: var(--white); text-decoration: none; font-family: 'Playfair Display', serif; font-size: 2rem; font-weight: 600; letter-spacing: 1px; transition: color 0.3s; position: relative; }
+        .mobile-menu a:hover { color: var(--accent); }
 
-        .mobile-menu a {
-            color: var(--white);
-            text-decoration: none;
-            font-family: 'Playfair Display', serif;
-            font-size: 2rem;
-            font-weight: 600;
-            letter-spacing: 1px;
-            transition: color 0.3s;
-            position: relative;
-        }
-
-        .mobile-menu a:hover {
-            color: var(--accent);
-        }
-
-        .mobile-menu a:after {
-            content: '';
-            position: absolute;
-            bottom: -5px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 0;
-            height: 2px;
-            background: var(--accent);
-            transition: width 0.3s;
-        }
-
-        .mobile-menu a:hover:after {
-            width: 60%;
-        }
-
-        /* Header */
         .header {
             background: linear-gradient(135deg, var(--primary), var(--primary-light));
-            color: var(--white);
-            padding: 8rem 2rem 4rem;
-            text-align: center;
+            color: var(--white); padding: 8rem 2rem 4rem; text-align: center;
         }
+        .header h1 { font-size: 2.8rem; margin-bottom: 1rem; letter-spacing: 1px; }
+        .header p { font-size: 1.1rem; opacity: 0.95; font-weight: 300; }
 
-        .header h1 {
-            font-size: 2.8rem;
-            margin-bottom: 1rem;
-            letter-spacing: 1px;
-        }
-
-        .header p {
-            font-size: 1.1rem;
-            opacity: 0.95;
-            font-weight: 300;
-        }
-
-        /* Content and Cards */
-        .content {
-            max-width: 1400px;
-            margin: 0 auto;
-            padding: 4rem 2rem;
-        }
-
-        .topics-grid {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 2rem;
-            margin-top: 2rem;
-        }
-
+        .content { max-width: 1400px; margin: 0 auto; padding: 4rem 2rem; }
+        .topics-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 2.5rem; margin-top: 2rem; }
+        
         .topic-card {
-            background: var(--white);
-            border-radius: 20px;
-            padding: 2rem 1.5rem;
-            text-decoration: none;
-            color: var(--text);
-            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-            border: 2px solid transparent;
-            box-shadow: 0 10px 30px rgba(13,59,46,0.08);
-            text-align: center;
-            position: relative;
-            overflow: hidden;
-            display: flex;
-            flex-direction: column;
-            height: 100%;
+            background: var(--white); border-radius: 20px; padding: 2.5rem 2rem;
+            text-decoration: none; color: var(--text); transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            border: 2px solid transparent; box-shadow: 0 10px 30px rgba(13,59,46,0.08);
+            text-align: center; position: relative; overflow: hidden; display: flex; flex-direction: column; height: 100%;
         }
-
         .topic-card:before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 5px;
+            content: ''; position: absolute; top: 0; left: 0; right: 0; height: 5px;
             background: linear-gradient(90deg, var(--primary), var(--accent));
-            transform: scaleX(0);
-            transform-origin: left;
-            transition: transform 0.4s ease;
+            transform: scaleX(0); transform-origin: left; transition: transform 0.4s ease;
         }
-
-        .topic-card:hover:before {
-            transform: scaleX(1);
-        }
-
-        .topic-card:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 20px 50px rgba(13,59,46,0.15);
-            border-color: var(--accent);
-        }
-
-        .topic-emoji {
-            font-size: 3.5rem;
-            margin-bottom: 1rem;
-            display: block;
-            line-height: 1;
-            filter: drop-shadow(0 4px 8px rgba(0,0,0,0.1));
-            transition: transform 0.3s ease;
-        }
-
-        .topic-card:hover .topic-emoji {
-            transform: scale(1.15) rotate(5deg);
-        }
-
-        .topic-card h3 {
-            font-size: 1.4rem;
-            color: var(--primary);
-            margin-bottom: 0.8rem;
-            font-weight: 700;
-        }
-
-        .topic-card > p {
-            font-size: 0.9rem;
-            opacity: 0.85;
-            margin-bottom: 1rem;
-            color: var(--text);
-            line-height: 1.5;
-        }
-
-        .topic-card ul {
-            list-style: none;
-            padding: 0;
-            text-align: left;
-            margin: 0 auto;
-            flex-grow: 1;
-        }
-
-        .topic-card li {
-            padding: 0.4rem 0;
-            padding-left: 1.8rem;
-            position: relative;
-            font-size: 0.85rem;
-            border-bottom: 1px solid #f0f0f0;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-        .topic-card li:last-child {
-            border-bottom: none;
-        }
-
-        .topic-card li:before {
-            content: "✓";
-            position: absolute;
-            left: 0;
-            color: var(--accent);
-            font-weight: bold;
-            font-size: 1rem;
-        }
-
-        /* Download Banner */
-        .download-banner {
-            background: linear-gradient(135deg, rgba(201,169,97,0.15), rgba(13,59,46,0.08));
-            border: 2px solid var(--accent);
-            border-radius: 15px;
-            padding: 2rem;
-            margin: 3rem auto;
-            max-width: 1200px;
-            text-align: center;
-        }
-
-        .download-banner h2 {
-            color: var(--primary);
-            margin-bottom: 1rem;
-            font-size: 1.8rem;
-        }
-
-        .download-banner p {
-            font-size: 1rem;
-            opacity: 0.9;
-            margin-bottom: 1.5rem;
-        }
-
-        .download-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 1rem;
-            margin-top: 1.5rem;
-        }
-
-        .download-item {
-            background: var(--white);
-            border-radius: 12px;
-            padding: 1.2rem;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
-            transition: all 0.3s ease;
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-        }
-
-        .download-item:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 10px 25px rgba(13,59,46,0.12);
-        }
-
-        .download-icon {
-            font-size: 2.5rem;
-            flex-shrink: 0;
-        }
-
-        .download-info {
-            text-align: left;
-            flex-grow: 1;
-        }
-
-        .download-info h4 {
-            color: var(--primary);
-            font-size: 1rem;
-            margin-bottom: 0.3rem;
-        }
-
-        .download-info p {
-            font-size: 0.85rem;
-            opacity: 0.8;
-            margin: 0;
-        }
-
-        .download-item a {
-            display: inline-block;
-            padding: 0.5rem 1rem;
-            background: var(--accent);
-            color: var(--white);
-            text-decoration: none;
-            border-radius: 20px;
-            font-size: 0.85rem;
-            font-weight: 600;
-            transition: all 0.3s ease;
-        }
-
-        .download-item a:hover {
-            background: var(--primary);
-            transform: scale(1.05);
-        }
+        .topic-card:hover:before { transform: scaleX(1); }
+        .topic-card:hover { transform: translateY(-10px); box-shadow: 0 20px 50px rgba(13,59,46,0.15); border-color: var(--accent); }
+        
+        .topic-emoji { font-size: 4.5rem; margin-bottom: 1.5rem; display: block; line-height: 1; filter: drop-shadow(0 4px 8px rgba(0,0,0,0.1)); transition: transform 0.3s ease; }
+        .topic-card:hover .topic-emoji { transform: scale(1.15) rotate(5deg); }
+        .topic-card h3 { font-size: 1.6rem; color: var(--primary); margin-bottom: 1rem; font-weight: 700; }
+        .topic-card > p { font-size: 1rem; opacity: 0.85; margin-bottom: 1.5rem; color: var(--text); line-height: 1.6; }
+        
+        .topic-card ul { list-style: none; padding: 0; text-align: left; max-width: 300px; margin: 0 auto; }
+        .topic-card li { padding: 0.6rem 0; padding-left: 2rem; position: relative; font-size: 0.95rem; border-bottom: 1px solid #f0f0f0; display: flex; align-items: center; gap: 0.5rem; }
+        .topic-card li:last-child { border-bottom: none; }
+        .topic-card li:before { content: "⚗️"; position: absolute; left: 0; font-size: 1.1rem; }
 
         footer {
             background: linear-gradient(135deg, var(--text), #1a1a2e);
-            color: var(--white);
-            text-align: center;
-            padding: 2.5rem;
-            margin-top: 5rem;
-            position: relative;
+            color: var(--white); text-align: center; padding: 2.5rem; margin-top: 5rem; position: relative;
         }
-
-        footer:before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 3px;
-            background: linear-gradient(90deg, var(--accent), var(--accent-light));
-        }
-
-        /* Responsive */
-        @media (max-width: 1200px) {
-            .topics-grid {
-                grid-template-columns: repeat(2, 1fr);
-            }
-        }
+        footer:before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; background: linear-gradient(90deg, var(--accent), var(--accent-light)); }
 
         @media (max-width: 768px) {
-            .nav {
-                padding: 1rem 1.5rem;
-            }
-
-            .nav-links {
-                display: none;
-            }
-
-            .burger {
-                display: flex;
-            }
-
-            .header {
-                padding: 6.5rem 1.5rem 3rem;
-            }
-
-            .header h1 {
-                font-size: 2.2rem;
-            }
-
-            .header p {
-                font-size: 1rem;
-            }
-
-            .content {
-                padding: 3rem 1.5rem;
-            }
-
-            .topics-grid {
-                grid-template-columns: 1fr;
-                gap: 1.5rem;
-            }
-
-            .topic-card {
-                padding: 2rem 1.5rem;
-            }
-
-            .topic-emoji {
-                font-size: 3rem;
-            }
-
-            .download-grid {
-                grid-template-columns: 1fr;
-            }
-        }
-
-        @media (max-width: 480px) {
-            .topics-grid {
-                display: flex;
-                flex-direction: column;
-            }
+            .nav { padding: 1rem 1.5rem; }
+            .nav-links { display: none; }
+            .burger { display: flex; }
+            .header { padding: 6.5rem 1.5rem 3rem; }
+            .header h1 { font-size: 2.2rem; }
+            .content { padding: 3rem 1.5rem; }
+            .topics-grid { grid-template-columns: 1fr; gap: 2rem; }
         }
     </style>
 </head>
@@ -515,133 +105,78 @@
 
     <nav class="nav">
         <div class="nav-container">
-            <div class="nav-logo">⚗️ ХИМИЯ</div>
+            <a href="index.html" class="nav-logo">⚗️ ХИМИЯ</a>
             <ul class="nav-links">
                 <li><a href="index.html">Главная</a></li>
                 <li><a href="index.html#about">О центре</a></li>
-                <li><a href="index.html#sections">Разделы</a></li>
                 <li><a href="contacts.html">Контакты</a></li>
             </ul>
             <button class="burger" id="burger" aria-label="Меню">
-                <span></span>
-                <span></span>
-                <span></span>
+                <span></span><span></span><span></span>
             </button>
         </div>
     </nav>
 
-    <!-- Мобильное меню -->
     <div class="mobile-menu" id="mobileMenu">
         <ul>
             <li><a href="index.html" class="mobile-link">Главная</a></li>
             <li><a href="index.html#about" class="mobile-link">О центре</a></li>
-            <li><a href="index.html#sections" class="mobile-link">Разделы</a></li>
             <li><a href="contacts.html" class="mobile-link">Контакты</a></li>
         </ul>
     </div>
 
     <div class="header">
-        <h1> Материалы для самоподготовки</h1>
-        <p>Учебники, задачники и теоретические материалы для подготовки к олимпиадам по химии</p>
+        <h1>📚 Материалы для самоподготовки</h1>
+        <p>Учебники, задачники и справочные материалы для углубленного изучения химии</p>
     </div>
 
     <div class="content">
         <div class="topics-grid">
-            <!-- Общая химия -->
-            <a href="materials-general-chemistry.html" class="topic-card">
-                <span class="topic-emoji">⚛️</span>
-                <h3>Общая химия</h3>
-                <p>Фундаментальные законы и принципы</p>
-                <ul>
-                    <li>Строение атома и ПСХЭ</li>
-                    <li>Химическая связь</li>
-                    <li>Химическая термодинамика</li>
-                    <li>Химическая кинетика</li>
-                </ul>
-            </a>
-
-            <!-- Неорганическая химия -->
-            <a href="materials-inorganic.html" class="topic-card">
+            
+            <a href="materials-general.html" class="topic-card">
                 <span class="topic-emoji">🧪</span>
-                <h3>Неорганическая химия</h3>
-                <p>Свойства элементов и их соединений</p>
+                <h3>Общая и неорганическая химия</h3>
+                <p>Фундаментальные основы и свойства веществ</p>
                 <ul>
-                    <li>Классы неорганических соединений</li>
-                    <li>Окислительно-восстановительные реакции</li>
-                    <li>Комплексные соединения</li>
-                    <li>Металлы и неметаллы</li>
+                    <li>Сборники задач с решениями</li>
+                    <li>Периодическая система и строение атома</li>
+                    <li>Химическая связь и реакции</li>
                 </ul>
             </a>
 
-            <!-- Органическая химия -->
             <a href="materials-organic.html" class="topic-card">
-                <span class="topic-emoji"></span>
+                <span class="topic-emoji">🔬</span>
                 <h3>Органическая химия</h3>
                 <p>Углеродные соединения и их превращения</p>
                 <ul>
-                    <li>Углеводороды и стереохимия</li>
-                    <li>Кислород- и азотсодержащие соединения</li>
-                    <li>Биополимеры (белки, углеводы)</li>
-                    <li>Генетическая связь между классами</li>
+                    <li>Учебные пособия (В.Ф. Травень)</li>
+                    <li>Углеводороды и функциональные группы</li>
+                    <li>Биополимеры и гетероциклы</li>
                 </ul>
             </a>
 
-            <!-- Задачник -->
-            <a href="materials-problems.html" class="topic-card">
-                <span class="topic-emoji"></span>
-                <h3>Задачник</h3>
-                <p>Задачи с решениями и эталонами</p>
+            <a href="olimpiads.html" class="topic-card">
+                <span class="topic-emoji">🏆</span>
+                <h3>Олимпиадная химия</h3>
+                <p>Задания и разборы прошлых лет</p>
                 <ul>
-                    <li>Расчётные задачи</li>
-                    <li>Цепочки превращений</li>
-                    <li>Качественные реакции</li>
-                    <li>Олимпиадные задачи</li>
+                    <li>Пригласительный этап (6-11 класс)</li>
+                    <li>Задачи повышенной сложности</li>
+                    <li>Эталоны решений и критерии</li>
                 </ul>
             </a>
-        </div>
 
-        <!-- Баннер с учебными материалами -->
-        <div class="download-banner">
-            <h2>📖 Учебные пособия</h2>
-            <p>Фундаментальные учебники и задачники для углублённого изучения химии</p>
-            
-            <div class="download-grid">
-                <div class="download-item">
-                    <span class="download-icon">📘</span>
-                    <div class="download-info">
-                        <h4>Органическая химия. Том 1</h4>
-                        <p>В.Ф. Травень. Алканы, алкены, алкины, стереохимия</p>
-                    </div>
-                    <a href="files/textbooks/traven_organic_chemistry_vol1.pdf" target="_blank">Скачать</a>
-                </div>
-
-                <div class="download-item">
-                    <span class="download-icon">📗</span>
-                    <div class="download-info">
-                        <h4>Органическая химия. Том 2</h4>
-                        <p>В.Ф. Травень. Ароматические соединения, спирты, альдегиды</p>
-                    </div>
-                    <a href="files/textbooks/traven_organic_chemistry_vol2.pdf" target="_blank">Скачать</a>
-                </div>
-
-                <div class="download-item">
-                    <span class="download-icon">📕</span>
-                    <div class="download-info">
-                        <h4>Органическая химия. Том 3</h4>
-                        <p>В.Ф. Травень. Карбоновые кислоты, амины, биополимеры</p>
-                    </div>
-                    <a href="files/textbooks/traven_organic_chemistry_vol3.pdf" target="_blank">Скачать</a>
-                </div>
-
-                <div class="download-item">
-                    <span class="download-icon">📙</span>
-                    <div class="download-info">
-                        <h4>Сборник задач по общей и неорганической химии</h4>
-                        <p>И.А. Передерина и др. Задачи с эталонами решений</p>
-                    </div>
-                    <a href="files/textbooks/perederina_problems_general_inorganic.pdf" target="_blank">Скачать</a>
-                </div>
+            <div class="topic-card" style="opacity: 0.7; cursor: default;">
+                <span class="topic-emoji">⚖️</span>
+                <h3>Аналитическая химия</h3>
+                <p>Методы анализа и лабораторный практикум</p>
+                <ul>
+                    <li>Качественные реакции</li>
+                    <li>Титриметрический анализ</li>
+                </ul>
+                <span style="margin-top: 1rem; background: var(--accent); color: white; padding: 0.3rem 1rem; border-radius: 20px; font-size: 0.8rem; display: inline-block;">Скоро</span>
             </div>
+
         </div>
     </div>
 
@@ -651,7 +186,6 @@
     </footer>
 
     <script>
-        // Burger Menu Logic
         const burger = document.getElementById('burger');
         const mobileMenu = document.getElementById('mobileMenu');
         const mobileLinks = document.querySelectorAll('.mobile-link');
@@ -662,7 +196,6 @@
                 mobileMenu.classList.toggle('active');
                 document.body.style.overflow = mobileMenu.classList.contains('active') ? 'hidden' : '';
             });
-
             mobileLinks.forEach(link => {
                 link.addEventListener('click', () => {
                     burger.classList.remove('active');
@@ -672,6 +205,5 @@
             });
         }
     </script>
-
 </body>
 </html>
