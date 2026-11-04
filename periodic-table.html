@@ -1,360 +1,431 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Таблица Менделеева - Ресурсный центр "Химия"</title>
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Raleway:wght@300;400;500;600&display=swap" rel="stylesheet">
-    <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        :root {
-            --primary: #0D3B2E; --primary-light: #1B5E5B; --accent: #C9A961;
-            --accent-light: #D4B570; --bg: #FAFAF7; --text: #2B2D42; --white: #FFFFFF;
-        }
-        html { scroll-behavior: smooth; }
-        body { font-family: 'Raleway', sans-serif; background: var(--bg); color: var(--text); line-height: 1.6; }
-        h1, h2, h3 { font-family: 'Playfair Display', serif; }
-
-        .nav { position: fixed; top: 0; left: 0; right: 0; background: rgba(255, 255, 255, 0.98); backdrop-filter: blur(15px); padding: 1rem 2rem; box-shadow: 0 2px 20px rgba(13,59,46,0.1); z-index: 1000; }
-        .nav-container { max-width: 1400px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; }
-        .nav-logo { font-family: 'Playfair Display', serif; font-size: 1.3rem; font-weight: 700; color: var(--primary); text-decoration: none; letter-spacing: 1px; }
-        .nav-links { display: flex; gap: 2rem; list-style: none; }
-        .nav-links a { color: var(--text); text-decoration: none; font-size: 0.9rem; font-weight: 600; transition: color 0.3s; }
-        .nav-links a:hover { color: var(--accent); }
-
-        .header { background: linear-gradient(135deg, var(--primary), var(--primary-light)); color: var(--white); padding: 8rem 2rem 3rem; text-align: center; }
-        .header h1 { font-size: 2.8rem; margin-bottom: 1rem; }
-        .header p { font-size: 1.1rem; opacity: 0.95; }
-
-        .content { max-width: 1400px; margin: 0 auto; padding: 2rem; }
-
-        /* Легенда */
-        .legend { display: flex; flex-wrap: wrap; gap: 1rem; justify-content: center; margin: 2rem 0; padding: 1.5rem; background: var(--white); border-radius: 15px; box-shadow: 0 5px 20px rgba(0,0,0,0.05); }
-        .legend-item { display: flex; align-items: center; gap: 0.5rem; font-size: 0.85rem; font-weight: 500; }
-        .legend-color { width: 16px; height: 16px; border-radius: 4px; }
-
-        /* Таблица */
-        .table-container { overflow-x: auto; padding-bottom: 1rem; }
-        .periodic-table {
-            display: grid;
-            grid-template-columns: repeat(18, minmax(45px, 1fr));
-            gap: 3px;
-            min-width: 900px; /* Чтобы на мобильных можно было скроллить */
-        }
-
-        .element {
-            aspect-ratio: 1;
-            border-radius: 6px;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            font-size: 0.7rem;
-            font-weight: 600;
-            position: relative;
-            border: 2px solid transparent;
-            color: var(--white);
-            text-shadow: 0 1px 2px rgba(0,0,0,0.2);
-        }
-
-        .element:hover {
-            transform: scale(1.3);
-            z-index: 100;
-            box-shadow: 0 8px 25px rgba(0,0,0,0.4);
-            border-color: var(--white);
-        }
-
-        .element .number { font-size: 0.6rem; opacity: 0.9; position: absolute; top: 2px; left: 4px; }
-        .element .symbol { font-size: 1.1rem; font-weight: 700; line-height: 1; }
-        .element .name { font-size: 0.55rem; opacity: 0.9; text-align: center; display: none; }
-        .element:hover .name { display: block; }
-
-        /* Цвета групп */
-        .alkali { background: linear-gradient(135deg, #FF6B6B, #EE5A5A); }
-        .alkaline { background: linear-gradient(135deg, #FFA502, #FF8C00); }
-        .transition { background: linear-gradient(135deg, #4ECDC4, #44A3AA); }
-        .post-transition { background: linear-gradient(135deg, #95E1D3, #6FC3A8); color: var(--text); text-shadow: none; }
-        .metalloid { background: linear-gradient(135deg, #F38181, #E06C6C); }
-        .nonmetal { background: linear-gradient(135deg, #AA96DA, #8B7CC8); }
-        .halogen { background: linear-gradient(135deg, #FCB69F, #F89B82); color: var(--text); text-shadow: none; }
-        .noble { background: linear-gradient(135deg, #7FDBFF, #5AC8EB); color: var(--text); text-shadow: none; }
-        .lanthanide { background: linear-gradient(135deg, #F9CA24, #F0932B); color: var(--text); text-shadow: none; }
-        .actinide { background: linear-gradient(135deg, #6C5CE7, #5F4DB8); }
-
-        /* Информационная панель */
-        .element-info {
-            background: var(--white); padding: 2.5rem; border-radius: 20px;
-            margin-top: 2rem; box-shadow: 0 10px 40px rgba(13,59,46,0.1);
-            display: none; animation: fadeIn 0.4s ease;
-        }
-        .element-info.active { display: block; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
-
-        .info-header { display: flex; align-items: center; gap: 2rem; margin-bottom: 2rem; flex-wrap: wrap; }
-        .info-symbol-box {
-            width: 100px; height: 100px; border-radius: 15px;
-            display: flex; flex-direction: column; justify-content: center; align-items: center;
-            font-size: 2.5rem; font-weight: 700; color: white; text-shadow: 0 2px 4px rgba(0,0,0,0.3);
-        }
-        .info-details h2 { font-size: 2.2rem; color: var(--primary); margin-bottom: 0.3rem; }
-        .info-details p { font-size: 1.1rem; opacity: 0.8; font-weight: 500; }
-
-        .info-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.5rem; }
-        .info-card { background: linear-gradient(135deg, var(--bg), rgba(250,250,247,0.8)); padding: 1.2rem; border-radius: 12px; border-left: 4px solid var(--accent); }
-        .info-card h4 { color: var(--primary); font-size: 0.85rem; margin-bottom: 0.3rem; text-transform: uppercase; letter-spacing: 1px; }
-        .info-card p { font-size: 1.1rem; font-weight: 600; color: var(--text); }
-
-        footer { background: linear-gradient(135deg, var(--text), #1a1a2e); color: var(--white); text-align: center; padding: 2.5rem; margin-top: 4rem; }
-
-        @media (max-width: 768px) {
-            .nav-links { display: none; }
-            .header { padding: 6rem 1rem 2rem; }
-            .header h1 { font-size: 2rem; }
-            .content { padding: 1rem; }
-            .info-header { flex-direction: column; text-align: center; }
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Интерактивная периодическая таблица — Ресурсный центр «Химия»</title>
+<style>
+  :root {
+    --bg: #f8fafc; --card: #fff; --text: #1e293b; --muted: #64748b;
+    --border: #e2e8f0; --accent: #2563eb;
+    --c-nonmetal: #6ee7b7; --c-noble: #c4b5fd; --c-alkali: #fca5a5;
+    --c-alkaline: #fdba74; --c-metalloid: #86efac; --c-halogen: #67e8f9;
+    --c-post: #d1d5db; --c-transition: #fde68a; --c-lanthanide: #fbcfe8;
+    --c-actinide: #e9d5ff;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+    background: var(--bg); color: var(--text); line-height: 1.6;
+  }
+  header {
+    background: var(--card); border-bottom: 1px solid var(--border);
+    padding: 1rem 2rem; position: sticky; top: 0; z-index: 100;
+    box-shadow: 0 1px 3px rgba(0,0,0,.05);
+  }
+  header nav {
+    display: flex; gap: 1.5rem; align-items: center; flex-wrap: wrap;
+    max-width: 1400px; margin: 0 auto;
+  }
+  header nav a {
+    color: var(--text); text-decoration: none; font-weight: 500;
+    padding: .25rem .5rem; border-radius: 6px; transition: background .2s;
+  }
+  header nav a:hover { background: var(--border); }
+  header nav a.active { background: var(--accent); color: #fff; }
+  main { max-width: 1400px; margin: 0 auto; padding: 2rem; }
+  h1 { font-size: 1.75rem; margin: 0 0 .5rem; }
+  .subtitle { color: var(--muted); margin: 0 0 1.5rem; }
+  .controls { display: flex; gap: 1rem; flex-wrap: wrap; margin-bottom: 1rem; align-items: center; }
+  .search-box { flex: 1; min-width: 250px; }
+  .search-box input {
+    width: 100%; padding: .75rem 1rem; border: 2px solid var(--border);
+    border-radius: 10px; font-size: 1rem; outline: none; transition: border-color .2s;
+    background: var(--card); color: var(--text);
+  }
+  .search-box input:focus { border-color: var(--accent); }
+  .filter-buttons { display: flex; gap: .5rem; flex-wrap: wrap; }
+  .filter-btn {
+    padding: .45rem .9rem; border: 2px solid var(--border); background: var(--card);
+    border-radius: 8px; cursor: pointer; font-size: .85rem; font-weight: 500;
+    transition: all .2s; color: var(--text);
+  }
+  .filter-btn:hover { border-color: var(--accent); }
+  .filter-btn.active { background: var(--accent); color: #fff; border-color: var(--accent); }
+  .table-wrapper {
+    overflow-x: auto; background: var(--card); border-radius: 12px;
+    padding: 1.5rem; box-shadow: 0 1px 3px rgba(0,0,0,.05); margin-bottom: 1.5rem;
+  }
+  .periodic-table {
+    display: grid;
+    grid-template-columns: repeat(18, minmax(56px, 1fr));
+    grid-template-rows: repeat(10, auto);
+    gap: 4px; min-width: 1080px;
+  }
+  .element {
+    aspect-ratio: 1; border-radius: 6px; padding: 4px; cursor: pointer;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    transition: all .15s; border: 2px solid transparent; position: relative;
+    user-select: none; overflow: hidden;
+  }
+  .element:hover { transform: scale(1.08); z-index: 10; box-shadow: 0 4px 12px rgba(0,0,0,.15); }
+  .element.selected { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(37,99,235,.3); }
+  .element.dimmed { opacity: .18; }
+  .element .num {
+    font-size: .6rem; position: absolute; top: 2px; left: 4px;
+    color: rgba(0,0,0,.55); font-variant-numeric: tabular-nums;
+  }
+  .element .sym { font-size: 1.1rem; font-weight: 700; line-height: 1; }
+  .element .name {
+    font-size: .55rem; text-align: center; line-height: 1.1; margin-top: 2px;
+    color: rgba(0,0,0,.75); white-space: nowrap; overflow: hidden;
+    text-overflow: ellipsis; max-width: 100%;
+  }
+  .element .mass { font-size: .5rem; color: rgba(0,0,0,.5); font-variant-numeric: tabular-nums; }
+  .cat-nonmetal { background: var(--c-nonmetal); }
+  .cat-noble { background: var(--c-noble); }
+  .cat-alkali { background: var(--c-alkali); }
+  .cat-alkaline { background: var(--c-alkaline); }
+  .cat-metalloid { background: var(--c-metalloid); }
+  .cat-halogen { background: var(--c-halogen); }
+  .cat-post { background: var(--c-post); }
+  .cat-transition { background: var(--c-transition); }
+  .cat-lanthanide { background: var(--c-lanthanide); }
+  .cat-actinide { background: var(--c-actinide); }
+  .fblock-label {
+    display: flex; align-items: center; justify-content: center; font-size: .7rem;
+    font-weight: 600; color: var(--muted); background: var(--bg); border-radius: 6px;
+    padding: 4px; text-align: center; line-height: 1.1;
+  }
+  .placeholder {
+    display: flex; align-items: center; justify-content: center;
+    background: var(--bg); border: 2px dashed var(--border); border-radius: 6px;
+    font-size: .65rem; color: var(--muted); font-weight: 600; aspect-ratio: 1;
+  }
+  .detail-panel {
+    background: var(--card); border-radius: 12px; padding: 1.5rem;
+    box-shadow: 0 1px 3px rgba(0,0,0,.05); display: none;
+  }
+  .detail-panel.visible { display: block; }
+  .detail-header { display: flex; align-items: center; gap: 1.5rem; margin-bottom: 1.5rem; flex-wrap: wrap; }
+  .detail-symbol {
+    width: 96px; height: 96px; border-radius: 12px; display: flex; flex-direction: column;
+    align-items: center; justify-content: center; font-weight: 700; flex-shrink: 0;
+  }
+  .detail-symbol .sym { font-size: 2.4rem; line-height: 1; }
+  .detail-symbol .num { font-size: .85rem; opacity: .65; font-variant-numeric: tabular-nums; }
+  .detail-title h2 { margin: 0 0 .25rem; font-size: 1.5rem; }
+  .detail-title .cat-label { font-size: .9rem; color: var(--muted); }
+  .detail-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 1rem; }
+  .detail-item { background: var(--bg); padding: .75rem 1rem; border-radius: 8px; }
+  .detail-item .label {
+    font-size: .72rem; color: var(--muted); text-transform: uppercase;
+    letter-spacing: .05em; margin-bottom: .25rem;
+  }
+  .detail-item .value { font-size: 1rem; font-weight: 600; font-variant-numeric: tabular-nums; }
+  .legend {
+    background: var(--card); border-radius: 12px; padding: 1rem 1.5rem;
+    box-shadow: 0 1px 3px rgba(0,0,0,.05); display: flex; gap: 1rem;
+    flex-wrap: wrap; font-size: .82rem;
+  }
+  .legend-item { display: flex; align-items: center; gap: .5rem; }
+  .legend-swatch { width: 18px; height: 18px; border-radius: 4px; }
+  footer { text-align: center; padding: 2rem; color: var(--muted); font-size: .875rem; }
+  @media (max-width: 768px) {
+    main { padding: 1rem; }
+    .periodic-table { min-width: 900px; }
+    .element .name { display: none; }
+    .element .sym { font-size: .9rem; }
+  }
+</style>
 </head>
 <body>
+<header>
+  <nav>
+    <a href="index.html">⚗️ Главная</a>
+    <a href="materials.html">📚 Материалы</a>
+    <a href="periodic-table.html" class="active">⚛️ Таблица Менделеева</a>
+    <a href="olimpiads.html">🏆 Олимпиады</a>
+    <a href="plan.html">📅 План</a>
+    <a href="contacts.html">✉️ Контакты</a>
+  </nav>
+</header>
 
-    <nav class="nav">
-        <div class="nav-container">
-            <a href="index.html" class="nav-logo">⚗️ ХИМИЯ</a>
-            <ul class="nav-links">
-                <li><a href="index.html">Главная</a></li>
-                <li><a href="materials.html">Материалы</a></li>
-                <li><a href="contacts.html">Контакты</a></li>
-            </ul>
-        </div>
-    </nav>
+<main>
+  <h1>⚛️ Интерактивная периодическая таблица</h1>
+  <p class="subtitle">Нажмите на элемент, чтобы увидеть подробные данные. Ищите по названию, символу или номеру.</p>
 
-    <div class="header">
-        <h1>Интерактивная таблица Менделеева</h1>
-        <p>Нажмите на любой элемент, чтобы узнать его подробные характеристики</p>
+  <div class="controls">
+    <div class="search-box">
+      <input type="text" id="search" placeholder="🔍 Поиск: водород, Fe, 26…" autocomplete="off">
     </div>
+    <div class="filter-buttons" id="filters"></div>
+  </div>
 
-    <div class="content">
-        <div class="legend" id="legend"></div>
-        <div class="table-container">
-            <div class="periodic-table" id="periodicTable"></div>
-        </div>
+  <div class="table-wrapper">
+    <div class="periodic-table" id="table"></div>
+  </div>
 
-        <div class="element-info" id="elementInfo">
-            <div class="info-header">
-                <div class="info-symbol-box" id="infoSymbolBox">
-                    <span id="infoNumber" style="font-size: 1rem; position: absolute; top: 8px; left: 10px;"></span>
-                    <span id="infoSymbolText"></span>
-                </div>
-                <div class="info-details">
-                    <h2 id="infoName"></h2>
-                    <p id="infoCategory"></p>
-                </div>
-            </div>
-            <div class="info-grid">
-                <div class="info-card"><h4>Атомная масса</h4><p id="infoMass"></p></div>
-                <div class="info-card"><h4>Электронная конфигурация</h4><p id="infoConfig"></p></div>
-                <div class="info-card"><h4>Атомный радиус</h4><p id="infoRadius"></p></div>
-                <div class="info-card"><h4>Степени окисления</h4><p id="infoOxidation"></p></div>
-            </div>
-        </div>
+  <div class="detail-panel" id="detail"></div>
+
+  <div class="legend" id="legend" style="margin-top:1.5rem;"></div>
+</main>
+
+<footer>© Ресурсный центр «Химия» · Данные соответствуют IUPAC</footer>
+
+<script>
+/* [num, symbol, name(ru), mass, category, group, period, electronConfig] */
+const ELEMENTS = [
+  [1,'H','Водород',1.008,'nonmetal',1,1,'1s¹'],
+  [2,'He','Гелий',4.0026,'noble',18,1,'1s²'],
+  [3,'Li','Литий',6.94,'alkali',1,2,'[He] 2s¹'],
+  [4,'Be','Бериллий',9.0122,'alkaline',2,2,'[He] 2s²'],
+  [5,'B','Бор',10.81,'metalloid',13,2,'[He] 2s² 2p¹'],
+  [6,'C','Углерод',12.011,'nonmetal',14,2,'[He] 2s² 2p²'],
+  [7,'N','Азот',14.007,'nonmetal',15,2,'[He] 2s² 2p³'],
+  [8,'O','Кислород',15.999,'nonmetal',16,2,'[He] 2s² 2p⁴'],
+  [9,'F','Фтор',18.998,'halogen',17,2,'[He] 2s² 2p⁵'],
+  [10,'Ne','Неон',20.180,'noble',18,2,'[He] 2s² 2p⁶'],
+  [11,'Na','Натрий',22.990,'alkali',1,3,'[Ne] 3s¹'],
+  [12,'Mg','Магний',24.305,'alkaline',2,3,'[Ne] 3s²'],
+  [13,'Al','Алюминий',26.982,'post',13,3,'[Ne] 3s² 3p¹'],
+  [14,'Si','Кремний',28.085,'metalloid',14,3,'[Ne] 3s² 3p²'],
+  [15,'P','Фосфор',30.974,'nonmetal',15,3,'[Ne] 3s² 3p³'],
+  [16,'S','Сера',32.06,'nonmetal',16,3,'[Ne] 3s² 3p⁴'],
+  [17,'Cl','Хлор',35.45,'halogen',17,3,'[Ne] 3s² 3p⁵'],
+  [18,'Ar','Аргон',39.948,'noble',18,3,'[Ne] 3s² 3p⁶'],
+  [19,'K','Калий',39.098,'alkali',1,4,'[Ar] 4s¹'],
+  [20,'Ca','Кальций',40.078,'alkaline',2,4,'[Ar] 4s²'],
+  [21,'Sc','Скандий',44.956,'transition',3,4,'[Ar] 3d¹ 4s²'],
+  [22,'Ti','Титан',47.867,'transition',4,4,'[Ar] 3d² 4s²'],
+  [23,'V','Ванадий',50.942,'transition',5,4,'[Ar] 3d³ 4s²'],
+  [24,'Cr','Хром',51.996,'transition',6,4,'[Ar] 3d⁵ 4s¹'],
+  [25,'Mn','Марганец',54.938,'transition',7,4,'[Ar] 3d⁵ 4s²'],
+  [26,'Fe','Железо',55.845,'transition',8,4,'[Ar] 3d⁶ 4s²'],
+  [27,'Co','Кобальт',58.933,'transition',9,4,'[Ar] 3d⁷ 4s²'],
+  [28,'Ni','Никель',58.693,'transition',10,4,'[Ar] 3d⁸ 4s²'],
+  [29,'Cu','Медь',63.546,'transition',11,4,'[Ar] 3d¹⁰ 4s¹'],
+  [30,'Zn','Цинк',65.38,'transition',12,4,'[Ar] 3d¹⁰ 4s²'],
+  [31,'Ga','Галлий',69.723,'post',13,4,'[Ar] 3d¹⁰ 4s² 4p¹'],
+  [32,'Ge','Германий',72.630,'metalloid',14,4,'[Ar] 3d¹⁰ 4s² 4p²'],
+  [33,'As','Арсен',74.922,'metalloid',15,4,'[Ar] 3d¹⁰ 4s² 4p³'],
+  [34,'Se','Селен',78.971,'nonmetal',16,4,'[Ar] 3d¹⁰ 4s² 4p⁴'],
+  [35,'Br','Бром',79.904,'halogen',17,4,'[Ar] 3d¹⁰ 4s² 4p⁵'],
+  [36,'Kr','Криптон',83.798,'noble',18,4,'[Ar] 3d¹⁰ 4s² 4p⁶'],
+  [37,'Rb','Рубидий',85.468,'alkali',1,5,'[Kr] 5s¹'],
+  [38,'Sr','Стронций',87.62,'alkaline',2,5,'[Kr] 5s²'],
+  [39,'Y','Иттрий',88.906,'transition',3,5,'[Kr] 4d¹ 5s²'],
+  [40,'Zr','Цирконий',91.224,'transition',4,5,'[Kr] 4d² 5s²'],
+  [41,'Nb','Ниобий',92.906,'transition',5,5,'[Kr] 4d⁴ 5s¹'],
+  [42,'Mo','Молибден',95.95,'transition',6,5,'[Kr] 4d⁵ 5s¹'],
+  [43,'Tc','Технеций',98,'transition',7,5,'[Kr] 4d⁵ 5s²'],
+  [44,'Ru','Рутений',101.07,'transition',8,5,'[Kr] 4d⁷ 5s¹'],
+  [45,'Rh','Родий',102.91,'transition',9,5,'[Kr] 4d⁸ 5s¹'],
+  [46,'Pd','Палладий',106.42,'transition',10,5,'[Kr] 4d¹⁰'],
+  [47,'Ag','Серебро',107.87,'transition',11,5,'[Kr] 4d¹⁰ 5s¹'],
+  [48,'Cd','Кадмий',112.41,'transition',12,5,'[Kr] 4d¹⁰ 5s²'],
+  [49,'In','Индий',114.82,'post',13,5,'[Kr] 4d¹⁰ 5s² 5p¹'],
+  [50,'Sn','Олово',118.71,'post',14,5,'[Kr] 4d¹⁰ 5s² 5p²'],
+  [51,'Sb','Сурьма',121.76,'metalloid',15,5,'[Kr] 4d¹⁰ 5s² 5p³'],
+  [52,'Te','Теллур',127.60,'metalloid',16,5,'[Kr] 4d¹⁰ 5s² 5p⁴'],
+  [53,'I','Иод',126.90,'halogen',17,5,'[Kr] 4d¹⁰ 5s² 5p⁵'],
+  [54,'Xe','Ксенон',131.29,'noble',18,5,'[Kr] 4d¹⁰ 5s² 5p⁶'],
+  [55,'Cs','Цезий',132.91,'alkali',1,6,'[Xe] 6s¹'],
+  [56,'Ba','Барий',137.33,'alkaline',2,6,'[Xe] 6s²'],
+  [57,'La','Лантан',138.91,'lanthanide',3,6,'[Xe] 5d¹ 6s²'],
+  [58,'Ce','Церий',140.12,'lanthanide',3,6,'[Xe] 4f¹ 5d¹ 6s²'],
+  [59,'Pr','Празеодим',140.91,'lanthanide',3,6,'[Xe] 4f³ 6s²'],
+  [60,'Nd','Неодим',144.24,'lanthanide',3,6,'[Xe] 4f⁴ 6s²'],
+  [61,'Pm','Прометий',145,'lanthanide',3,6,'[Xe] 4f⁵ 6s²'],
+  [62,'Sm','Самарий',150.36,'lanthanide',3,6,'[Xe] 4f⁶ 6s²'],
+  [63,'Eu','Европий',151.96,'lanthanide',3,6,'[Xe] 4f⁷ 6s²'],
+  [64,'Gd','Гадолиний',157.25,'lanthanide',3,6,'[Xe] 4f⁷ 5d¹ 6s²'],
+  [65,'Tb','Тербий',158.93,'lanthanide',3,6,'[Xe] 4f⁹ 6s²'],
+  [66,'Dy','Диспрозий',162.50,'lanthanide',3,6,'[Xe] 4f¹⁰ 6s²'],
+  [67,'Ho','Гольмий',164.93,'lanthanide',3,6,'[Xe] 4f¹¹ 6s²'],
+  [68,'Er','Эрбий',167.26,'lanthanide',3,6,'[Xe] 4f¹² 6s²'],
+  [69,'Tm','Тулий',168.93,'lanthanide',3,6,'[Xe] 4f¹³ 6s²'],
+  [70,'Yb','Иттербий',173.05,'lanthanide',3,6,'[Xe] 4f¹⁴ 6s²'],
+  [71,'Lu','Лютеций',174.97,'lanthanide',3,6,'[Xe] 4f¹⁴ 5d¹ 6s²'],
+  [72,'Hf','Гафний',178.49,'transition',4,6,'[Xe] 4f¹⁴ 5d² 6s²'],
+  [73,'Ta','Тантал',180.95,'transition',5,6,'[Xe] 4f¹⁴ 5d³ 6s²'],
+  [74,'W','Вольфрам',183.84,'transition',6,6,'[Xe] 4f¹⁴ 5d⁴ 6s²'],
+  [75,'Re','Рений',186.21,'transition',7,6,'[Xe] 4f¹⁴ 5d⁵ 6s²'],
+  [76,'Os','Осмий',190.23,'transition',8,6,'[Xe] 4f¹⁴ 5d⁶ 6s²'],
+  [77,'Ir','Иридий',192.22,'transition',9,6,'[Xe] 4f¹⁴ 5d⁷ 6s²'],
+  [78,'Pt','Платина',195.08,'transition',10,6,'[Xe] 4f¹⁴ 5d⁹ 6s¹'],
+  [79,'Au','Золото',196.97,'transition',11,6,'[Xe] 4f¹⁴ 5d¹⁰ 6s¹'],
+  [80,'Hg','Ртуть',200.59,'transition',12,6,'[Xe] 4f¹⁴ 5d¹⁰ 6s²'],
+  [81,'Tl','Таллий',204.38,'post',13,6,'[Xe] 4f¹⁴ 5d¹⁰ 6s² 6p¹'],
+  [82,'Pb','Свинец',207.2,'post',14,6,'[Xe] 4f¹⁴ 5d¹⁰ 6s² 6p²'],
+  [83,'Bi','Висмут',208.98,'post',15,6,'[Xe] 4f¹⁴ 5d¹⁰ 6s² 6p³'],
+  [84,'Po','Полоний',209,'post',16,6,'[Xe] 4f¹⁴ 5d¹⁰ 6s² 6p⁴'],
+  [85,'At','Астат',210,'halogen',17,6,'[Xe] 4f¹⁴ 5d¹⁰ 6s² 6p⁵'],
+  [86,'Rn','Радон',222,'noble',18,6,'[Xe] 4f¹⁴ 5d¹⁰ 6s² 6p⁶'],
+  [87,'Fr','Франций',223,'alkali',1,7,'[Rn] 7s¹'],
+  [88,'Ra','Радий',226,'alkaline',2,7,'[Rn] 7s²'],
+  [89,'Ac','Актиний',227,'actinide',3,7,'[Rn] 6d¹ 7s²'],
+  [90,'Th','Торий',232.04,'actinide',3,7,'[Rn] 6d² 7s²'],
+  [91,'Pa','Протактиний',231.04,'actinide',3,7,'[Rn] 5f² 6d¹ 7s²'],
+  [92,'U','Уран',238.03,'actinide',3,7,'[Rn] 5f³ 6d¹ 7s²'],
+  [93,'Np','Нептуний',237,'actinide',3,7,'[Rn] 5f⁴ 6d¹ 7s²'],
+  [94,'Pu','Плутоний',244,'actinide',3,7,'[Rn] 5f⁶ 7s²'],
+  [95,'Am','Америций',243,'actinide',3,7,'[Rn] 5f⁷ 7s²'],
+  [96,'Cm','Кюрий',247,'actinide',3,7,'[Rn] 5f⁷ 6d¹ 7s²'],
+  [97,'Bk','Берклий',247,'actinide',3,7,'[Rn] 5f⁹ 7s²'],
+  [98,'Cf','Калифорний',251,'actinide',3,7,'[Rn] 5f¹⁰ 7s²'],
+  [99,'Es','Эйнштейний',252,'actinide',3,7,'[Rn] 5f¹¹ 7s²'],
+  [100,'Fm','Фермий',257,'actinide',3,7,'[Rn] 5f¹² 7s²'],
+  [101,'Md','Менделевий',258,'actinide',3,7,'[Rn] 5f¹³ 7s²'],
+  [102,'No','Нобелий',259,'actinide',3,7,'[Rn] 5f¹⁴ 7s²'],
+  [103,'Lr','Лоуренсий',266,'actinide',3,7,'[Rn] 5f¹⁴ 7s² 7p¹'],
+  [104,'Rf','Резерфордий',267,'transition',4,7,'[Rn] 5f¹⁴ 6d² 7s²'],
+  [105,'Db','Дубний',268,'transition',5,7,'[Rn] 5f¹⁴ 6d³ 7s²'],
+  [106,'Sg','Сиборгий',269,'transition',6,7,'[Rn] 5f¹⁴ 6d⁴ 7s²'],
+  [107,'Bh','Борий',270,'transition',7,7,'[Rn] 5f¹⁴ 6d⁵ 7s²'],
+  [108,'Hs','Хассий',277,'transition',8,7,'[Rn] 5f¹⁴ 6d⁶ 7s²'],
+  [109,'Mt','Мейтнерий',278,'transition',9,7,'[Rn] 5f¹⁴ 6d⁷ 7s²'],
+  [110,'Ds','Дармштадтий',281,'transition',10,7,'[Rn] 5f¹⁴ 6d⁸ 7s²'],
+  [111,'Rg','Рентгений',282,'transition',11,7,'[Rn] 5f¹⁴ 6d⁹ 7s²'],
+  [112,'Cn','Коперниций',285,'transition',12,7,'[Rn] 5f¹⁴ 6d¹⁰ 7s²'],
+  [113,'Nh','Нихоний',286,'post',13,7,'[Rn] 5f¹⁴ 6d¹⁰ 7s² 7p¹'],
+  [114,'Fl','Флеровий',289,'post',14,7,'[Rn] 5f¹⁴ 6d¹⁰ 7s² 7p²'],
+  [115,'Mc','Московий',290,'post',15,7,'[Rn] 5f¹⁴ 6d¹⁰ 7s² 7p³'],
+  [116,'Lv','Ливерморий',293,'post',16,7,'[Rn] 5f¹⁴ 6d¹⁰ 7s² 7p⁴'],
+  [117,'Ts','Теннессин',294,'halogen',17,7,'[Rn] 5f¹⁴ 6d¹⁰ 7s² 7p⁵'],
+  [118,'Og','Оганесон',294,'noble',18,7,'[Rn] 5f¹⁴ 6d¹⁰ 7s² 7p⁶']
+];
+
+const CAT_LABELS = {
+  nonmetal: 'Неметалл', noble: 'Благородный газ', alkali: 'Щелочной металл',
+  alkaline: 'Щёлочноземельный металл', metalloid: 'Металлоид', halogen: 'Галоген',
+  post: 'Постпереходный металл', transition: 'Переходный металл',
+  lanthanide: 'Лантаноид', actinide: 'Актиноид'
+};
+
+function gridPos(num, group, period) {
+  if (num >= 57 && num <= 71) return { row: 9, col: 3 + (num - 57) };
+  if (num >= 89 && num <= 103) return { row: 10, col: 3 + (num - 89) };
+  return { row: period, col: group };
+}
+
+const table = document.getElementById('table');
+const detail = document.getElementById('detail');
+const searchInput = document.getElementById('search');
+const filtersBox = document.getElementById('filters');
+
+// Placeholders
+function makePlaceholder(row, col, text) {
+  const d = document.createElement('div');
+  d.className = 'placeholder';
+  d.style.gridRow = row;
+  d.style.gridColumn = col;
+  d.textContent = text;
+  return d;
+}
+table.appendChild(makePlaceholder(6, 3, '57–71'));
+table.appendChild(makePlaceholder(7, 3, '89–103'));
+
+// F-block labels
+const lb1 = document.createElement('div');
+lb1.className = 'fblock-label';
+lb1.style.gridRow = 9; lb1.style.gridColumn = '1 / span 2';
+lb1.textContent = 'Лантаноиды';
+table.appendChild(lb1);
+const lb2 = document.createElement('div');
+lb2.className = 'fblock-label';
+lb2.style.gridRow = 10; lb2.style.gridColumn = '1 / span 2';
+lb2.textContent = 'Актиноиды';
+table.appendChild(lb2);
+
+// Build element cells
+const cells = {};
+ELEMENTS.forEach(el => {
+  const [num, sym, name, mass, cat, group, period, config] = el;
+  const { row, col } = gridPos(num, group, period);
+  const div = document.createElement('div');
+  div.className = `element cat-${cat}`;
+  div.style.gridRow = row;
+  div.style.gridColumn = col;
+  div.dataset.num = num;
+  div.dataset.sym = sym.toLowerCase();
+  div.dataset.name = name.toLowerCase();
+  div.dataset.cat = cat;
+  div.innerHTML = `<span class="num">${num}</span><span class="sym">${sym}</span><span class="name">${name}</span>`;
+  div.addEventListener('click', () => showDetail(num));
+  table.appendChild(div);
+  cells[num] = div;
+});
+
+// Legend
+const legend = document.getElementById('legend');
+Object.entries(CAT_LABELS).forEach(([cat, label]) => {
+  const item = document.createElement('div');
+  item.className = 'legend-item';
+  item.innerHTML = `<span class="legend-swatch cat-${cat}"></span>${label}`;
+  legend.appendChild(item);
+});
+
+// Filters
+let activeCat = null;
+Object.entries(CAT_LABELS).forEach(([cat, label]) => {
+  const btn = document.createElement('button');
+  btn.className = 'filter-btn';
+  btn.dataset.cat = cat;
+  btn.textContent = label;
+  btn.addEventListener('click', () => {
+    if (activeCat === cat) { activeCat = null; }
+    else { activeCat = cat; }
+    document.querySelectorAll('.filter-btn').forEach(b => b.classList.toggle('active', b.dataset.cat === activeCat));
+    applyFilters();
+  });
+  filtersBox.appendChild(btn);
+});
+
+// Search
+searchInput.addEventListener('input', applyFilters);
+
+function applyFilters() {
+  const q = searchInput.value.trim().toLowerCase();
+  ELEMENTS.forEach(el => {
+    const [num, sym, name, , cat] = el;
+    const matchesQ = !q || sym.toLowerCase().includes(q) || name.toLowerCase().includes(q) || String(num) === q;
+    const matchesCat = !activeCat || cat === activeCat;
+    cells[num].classList.toggle('dimmed', !(matchesQ && matchesCat));
+  });
+}
+
+// Detail panel
+function showDetail(num) {
+  const el = ELEMENTS.find(e => e[0] === num);
+  if (!el) return;
+  const [n, sym, name, mass, cat, group, period, config] = el;
+  const groupDisplay = (cat === 'lanthanide' || cat === 'actinide')
+    ? `${cat === 'lanthanide' ? 'f-блок (лантаноид)' : 'f-блок (актиноид)'}`
+    : String(group);
+  detail.innerHTML = `
+    <div class="detail-header">
+      <div class="detail-symbol cat-${cat}">
+        <span class="sym">${sym}</span>
+        <span class="num">${n}</span>
+      </div>
+      <div class="detail-title">
+        <h2>${name}</h2>
+        <div class="cat-label">${CAT_LABELS[cat]}</div>
+      </div>
     </div>
-
-    <footer>
-        <p>© 2026 Ресурсный центр «Химия» | Корольчук О.Г.</p>
-        <p>ГУО «Средняя школа №3 г. Хойники»</p>
-    </footer>
-
-    <script>
-        // Полная база данных всех 118 элементов
-        const elements = [
-            // 1 период
-            {n:1,s:'H',name:'Водород',m:'1.008',cat:'nonmetal',r:1,c:1,conf:'1s¹',ox:'-1, +1',rad:'53'},
-            {n:2,s:'He',name:'Гелий',m:'4.003',cat:'noble',r:1,c:18,conf:'1s²',ox:'0',rad:'31'},
-            // 2 период
-            {n:3,s:'Li',name:'Литий',m:'6.94',cat:'alkali',r:2,c:1,conf:'[He] 2s¹',ox:'+1',rad:'167'},
-            {n:4,s:'Be',name:'Бериллий',m:'9.012',cat:'alkaline',r:2,c:2,conf:'[He] 2s²',ox:'+2',rad:'112'},
-            {n:5,s:'B',name:'Бор',m:'10.81',cat:'metalloid',r:2,c:13,conf:'[He] 2s² 2p¹',ox:'+3',rad:'87'},
-            {n:6,s:'C',name:'Углерод',m:'12.011',cat:'nonmetal',r:2,c:14,conf:'[He] 2s² 2p²',ox:'-4, +2, +4',rad:'67'},
-            {n:7,s:'N',name:'Азот',m:'14.007',cat:'nonmetal',r:2,c:15,conf:'[He] 2s² 2p³',ox:'-3, +3, +5',rad:'56'},
-            {n:8,s:'O',name:'Кислород',m:'15.999',cat:'nonmetal',r:2,c:16,conf:'[He] 2s² 2p⁴',ox:'-2',rad:'48'},
-            {n:9,s:'F',name:'Фтор',m:'18.998',cat:'halogen',r:2,c:17,conf:'[He] 2s² 2p⁵',ox:'-1',rad:'42'},
-            {n:10,s:'Ne',name:'Неон',m:'20.180',cat:'noble',r:2,c:18,conf:'[He] 2s² 2p⁶',ox:'0',rad:'38'},
-            // 3 период
-            {n:11,s:'Na',name:'Натрий',m:'22.990',cat:'alkali',r:3,c:1,conf:'[Ne] 3s¹',ox:'+1',rad:'190'},
-            {n:12,s:'Mg',name:'Магний',m:'24.305',cat:'alkaline',r:3,c:2,conf:'[Ne] 3s²',ox:'+2',rad:'145'},
-            {n:13,s:'Al',name:'Алюминий',m:'26.982',cat:'post-transition',r:3,c:13,conf:'[Ne] 3s² 3p¹',ox:'+3',rad:'118'},
-            {n:14,s:'Si',name:'Кремний',m:'28.085',cat:'metalloid',r:3,c:14,conf:'[Ne] 3s² 3p²',ox:'-4, +4',rad:'111'},
-            {n:15,s:'P',name:'Фосфор',m:'30.974',cat:'nonmetal',r:3,c:15,conf:'[Ne] 3s² 3p³',ox:'-3, +3, +5',rad:'98'},
-            {n:16,s:'S',name:'Сера',m:'32.06',cat:'nonmetal',r:3,c:16,conf:'[Ne] 3s² 3p⁴',ox:'-2, +4, +6',rad:'88'},
-            {n:17,s:'Cl',name:'Хлор',m:'35.45',cat:'halogen',r:3,c:17,conf:'[Ne] 3s² 3p⁵',ox:'-1, +1, +5, +7',rad:'79'},
-            {n:18,s:'Ar',name:'Аргон',m:'39.948',cat:'noble',r:3,c:18,conf:'[Ne] 3s² 3p⁶',ox:'0',rad:'71'},
-            // 4 период
-            {n:19,s:'K',name:'Калий',m:'39.098',cat:'alkali',r:4,c:1,conf:'[Ar] 4s¹',ox:'+1',rad:'243'},
-            {n:20,s:'Ca',name:'Кальций',m:'40.078',cat:'alkaline',r:4,c:2,conf:'[Ar] 4s²',ox:'+2',rad:'194'},
-            {n:21,s:'Sc',name:'Скандий',m:'44.956',cat:'transition',r:4,c:3,conf:'[Ar] 3d¹ 4s²',ox:'+3',rad:'184'},
-            {n:22,s:'Ti',name:'Титан',m:'47.867',cat:'transition',r:4,c:4,conf:'[Ar] 3d² 4s²',ox:'+2, +3, +4',rad:'176'},
-            {n:23,s:'V',name:'Ванадий',m:'50.942',cat:'transition',r:4,c:5,conf:'[Ar] 3d³ 4s²',ox:'+2, +3, +4, +5',rad:'171'},
-            {n:24,s:'Cr',name:'Хром',m:'51.996',cat:'transition',r:4,c:6,conf:'[Ar] 3d⁵ 4s¹',ox:'+2, +3, +6',rad:'166'},
-            {n:25,s:'Mn',name:'Марганец',m:'54.938',cat:'transition',r:4,c:7,conf:'[Ar] 3d⁵ 4s²',ox:'+2, +3, +4, +6, +7',rad:'161'},
-            {n:26,s:'Fe',name:'Железо',m:'55.845',cat:'transition',r:4,c:8,conf:'[Ar] 3d⁶ 4s²',ox:'+2, +3',rad:'156'},
-            {n:27,s:'Co',name:'Кобальт',m:'58.933',cat:'transition',r:4,c:9,conf:'[Ar] 3d⁷ 4s²',ox:'+2, +3',rad:'152'},
-            {n:28,s:'Ni',name:'Никель',m:'58.693',cat:'transition',r:4,c:10,conf:'[Ar] 3d⁸ 4s²',ox:'+2, +3',rad:'149'},
-            {n:29,s:'Cu',name:'Медь',m:'63.546',cat:'transition',r:4,c:11,conf:'[Ar] 3d¹ 4s¹',ox:'+1, +2',rad:'145'},
-            {n:30,s:'Zn',name:'Цинк',m:'65.38',cat:'transition',r:4,c:12,conf:'[Ar] 3d¹⁰ 4s²',ox:'+2',rad:'142'},
-            {n:31,s:'Ga',name:'Галлий',m:'69.723',cat:'post-transition',r:4,c:13,conf:'[Ar] 3d¹⁰ 4s² 4p¹',ox:'+3',rad:'136'},
-            {n:32,s:'Ge',name:'Германий',m:'72.630',cat:'metalloid',r:4,c:14,conf:'[Ar] 3d¹⁰ 4s² 4p²',ox:'+2, +4',rad:'125'},
-            {n:33,s:'As',name:'Мышьяк',m:'74.922',cat:'metalloid',r:4,c:15,conf:'[Ar] 3d¹⁰ 4s² 4p³',ox:'-3, +3, +5',rad:'114'},
-            {n:34,s:'Se',name:'Селен',m:'78.971',cat:'nonmetal',r:4,c:16,conf:'[Ar] 3d¹⁰ 4s² 4p⁴',ox:'-2, +4, +6',rad:'103'},
-            {n:35,s:'Br',name:'Бром',m:'79.904',cat:'halogen',r:4,c:17,conf:'[Ar] 3d¹⁰ 4s² 4p⁵',ox:'-1, +1, +5',rad:'94'},
-            {n:36,s:'Kr',name:'Криптон',m:'83.798',cat:'noble',r:4,c:18,conf:'[Ar] 3d¹⁰ 4s² 4p⁶',ox:'0, +2',rad:'88'},
-            // 5 период
-            {n:37,s:'Rb',name:'Рубидий',m:'85.468',cat:'alkali',r:5,c:1,conf:'[Kr] 5s¹',ox:'+1',rad:'265'},
-            {n:38,s:'Sr',name:'Стронций',m:'87.62',cat:'alkaline',r:5,c:2,conf:'[Kr] 5s²',ox:'+2',rad:'219'},
-            {n:39,s:'Y',name:'Иттрий',m:'88.906',cat:'transition',r:5,c:3,conf:'[Kr] 4d¹ 5s²',ox:'+3',rad:'212'},
-            {n:40,s:'Zr',name:'Цирконий',m:'91.224',cat:'transition',r:5,c:4,conf:'[Kr] 4d² 5s²',ox:'+4',rad:'206'},
-            {n:41,s:'Nb',name:'Ниобий',m:'92.906',cat:'transition',r:5,c:5,conf:'[Kr] 4d⁴ 5s¹',ox:'+3, +5',rad:'198'},
-            {n:42,s:'Mo',name:'Молибден',m:'95.95',cat:'transition',r:5,c:6,conf:'[Kr] 4d⁵ 5s¹',ox:'+3, +4, +6',rad:'190'},
-            {n:43,s:'Tc',name:'Технеций',m:'(98)',cat:'transition',r:5,c:7,conf:'[Kr] 4d⁵ 5s²',ox:'+4, +6, +7',rad:'183'},
-            {n:44,s:'Ru',name:'Рутений',m:'101.07',cat:'transition',r:5,c:8,conf:'[Kr] 4d⁷ 5s¹',ox:'+3, +4, +6',rad:'178'},
-            {n:45,s:'Rh',name:'Родий',m:'102.91',cat:'transition',r:5,c:9,conf:'[Kr] 4d⁸ 5s¹',ox:'+3, +4',rad:'173'},
-            {n:46,s:'Pd',name:'Палладий',m:'106.42',cat:'transition',r:5,c:10,conf:'[Kr] 4d¹⁰',ox:'+2, +4',rad:'169'},
-            {n:47,s:'Ag',name:'Серебро',m:'107.87',cat:'transition',r:5,c:11,conf:'[Kr] 4d¹⁰ 5s¹',ox:'+1',rad:'165'},
-            {n:48,s:'Cd',name:'Кадмий',m:'112.41',cat:'transition',r:5,c:12,conf:'[Kr] 4d¹⁰ 5s²',ox:'+2',rad:'161'},
-            {n:49,s:'In',name:'Индий',m:'114.82',cat:'post-transition',r:5,c:13,conf:'[Kr] 4d¹⁰ 5s² 5p¹',ox:'+3',rad:'156'},
-            {n:50,s:'Sn',name:'Олово',m:'118.71',cat:'post-transition',r:5,c:14,conf:'[Kr] 4d¹ 5s² 5p²',ox:'+2, +4',rad:'145'},
-            {n:51,s:'Sb',name:'Сурьма',m:'121.76',cat:'metalloid',r:5,c:15,conf:'[Kr] 4d¹⁰ 5s² 5p³',ox:'-3, +3, +5',rad:'133'},
-            {n:52,s:'Te',name:'Теллур',m:'127.60',cat:'metalloid',r:5,c:16,conf:'[Kr] 4d¹⁰ 5s² 5p',ox:'-2, +4, +6',rad:'123'},
-            {n:53,s:'I',name:'Йод',m:'126.90',cat:'halogen',r:5,c:17,conf:'[Kr] 4d¹⁰ 5s² 5p⁵',ox:'-1, +1, +5, +7',rad:'115'},
-            {n:54,s:'Xe',name:'Ксенон',m:'131.29',cat:'noble',r:5,c:18,conf:'[Kr] 4d¹⁰ 5s² 5p⁶',ox:'0, +2, +4, +6',rad:'108'},
-            // 6 период
-            {n:55,s:'Cs',name:'Цезий',m:'132.91',cat:'alkali',r:6,c:1,conf:'[Xe] 6s¹',ox:'+1',rad:'298'},
-            {n:56,s:'Ba',name:'Барий',m:'137.33',cat:'alkaline',r:6,c:2,conf:'[Xe] 6s²',ox:'+2',rad:'253'},
-            {n:57,s:'La',name:'Лантан',m:'138.91',cat:'lanthanide',r:6,c:3,conf:'[Xe] 5d¹ 6s²',ox:'+3',rad:'195'},
-            {n:72,s:'Hf',name:'Гафний',m:'178.49',cat:'transition',r:6,c:4,conf:'[Xe] 4f¹⁴ 5d² 6s²',ox:'+4',rad:'208'},
-            {n:73,s:'Ta',name:'Тантал',m:'180.95',cat:'transition',r:6,c:5,conf:'[Xe] 4f¹⁴ 5d³ 6s²',ox:'+5',rad:'200'},
-            {n:74,s:'W',name:'Вольфрам',m:'183.84',cat:'transition',r:6,c:6,conf:'[Xe] 4f¹⁴ 5d⁴ 6s²',ox:'+4, +6',rad:'193'},
-            {n:75,s:'Re',name:'Рений',m:'186.21',cat:'transition',r:6,c:7,conf:'[Xe] 4f¹⁴ 5d⁵ 6s²',ox:'+4, +6, +7',rad:'188'},
-            {n:76,s:'Os',name:'Осмий',m:'190.23',cat:'transition',r:6,c:8,conf:'[Xe] 4f¹⁴ 5d 6s²',ox:'+3, +4, +6, +8',rad:'185'},
-            {n:77,s:'Ir',name:'Иридий',m:'192.22',cat:'transition',r:6,c:9,conf:'[Xe] 4f¹ 5d⁷ 6s²',ox:'+3, +4',rad:'180'},
-            {n:78,s:'Pt',name:'Платина',m:'195.08',cat:'transition',r:6,c:10,conf:'[Xe] 4f¹⁴ 5d⁹ 6s¹',ox:'+2, +4',rad:'177'},
-            {n:79,s:'Au',name:'Золото',m:'196.97',cat:'transition',r:6,c:11,conf:'[Xe] 4f¹⁴ 5d¹⁰ 6s¹',ox:'+1, +3',rad:'174'},
-            {n:80,s:'Hg',name:'Ртуть',m:'200.59',cat:'transition',r:6,c:12,conf:'[Xe] 4f¹⁴ 5d¹⁰ 6s²',ox:'+1, +2',rad:'171'},
-            {n:81,s:'Tl',name:'Таллий',m:'204.38',cat:'post-transition',r:6,c:13,conf:'[Xe] 4f¹⁴ 5d¹⁰ 6s² 6p¹',ox:'+1, +3',rad:'156'},
-            {n:82,s:'Pb',name:'Свинец',m:'207.2',cat:'post-transition',r:6,c:14,conf:'[Xe] 4f¹ 5d¹⁰ 6s² 6p²',ox:'+2, +4',rad:'154'},
-            {n:83,s:'Bi',name:'Висмут',m:'208.98',cat:'post-transition',r:6,c:15,conf:'[Xe] 4f¹ 5d¹⁰ 6s² 6p³',ox:'+3, +5',rad:'143'},
-            {n:84,s:'Po',name:'Полоний',m:'(209)',cat:'post-transition',r:6,c:16,conf:'[Xe] 4f¹⁴ 5d¹⁰ 6s² 6p⁴',ox:'+2, +4',rad:'135'},
-            {n:85,s:'At',name:'Астат',m:'(210)',cat:'halogen',r:6,c:17,conf:'[Xe] 4f¹⁴ 5d¹⁰ 6s² 6p⁵',ox:'-1, +1, +5',rad:'127'},
-            {n:86,s:'Rn',name:'Радон',m:'(222)',cat:'noble',r:6,c:18,conf:'[Xe] 4f¹⁴ 5d¹⁰ 6s² 6p⁶',ox:'0, +2',rad:'120'},
-            // 7 период
-            {n:87,s:'Fr',name:'Франций',m:'(223)',cat:'alkali',r:7,c:1,conf:'[Rn] 7s¹',ox:'+1',rad:'348'},
-            {n:88,s:'Ra',name:'Радий',m:'(226)',cat:'alkaline',r:7,c:2,conf:'[Rn] 7s²',ox:'+2',rad:'283'},
-            {n:89,s:'Ac',name:'Актиний',m:'(227)',cat:'actinide',r:7,c:3,conf:'[Rn] 6d¹ 7s²',ox:'+3',rad:'195'},
-            {n:104,s:'Rf',name:'Резерфордий',m:'(267)',cat:'transition',r:7,c:4,conf:'[Rn] 5f¹⁴ 6d² 7s²',ox:'+4',rad:'—'},
-            {n:105,s:'Db',name:'Дубний',m:'(268)',cat:'transition',r:7,c:5,conf:'[Rn] 5f¹⁴ 6d³ 7s²',ox:'+5',rad:'—'},
-            {n:106,s:'Sg',name:'Сиборгий',m:'(269)',cat:'transition',r:7,c:6,conf:'[Rn] 5f¹⁴ 6d⁴ 7s²',ox:'+6',rad:'—'},
-            {n:107,s:'Bh',name:'Борий',m:'(270)',cat:'transition',r:7,c:7,conf:'[Rn] 5f¹⁴ 6d 7s²',ox:'+7',rad:'—'},
-            {n:108,s:'Hs',name:'Хассий',m:'(277)',cat:'transition',r:7,c:8,conf:'[Rn] 5f¹⁴ 6d⁶ 7s²',ox:'+8',rad:'—'},
-            {n:109,s:'Mt',name:'Мейтнерий',m:'(278)',cat:'transition',r:7,c:9,conf:'[Rn] 5f¹⁴ 6d⁷ 7s²',ox:'—',rad:'—'},
-            {n:110,s:'Ds',name:'Дармштадтий',m:'(281)',cat:'transition',r:7,c:10,conf:'[Rn] 5f¹⁴ 6d⁸ 7s²',ox:'—',rad:'—'},
-            {n:111,s:'Rg',name:'Рентгений',m:'(282)',cat:'transition',r:7,c:11,conf:'[Rn] 5f¹⁴ 6d⁹ 7s²',ox:'—',rad:'—'},
-            {n:112,s:'Cn',name:'Коперниций',m:'(285)',cat:'transition',r:7,c:12,conf:'[Rn] 5f¹⁴ 6d¹⁰ 7s²',ox:'+2',rad:'—'},
-            {n:113,s:'Nh',name:'Нихоний',m:'(286)',cat:'post-transition',r:7,c:13,conf:'[Rn] 5f¹⁴ 6d¹⁰ 7s² 7p¹',ox:'—',rad:'—'},
-            {n:114,s:'Fl',name:'Флеровий',m:'(289)',cat:'post-transition',r:7,c:14,conf:'[Rn] 5f¹⁴ 6d¹⁰ 7s² 7p²',ox:'—',rad:'—'},
-            {n:115,s:'Mc',name:'Московий',m:'(290)',cat:'post-transition',r:7,c:15,conf:'[Rn] 5f¹⁴ 6d¹⁰ 7s² 7p³',ox:'—',rad:'—'},
-            {n:116,s:'Lv',name:'Ливерморий',m:'(293)',cat:'post-transition',r:7,c:16,conf:'[Rn] 5f¹⁴ 6d¹⁰ 7s² 7p⁴',ox:'—',rad:'—'},
-            {n:117,s:'Ts',name:'Теннессин',m:'(294)',cat:'halogen',r:7,c:17,conf:'[Rn] 5f¹⁴ 6d¹⁰ 7s² 7p⁵',ox:'—',rad:'—'},
-            {n:118,s:'Og',name:'Оганесон',m:'(294)',cat:'noble',r:7,c:18,conf:'[Rn] 5f¹⁴ 6d¹⁰ 7s² 7p',ox:'—',rad:'—'},
-            // Лантаноиды (9 ряд)
-            {n:58,s:'Ce',name:'Церий',m:'140.12',cat:'lanthanide',r:9,c:4,conf:'[Xe] 4f¹ 5d¹ 6s²',ox:'+3, +4',rad:'185'},
-            {n:59,s:'Pr',name:'Празеодим',m:'140.91',cat:'lanthanide',r:9,c:5,conf:'[Xe] 4f³ 6s²',ox:'+3, +4',rad:'185'},
-            {n:60,s:'Nd',name:'Неодим',m:'144.24',cat:'lanthanide',r:9,c:6,conf:'[Xe] 4f⁴ 6s²',ox:'+3',rad:'185'},
-            {n:61,s:'Pm',name:'Прометий',m:'(145)',cat:'lanthanide',r:9,c:7,conf:'[Xe] 4f⁵ 6s²',ox:'+3',rad:'185'},
-            {n:62,s:'Sm',name:'Самарий',m:'150.36',cat:'lanthanide',r:9,c:8,conf:'[Xe] 4f⁶ 6s²',ox:'+2, +3',rad:'185'},
-            {n:63,s:'Eu',name:'Европий',m:'151.96',cat:'lanthanide',r:9,c:9,conf:'[Xe] 4f⁷ 6s²',ox:'+2, +3',rad:'185'},
-            {n:64,s:'Gd',name:'Гадолиний',m:'157.25',cat:'lanthanide',r:9,c:10,conf:'[Xe] 4f⁷ 5d¹ 6s²',ox:'+3',rad:'180'},
-            {n:65,s:'Tb',name:'Тербий',m:'158.93',cat:'lanthanide',r:9,c:11,conf:'[Xe] 4f⁹ 6s²',ox:'+3, +4',rad:'180'},
-            {n:66,s:'Dy',name:'Диспрозий',m:'162.50',cat:'lanthanide',r:9,c:12,conf:'[Xe] 4f¹⁰ 6s²',ox:'+3',rad:'180'},
-            {n:67,s:'Ho',name:'Гольмий',m:'164.93',cat:'lanthanide',r:9,c:13,conf:'[Xe] 4f¹¹ 6s²',ox:'+3',rad:'180'},
-            {n:68,s:'Er',name:'Эрбий',m:'167.26',cat:'lanthanide',r:9,c:14,conf:'[Xe] 4f¹² 6s²',ox:'+3',rad:'180'},
-            {n:69,s:'Tm',name:'Тулий',m:'168.93',cat:'lanthanide',r:9,c:15,conf:'[Xe] 4f¹³ 6s²',ox:'+3',rad:'180'},
-            {n:70,s:'Yb',name:'Иттербий',m:'173.05',cat:'lanthanide',r:9,c:16,conf:'[Xe] 4f¹⁴ 6s²',ox:'+2, +3',rad:'180'},
-            {n:71,s:'Lu',name:'Лютеций',m:'174.97',cat:'lanthanide',r:9,c:17,conf:'[Xe] 4f¹⁴ 5d¹ 6s²',ox:'+3',rad:'175'},
-            // Актиноиды (10 ряд)
-            {n:90,s:'Th',name:'Торий',m:'232.04',cat:'actinide',r:10,c:4,conf:'[Rn] 6d² 7s²',ox:'+4',rad:'180'},
-            {n:91,s:'Pa',name:'Протактиний',m:'231.04',cat:'actinide',r:10,c:5,conf:'[Rn] 5f² 6d¹ 7s²',ox:'+4, +5',rad:'180'},
-            {n:92,s:'U',name:'Уран',m:'238.03',cat:'actinide',r:10,c:6,conf:'[Rn] 5f³ 6d¹ 7s²',ox:'+3, +4, +5, +6',rad:'175'},
-            {n:93,s:'Np',name:'Нептуний',m:'(237)',cat:'actinide',r:10,c:7,conf:'[Rn] 5f 6d¹ 7s²',ox:'+3, +4, +5, +6',rad:'175'},
-            {n:94,s:'Pu',name:'Плутоний',m:'(244)',cat:'actinide',r:10,c:8,conf:'[Rn] 5f⁶ 7s²',ox:'+3, +4, +5, +6',rad:'175'},
-            {n:95,s:'Am',name:'Америций',m:'(243)',cat:'actinide',r:10,c:9,conf:'[Rn] 5f 7s²',ox:'+3, +4, +5, +6',rad:'175'},
-            {n:96,s:'Cm',name:'Кюрий',m:'(247)',cat:'actinide',r:10,c:10,conf:'[Rn] 5f⁷ 6d¹ 7s²',ox:'+3',rad:'—'},
-            {n:97,s:'Bk',name:'Берклий',m:'(247)',cat:'actinide',r:10,c:11,conf:'[Rn] 5f⁹ 7s²',ox:'+3, +4',rad:'—'},
-            {n:98,s:'Cf',name:'Калифорний',m:'(251)',cat:'actinide',r:10,c:12,conf:'[Rn] 5f¹⁰ 7s²',ox:'+3',rad:'—'},
-            {n:99,s:'Es',name:'Эйнштейний',m:'(252)',cat:'actinide',r:10,c:13,conf:'[Rn] 5f¹¹ 7s²',ox:'+3',rad:'—'},
-            {n:100,s:'Fm',name:'Фермий',m:'(257)',cat:'actinide',r:10,c:14,conf:'[Rn] 5f¹² 7s²',ox:'+3',rad:'—'},
-            {n:101,s:'Md',name:'Менделевий',m:'(258)',cat:'actinide',r:10,c:15,conf:'[Rn] 5f¹³ 7s²',ox:'+2, +3',rad:'—'},
-            {n:102,s:'No',name:'Нобелий',m:'(259)',cat:'actinide',r:10,c:16,conf:'[Rn] 5f¹⁴ 7s²',ox:'+2, +3',rad:'—'},
-            {n:103,s:'Lr',name:'Лоуренсий',m:'(266)',cat:'actinide',r:10,c:17,conf:'[Rn] 5f¹⁴ 7s² 7p¹',ox:'+3',rad:'—'}
-        ];
-
-        const categories = {
-            'alkali': { name: 'Щелочные металлы', color: '#FF6B6B' },
-            'alkaline': { name: 'Щёлочноземельные металлы', color: '#FFA502' },
-            'transition': { name: 'Переходные металлы', color: '#4ECDC4' },
-            'post-transition': { name: 'Постпереходные металлы', color: '#95E1D3' },
-            'metalloid': { name: 'Полуметаллы', color: '#F38181' },
-            'nonmetal': { name: 'Неметаллы', color: '#AA96DA' },
-            'halogen': { name: 'Галогены', color: '#FCB69F' },
-            'noble': { name: 'Благородные газы', color: '#7FDBFF' },
-            'lanthanide': { name: 'Лантаноиды', color: '#F9CA24' },
-            'actinide': { name: 'Актиноиды', color: '#6C5CE7' }
-        };
-
-        const table = document.getElementById('periodicTable');
-        const legend = document.getElementById('legend');
-        const elementInfo = document.getElementById('elementInfo');
-
-        // Генерация легенды
-        Object.keys(categories).forEach(key => {
-            const item = document.createElement('div');
-            item.className = 'legend-item';
-            item.innerHTML = `<div class="legend-color ${key}"></div>${categories[key].name}`;
-            legend.appendChild(item);
-        });
-
-        // Генерация таблицы
-        elements.forEach(el => {
-            const cell = document.createElement('div');
-            cell.className = `element ${el.cat}`;
-            cell.style.gridColumn = el.c;
-            cell.style.gridRow = el.r;
-            cell.innerHTML = `
-                <span class="number">${el.n}</span>
-                <span class="symbol">${el.s}</span>
-                <span class="name">${el.name}</span>
-            `;
-            cell.addEventListener('click', () => showElementInfo(el));
-            table.appendChild(cell);
-        });
-
-        // Показ информации
-        function showElementInfo(el) {
-            document.getElementById('infoNumber').textContent = el.n;
-            document.getElementById('infoSymbolText').textContent = el.s;
-            document.getElementById('infoName').textContent = el.name;
-            document.getElementById('infoMass').textContent = `${el.m} а.е.м.`;
-            document.getElementById('infoConfig').textContent = el.conf;
-            document.getElementById('infoRadius').textContent = el.rad === '—' ? 'Нет данных' : `${el.rad} пм`;
-            document.getElementById('infoOxidation').textContent = el.ox === '—' ? 'Нет данных' : el.ox;
-            document.getElementById('infoCategory').textContent = categories[el.cat].name;
-            
-            const symbolDiv = document.getElementById('infoSymbolBox');
-            symbolDiv.className = `info-symbol-box ${el.cat}`;
-            
-            elementInfo.classList.add('active');
-            elementInfo.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-        }
-    </script>
+    <div class="detail-grid">
+      <div class="detail-item"><div class="label">Атомный номер</div><div class="value">${n}</div></div>
+      <div class="detail-item"><div class="label">Атомная масса</div><div class="value">${mass} а.е.м.</div></div>
+      <div class="detail-item"><div class="label">Период</div><div class="value">${period}</div></div>
+      <div class="detail-item"><div class="label">Группа</div><div class="value">${groupDisplay}</div></div>
+      <div class="detail-item" style="grid-column: 1 / -1;"><div class="label">Электронная конфигурация</div><div class="value">${config}</div></div>
+    </div>`;
+  detail.classList.add('visible');
+  Object.values(cells).forEach(c => c.classList.remove('selected'));
+  cells[num].classList.add('selected');
+  detail.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+}
+</script>
 </body>
 </html>
