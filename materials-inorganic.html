@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Неорганическая химия - Ресурсный центр "Химия"</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Raleway:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        :root {
+            --primary: #0D3B2E; --primary-light: #1B5E5B; --accent: #C9A961;
+            --accent-light: #D4B570; --bg: #FAFAF7; --text: #2B2D42; --white: #FFFFFF;
+        }
+        html { scroll-behavior: smooth; scroll-padding-top: 100px; }
+        body { font-family: 'Raleway', sans-serif; background: var(--bg); color: var(--text); line-height: 1.6; overflow-x: hidden; }
+        h1, h2, h3, h4 { font-family: 'Playfair Display', serif; }
+
+        /* Navigation */
+        .nav {
+            position: fixed; top: 0; left: 0; right: 0;
+            background: rgba(255, 255, 255, 0.98); backdrop-filter: blur(15px);
+            padding: 1rem 2rem; box-shadow: 0 2px 20px rgba(13,59,46,0.1); z-index: 1000;
+        }
+        .nav-container { max-width: 1200px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; }
+        .nav-logo { font-family: 'Playfair Display', serif; font-size: 1.3rem; font-weight: 700; color: var(--primary); text-decoration: none; letter-spacing: 1px; z-index: 1001; }
+        .nav-links { display: flex; gap: 2rem; list-style: none; }
+        .nav-links a { color: var(--text); text-decoration: none; font-size: 0.9rem; font-weight: 600; transition: color 0.3s; position: relative; }
+        .nav-links a:after { content: ''; position: absolute; bottom: -4px; left: 0; width: 0; height: 2px; background: var(--accent); transition: width 0.3s; }
+        .nav-links a:hover { color: var(--accent); }
+        .nav-links a:hover:after { width: 100%; }
+
+        .burger { display: none; flex-direction: column; justify-content: space-between; width: 28px; height: 20px; cursor: pointer; z-index: 1001; background: none; border: none; padding: 0; }
+        .burger span { display: block; width: 100%; height: 2px; background: var(--primary); transition: all 0.3s ease; border-radius: 2px; }
+        .burger.active span:nth-child(1) { transform: translateY(9px) rotate(45deg); }
+        .burger.active span:nth-child(2) { opacity: 0; transform: translateX(-10px); }
+        .burger.active span:nth-child(3) { transform: translateY(-9px) rotate(-45deg); }
+
+        .mobile-menu {
+            display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+            z-index: 999; flex-direction: column; justify-content: center; align-items: center; opacity: 0; transition: opacity 0.4s ease;
+        }
+        .mobile-menu.active { display: flex; opacity: 1; }
+        .mobile-menu ul { list-style: none; text-align: center; }
+        .mobile-menu li { margin: 1.5rem 0; transform: translateY(20px); opacity: 0; transition: all 0.4s ease; }
+        .mobile-menu.active li { transform: translateY(0); opacity: 1; }
+        .mobile-menu.active li:nth-child(1) { transition-delay: 0.1s; }
+        .mobile-menu.active li:nth-child(2) { transition-delay: 0.2s; }
+        .mobile-menu.active li:nth-child(3) { transition-delay: 0.3s; }
+        .mobile-menu a { color: var(--white); text-decoration: none; font-family: 'Playfair Display', serif; font-size: 2rem; font-weight: 600; letter-spacing: 1px; transition: color 0.3s; position: relative; }
+        .mobile-menu a:hover { color: var(--accent); }
+
+        .header {
+            background: linear-gradient(-45deg, var(--primary), var(--primary-light), #0f4d45, #1a5f5a);
+            background-size: 400% 400%;
+            animation: gradientShift 15s ease infinite;
+            color: var(--white); padding: 8rem 2rem 4rem; text-align: center; position: relative; overflow: hidden;
+        }
+        @keyframes gradientShift { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
+        .header:before { content: ''; position: absolute; top: -50%; right: -10%; width: 600px; height: 600px; background: radial-gradient(circle, rgba(201,169,97,0.15) 0%, transparent 70%); border-radius: 50%; }
+        .header h1 { font-size: 2.8rem; margin-bottom: 1rem; letter-spacing: 2px; position: relative; z-index: 1; text-shadow: 2px 2px 4px rgba(0,0,0,0.3); }
+        .header p { font-size: 1.1rem; opacity: 0.95; font-weight: 300; max-width: 800px; margin: 0 auto; position: relative; z-index: 1; line-height: 1.8; }
+
+        .main-wrapper { display: flex; max-width: 1400px; margin: 0 auto; position: relative; }
+        .content { flex: 1; padding: 4rem 2rem; max-width: 1100px; }
+
+        /* Side Navigation */
+        .side-nav {
+            position: sticky; top: 100px; width: 300px; padding: 2rem 1.5rem;
+            background: var(--white); border-radius: 15px; box-shadow: 0 5px 20px rgba(13,59,46,0.1);
+            margin-left: 2rem; align-self: flex-start; max-height: calc(100vh - 120px); overflow-y: auto;
+        }
+        .side-nav h3 { font-size: 1.1rem; color: var(--primary); margin-bottom: 1.5rem; padding-bottom: 0.8rem; border-bottom: 2px solid var(--accent); }
+        .nav-section { margin-bottom: 1rem; }
+        .nav-section h4 { font-size: 0.95rem; color: var(--primary); margin-bottom: 0.5rem; padding-bottom: 0.5rem; border-bottom: 1px solid rgba(201,169,97,0.3); font-weight: 600; cursor: pointer; display: flex; justify-content: space-between; align-items: center; transition: color 0.3s; }
+        .nav-section h4:hover { color: var(--accent); }
+        .nav-section h4::after { content: '▼'; font-size: 0.7rem; transition: transform 0.3s ease; }
+        .nav-section.collapsed h4::after { transform: rotate(-90deg); }
+        .nav-section ul { list-style: none; padding-left: 0; transition: max-height 0.3s ease, opacity 0.3s ease; }
+        .nav-section.collapsed ul { display: none; }
+        .nav-section li { margin-bottom: 0.3rem; }
+        .nav-section a { display: block; padding: 0.5rem 1rem 0.5rem 1.5rem; color: var(--text); text-decoration: none; border-radius: 6px; font-size: 0.85rem; font-weight: 500; transition: all 0.3s ease; border-left: 3px solid transparent; }
+        .nav-section a:hover { background: rgba(201,169,97,0.1); border-left-color: var(--accent); color: var(--primary); transform: translateX(3px); }
+        .nav-section a.active { background: rgba(13,59,46,0.1); border-left-color: var(--primary); color: var(--primary); font-weight: 600; }
+
+        .section-title { font-size: 1.8rem; color: var(--primary); margin: 3rem 0 1.5rem; padding-bottom: 0.8rem; border-bottom: 3px solid var(--accent); display: inline-block; position: relative; scroll-margin-top: 100px; }
+        .section-title:after { content: ''; position: absolute; bottom: -3px; left: 0; width: 100px; height: 3px; background: var(--primary); }
+        .section-subtitle { font-size: 1rem; color: var(--text); opacity: 0.7; margin-bottom: 2rem; font-style: italic; display: block; }
+
+        .material-list { display: flex; flex-direction: column; gap: 1.5rem; margin-bottom: 2rem; }
+        
+        .material-item {
+            background: var(--white); border-radius: 15px; padding: 2rem;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.06); border-left: 5px solid var(--accent);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1); display: flex; flex-direction: column; gap: 1rem;
+            opacity: 0; transform: translateY(30px); scroll-margin-top: 120px;
+        }
+        .material-item.visible { opacity: 1; transform: translateY(0); }
+        .material-item:hover { transform: translateX(10px); box-shadow: 0 15px 40px rgba(13,59,46,0.12); border-left-color: var(--primary); }
+
+        .material-header { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; }
+        .material-title { font-size: 1.4rem; color: var(--primary); font-weight: 600; flex: 1; }
+        .material-tag { background: linear-gradient(135deg, rgba(201,169,97,0.2), rgba(201,169,97,0.1)); color: var(--primary); padding: 0.3rem 1rem; border-radius: 20px; font-size: 0.85rem; font-weight: 600; border: 1px solid rgba(201,169,97,0.3); }
+
+        .material-desc { font-size: 0.95rem; opacity: 0.85; line-height: 1.7; }
+        .material-desc strong { color: var(--primary); }
+        .material-desc em { color: var(--primary-light); font-style: italic; }
+
+        .material-actions { display: flex; gap: 1rem; flex-wrap: wrap; margin-top: 0.5rem; }
+        
+        .btn { display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.8rem 1.5rem; border-radius: 30px; text-decoration: none; font-weight: 600; font-size: 0.9rem; transition: all 0.3s ease; }
+        .btn-primary { background: linear-gradient(135deg, var(--accent), var(--accent-light)); color: var(--primary); box-shadow: 0 4px 15px rgba(201,169,97,0.3); }
+        .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 25px rgba(201,169,97,0.5); }
+        .btn-secondary { background: var(--bg); color: var(--primary); border: 1px solid rgba(13,59,46,0.2); }
+        .btn-secondary:hover { background: var(--primary); color: var(--white); }
+
+        footer { background: linear-gradient(135deg, var(--text), #1a1a2e); color: var(--white); text-align: center; padding: 2.5rem; margin-top: 5rem; font-size: 0.9rem; position: relative; overflow: hidden; }
+        footer:before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; background: linear-gradient(90deg, var(--accent), var(--accent-light)); }
+
+        @media (max-width: 1200px) {
+            .side-nav { display: none; }
+            .main-wrapper { max-width: 100%; }
+            .content { max-width: 100%; padding: 3rem 1.5rem; }
+        }
+        @media (max-width: 768px) {
+            .nav { padding: 1rem 1.5rem; }
+            .nav-links { display: none; }
+            .burger { display: flex; }
+            .header { padding: 6.5rem 1.5rem 3rem; }
+            .header h1 { font-size: 2.2rem; }
+            .header p { font-size: 1rem; }
+            .material-header { flex-direction: column; align-items: flex-start; }
+            .content { padding: 2rem 1rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <nav class="nav">
+        <div class="nav-container">
+            <a href="index.html" class="nav-logo">🧪 ХИМИЯ</a>
+            <ul class="nav-links">
+                <li><a href="index.html">Главная</a></li>
+                <li><a href="materials.html">← Назад к материалам</a></li>
+                <li><a href="contacts.html">Контакты</a></li>
+            </ul>
+            <button class="burger" id="burger" aria-label="Меню">
+                <span></span><span></span><span></span>
+            </button>
+        </div>
+    </nav>
+
+    <div class="mobile-menu" id="mobileMenu">
+        <ul>
+            <li><a href="index.html">Главная</a></li>
+            <li><a href="materials.html">← Назад к материалам</a></li>
+            <li><a href="contacts.html">Контакты</a></li>
+        </ul>
+    </div>
+
+    <div class="header">
+        <h1>⚛️ Неорганическая химия</h1>
+        <p>Строение вещества, периодический закон и химия элементов. Теоретические основы и практические алгоритмы.</p>
+    </div>
+
+    <div class="main-wrapper">
+        <div class="content">
+
+            <!-- РАЗДЕЛ 1: ТЕОРЕТИЧЕСКИЕ ОСНОВЫ -->
+            <h2 class="section-title" id="section-theory">📘 Теоретические основы</h2>
+            <span class="section-subtitle">Строение атома, химическая связь и периодический закон</span>
+            <div class="material-list">
+
+                <div class="material-item" id="topic-atomic">
+                    <div class="material-header">
+                        <h3 class="material-title">Строение атома и периодический закон</h3>
+                        <span class="material-tag">Квантовые числа · Электронные конфигурации</span>
+                    </div>
+                    <p class="material-desc">
+                        Основы квантово-механической модели строения атома. <strong>Квантовые числа</strong> (главное, орбитальное, магнитное, спиновое). Принцип Паули, правило Хунда, правило Клечковского. Электронные и электронно-графические формулы элементов. Периодический закон Д.И. Менделеева и его современная формулировка.
+                    </p>
+                    <div class="material-actions">
+                        <a href="files/chemistry/nachala_himii.pdf" class="btn btn-primary" target="_blank">📥 Скачать PDF (Глава 3)</a>
+                        <a href="files/chemistry/nachala_himii.pdf" class="btn btn-secondary" target="_blank">👁️ Смотреть онлайн</a>
+                    </div>
+                </div>
+
+                <div class="material-item" id="topic-bond">
+                    <div class="material-header">
+                        <h3 class="material-title">Химическая связь и строение вещества</h3>
+                        <span class="material-tag">Ковалентная · Ионная · Металлическая</span>
+                    </div>
+                    <p class="material-desc">
+                        Типы химических связей. <strong>Метод валентных связей (МВС)</strong> и гибридизация орбиталей (sp, sp², sp³). Метод молекулярных орбиталей (ММО). Ионная связь и строение ионных кристаллов. Металлическая связь. Водородная связь и её роль в природе. Межмолекулярные взаимодействия (силы Ван-дер-Ваальса).
+                    </p>
+                    <div class="material-actions">
+                        <a href="files/chemistry/nachala_himii.pdf" class="btn btn-primary" target="_blank">📥 Скачать PDF (Глава 4)</a>
+                        <a href="files/chemistry/nachala_himii.pdf" class="btn btn-secondary" target="_blank">👁️ Смотреть онлайн</a>
+                    </div>
+                </div>
+
+                <div class="material-item" id="topic-solutions">
+                    <div class="material-header">
+                        <h3 class="material-title">Растворы и электролитическая диссоциация</h3>
+                        <span class="material-tag">Теория Аррениуса · Гидролиз</span>
+                    </div>
+                    <p class="material-desc">
+                        Дисперсные системы. Способы выражения концентрации растворов. <strong>Теория электролитической диссоциации</strong> Аррениуса. Сильные и слабые электролиты. Ионные уравнения реакций. Водородный показатель (pH). Гидролиз солей. Произведение растворимости (ПР).
+                    </p>
+                    <div class="material-actions">
+                        <a href="files/chemistry/nachala_himii.pdf" class="btn btn-primary" target="_blank">📥 Скачать PDF (Глава 7)</a>
+                        <a href="files/chemistry/nachala_himii.pdf" class="btn btn-secondary" target="_blank">👁️ Смотреть онлайн</a>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- РАЗДЕЛ 2: ХИМИЯ ЭЛЕМЕНТОВ -->
+            <h2 class="section-title" id="section-elements">🧪 Химия элементов</h2>
+            <span class="section-subtitle">Свойства простых веществ и их соединений</span>
+            <div class="material-list">
+
+                <div class="material-item" id="topic-p-elements">
+                    <div class="material-header">
+                        <h3 class="material-title">Неметаллы (p-элементы)</h3>
+                        <span class="material-tag">Галогены · Халькогены · Азот · Углерод</span>
+                    </div>
+                    <p class="material-desc">
+                        Подгруппы галогенов, кислорода (халькогены), азота и фосфора, углерода и кремния. Строение, физические и химические свойства. Важнейшие соединения (оксиды, кислоты, соли). Качественные реакции на анионы. Круговороты элементов в природе.
+                    </p>
+                    <div class="material-actions">
+                        <a href="files/chemistry/nachala_himii.pdf" class="btn btn-primary" target="_blank">📥 Скачать PDF (Главы 11-14)</a>
+                        <a href="files/chemistry/nachala_himii.pdf" class="btn btn-secondary" target="_blank">👁️ Смотреть онлайн</a>
+                    </div>
+                </div>
+
+                <div class="material-item" id="topic-metals">
+                    <div class="material-header">
+                        <h3 class="material-title">Металлы (s- и d-элементы)</h3>
+                        <span class="material-tag">Щелочные · Переходные металлы</span>
+                    </div>
+                    <p class="material-desc">
+                        <strong>Щелочные и щелочноземельные металлы</strong> (I и II группы). Алюминий (амфотерность). <strong>Переходные металлы</strong> (хром, марганец, железо, медь, цинк, серебро). Комплексные соединения. Окислительно-восстановительные свойства соединений металлов.
+                    </p>
+                    <div class="material-actions">
+                        <a href="files/chemistry/nachala_himii.pdf" class="btn btn-primary" target="_blank">📥 Скачать PDF (Главы 15-17)</a>
+                        <a href="files/chemistry/nachala_himii.pdf" class="btn btn-secondary" target="_blank">👁️ Смотреть онлайн</a>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- РАЗДЕЛ 3: ПРАКТИКА -->
+            <h2 class="section-title" id="section-practice">📝 Практика и задачи</h2>
+            <span class="section-subtitle">Алгоритмы решений и расчеты</span>
+            <div class="material-list">
+
+                <div class="material-item" id="topic-algorithms">
+                    <div class="material-header">
+                        <h3 class="material-title">Алгоритмы решения задач</h3>
+                        <span class="material-tag">Газовые законы · Растворы</span>
+                    </div>
+                    <p class="material-desc">
+                        Пошаговые алгоритмы решения типовых задач по неорганической химии. Газовые законы (уравнение Менделеева-Клапейрона). Расчеты по уравнениям реакций с избытком и недостатком. Определение формул соединений. Задачи на растворы (массовая доля, молярность).
+                    </p>
+                    <div class="material-actions">
+                        <a href="files/chemistry/Himiya_Algoritmy_resheniya_zadach_2014.pdf" class="btn btn-primary" target="_blank">📥 Скачать сборник задач</a>
+                        <a href="files/chemistry/Himiya_Algoritmy_resheniya_zadach_2014.pdf" class="btn btn-secondary" target="_blank">👁️ Смотреть онлайн</a>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- Side Navigation -->
+        <aside class="side-nav">
+            <h3>📑 Навигация по темам</h3>
+            
+            <div class="nav-section">
+                <h4>📘 Теоретические основы</h4>
+                <ul>
+                    <li><a href="#topic-atomic" class="nav-link">Строение атома</a></li>
+                    <li><a href="#topic-bond" class="nav-link">Химическая связь</a></li>
+                    <li><a href="#topic-solutions" class="nav-link">Растворы и диссоциация</a></li>
+                </ul>
+            </div>
+
+            <div class="nav-section">
+                <h4>🧪 Химия элементов</h4>
+                <ul>
+                    <li><a href="#topic-p-elements" class="nav-link">Неметаллы</a></li>
+                    <li><a href="#topic-metals" class="nav-link">Металлы</a></li>
+                </ul>
+            </div>
+
+            <div class="nav-section">
+                <h4>📝 Практика</h4>
+                <ul>
+                    <li><a href="#topic-algorithms" class="nav-link">Алгоритмы решений</a></li>
+                </ul>
+            </div>
+        </aside>
+    </div>
+
+    <footer>
+        <p>© 2026 Ресурсный центр «Химия»</p>
+        <p>Email: zz999an@yandex.by | г. Хойники, школа №3</p>
+    </footer>
+
+    <script>
+        const burger = document.getElementById('burger');
+        const mobileMenu = document.getElementById('mobileMenu');
+        const mobileLinks = document.querySelectorAll('.mobile-link');
+
+        if (burger) {
+            burger.addEventListener('click', () => {
+                burger.classList.toggle('active');
+                mobileMenu.classList.toggle('active');
+                document.body.style.overflow = mobileMenu.classList.contains('active') ? 'hidden' : '';
+            });
+
+            mobileLinks.forEach(link => {
+                link.addEventListener('click', () => {
+                    burger.classList.remove('active');
+                    mobileMenu.classList.remove('active');
+                    document.body.style.overflow = '';
+                });
+            });
+        }
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach((entry, index) => {
+                if (entry.isIntersecting) {
+                    setTimeout(() => entry.target.classList.add('visible'), index * 80);
+                }
+            });
+        }, { threshold: 0.1, rootMargin: "0px 0px -50px 0px" });
+
+        document.querySelectorAll('.material-item').forEach(el => observer.observe(el));
+
+        const sections = document.querySelectorAll('.material-item, .section-title');
+        const navLinks = document.querySelectorAll('.nav-link');
+
+        window.addEventListener('scroll', () => {
+            let current = '';
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop;
+                if (scrollY >= (sectionTop - 150)) {
+                    current = section.getAttribute('id');
+                }
+            });
+
+            navLinks.forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('href').slice(1) === current) {
+                    link.classList.add('active');
+                    link.closest('.nav-section').classList.remove('collapsed');
+                }
+            });
+        });
+
+        document.querySelectorAll('.nav-section h4').forEach(header => {
+            header.addEventListener('click', () => {
+                header.parentElement.classList.toggle('collapsed');
+            });
+        });
+    </script>
+</body>
+</html>
