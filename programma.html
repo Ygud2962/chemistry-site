@@ -3,100 +3,660 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Программа занятий - Ресурсный центр "Химия"</title>
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Raleway:wght@300;400;600&display=swap" rel="stylesheet">
+    <title>Программа - Ресурсный центр "Химия"</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Raleway:wght@300;400;500;600&display=swap" rel="stylesheet">
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        :root {
-            --primary: #0D3B2E; --primary-light: #1B5E5B; --accent: #C9A961;
-            --bg: #FAFAF7; --text: #2B2D42; --white: #FFFFFF;
-        }
-        html { scroll-behavior: smooth; }
-        body { font-family: 'Raleway', sans-serif; background: var(--bg); color: var(--text); line-height: 1.6; display: flex; flex-direction: column; min-height: 100vh; }
-        h1, h2, h3 { font-family: 'Playfair Display', serif; }
 
-        .nav {
-            position: fixed; top: 0; left: 0; right: 0;
-            background: rgba(255, 255, 255, 0.98); backdrop-filter: blur(15px);
-            padding: 1rem 2rem; box-shadow: 0 2px 20px rgba(13,59,46,0.1); z-index: 1000;
+        :root {
+            --primary: #0D3B2E;
+            --primary-light: #1B5E5B;
+            --accent: #C9A961;
+            --accent-light: #D4B570;
+            --bg: #FAFAF7;
+            --text: #2B2D42;
+            --white: #FFFFFF;
         }
-        .nav-container { max-width: 1200px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; }
-        .nav-logo { font-family: 'Playfair Display', serif; font-size: 1.3rem; font-weight: 700; color: var(--primary); text-decoration: none; letter-spacing: 1px; }
+
+        html { scroll-behavior: smooth; }
+
+        body {
+            font-family: 'Raleway', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        h1, h2, h3, h4 { font-family: 'Playfair Display', serif; }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(40px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes fadeInDown {
+            from { opacity: 0; transform: translateY(-40px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* Navigation */
+        .nav {
+            position: fixed;
+            top: 0; left: 0; right: 0;
+            background: rgba(255, 255, 255, 0.98);
+            backdrop-filter: blur(15px);
+            padding: 1rem 2rem;
+            box-shadow: 0 2px 20px rgba(13,59,46,0.1);
+            z-index: 1000;
+            animation: fadeInDown 0.8s ease;
+        }
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .nav-logo {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--primary);
+            letter-spacing: 1px;
+            z-index: 1001;
+        }
         .nav-links { display: flex; gap: 2rem; list-style: none; }
-        .nav-links a { color: var(--text); text-decoration: none; font-size: 0.9rem; font-weight: 600; transition: color 0.3s; position: relative; }
-        .nav-links a:after { content: ''; position: absolute; bottom: -4px; left: 0; width: 0; height: 2px; background: var(--accent); transition: width 0.3s; }
+        .nav-links a {
+            color: var(--text);
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: 600;
+            transition: color 0.3s;
+            position: relative;
+        }
+        .nav-links a:after {
+            content: '';
+            position: absolute;
+            bottom: -4px; left: 0;
+            width: 0; height: 2px;
+            background: var(--accent);
+            transition: width 0.3s;
+        }
         .nav-links a:hover { color: var(--accent); }
         .nav-links a:hover:after { width: 100%; }
 
-        .burger { display: none; flex-direction: column; justify-content: space-between; width: 28px; height: 20px; cursor: pointer; z-index: 1001; background: none; border: none; padding: 0; }
-        .burger span { display: block; width: 100%; height: 2px; background: var(--primary); transition: all 0.3s ease; border-radius: 2px; }
+        /* Burger */
+        .burger {
+            display: none;
+            flex-direction: column;
+            justify-content: space-between;
+            width: 28px; height: 20px;
+            cursor: pointer;
+            z-index: 1001;
+            background: none; border: none; padding: 0;
+        }
+        .burger span {
+            display: block;
+            width: 100%; height: 2px;
+            background: var(--primary);
+            transition: all 0.3s ease;
+            border-radius: 2px;
+        }
         .burger.active span:nth-child(1) { transform: translateY(9px) rotate(45deg); }
         .burger.active span:nth-child(2) { opacity: 0; transform: translateX(-10px); }
         .burger.active span:nth-child(3) { transform: translateY(-9px) rotate(-45deg); }
 
         .mobile-menu {
-            display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+            display: none;
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
             background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
-            z-index: 999; flex-direction: column; justify-content: center; align-items: center; opacity: 0; transition: opacity 0.4s ease;
+            z-index: 999;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            transition: opacity 0.4s ease;
         }
         .mobile-menu.active { display: flex; opacity: 1; }
         .mobile-menu ul { list-style: none; text-align: center; }
-        .mobile-menu li { margin: 1.5rem 0; transform: translateY(20px); opacity: 0; transition: all 0.4s ease; }
+        .mobile-menu li {
+            margin: 1.5rem 0;
+            transform: translateY(20px);
+            opacity: 0;
+            transition: all 0.4s ease;
+        }
         .mobile-menu.active li { transform: translateY(0); opacity: 1; }
         .mobile-menu.active li:nth-child(1) { transition-delay: 0.1s; }
         .mobile-menu.active li:nth-child(2) { transition-delay: 0.2s; }
         .mobile-menu.active li:nth-child(3) { transition-delay: 0.3s; }
         .mobile-menu.active li:nth-child(4) { transition-delay: 0.4s; }
-        .mobile-menu a { color: var(--white); text-decoration: none; font-family: 'Playfair Display', serif; font-size: 2rem; font-weight: 600; letter-spacing: 1px; }
+        .mobile-menu a {
+            color: var(--white);
+            text-decoration: none;
+            font-family: 'Playfair Display', serif;
+            font-size: 2rem;
+            font-weight: 600;
+            letter-spacing: 1px;
+            transition: color 0.3s;
+        }
         .mobile-menu a:hover { color: var(--accent); }
 
-        .content-wrapper { flex: 1; display: flex; align-items: center; justify-content: center; padding: 8rem 2rem 4rem; }
-        
-        .coming-soon-card {
-            background: var(--white);
-            border-radius: 20px;
-            padding: 4rem 3rem;
+        /* Header */
+        .header {
+            background: linear-gradient(-45deg, var(--primary), var(--primary-light), #0f4d45, #1a5f5a);
+            background-size: 400% 400%;
+            animation: gradientShift 15s ease infinite;
+            color: var(--white);
+            padding: 8rem 2rem 4rem;
             text-align: center;
-            box-shadow: 0 15px 40px rgba(13,59,46,0.1);
-            max-width: 600px;
-            width: 100%;
-            animation: fadeIn 0.8s ease-out;
-            border-top: 5px solid var(--accent);
+            position: relative;
+            overflow: hidden;
+        }
+        .header:before {
+            content: '';
+            position: absolute;
+            top: -50%; right: -10%;
+            width: 600px; height: 600px;
+            background: radial-gradient(circle, rgba(201,169,97,0.15) 0%, transparent 70%);
+            animation: float 20s ease-in-out infinite;
+            border-radius: 50%;
+        }
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            33% { transform: translateY(-20px) rotate(5deg); }
+            66% { transform: translateY(-10px) rotate(-5deg); }
+        }
+        .header h1 {
+            font-size: 2.8rem;
+            margin-bottom: 1rem;
+            letter-spacing: 2px;
+            animation: fadeInDown 1s ease;
+            position: relative; z-index: 1;
+        }
+        .header p {
+            font-size: 1.1rem;
+            opacity: 0.95;
+            font-weight: 300;
+            max-width: 700px;
+            margin: 0 auto;
+            animation: fadeInUp 1s ease 0.3s both;
+            position: relative; z-index: 1;
         }
 
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
+        .content {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 4rem 2rem;
         }
 
-        .coming-soon-icon { font-size: 5rem; margin-bottom: 1.5rem; display: block; animation: pulse 2s infinite; }
-        @keyframes pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.1); } }
-
-        .coming-soon-card h1 { font-size: 2.2rem; color: var(--primary); margin-bottom: 1rem; }
-        .coming-soon-card p { font-size: 1.1rem; color: var(--text); opacity: 0.8; margin-bottom: 2.5rem; line-height: 1.7; }
-
-        .btn-back {
-            display: inline-block; padding: 1rem 2.5rem;
-            background: linear-gradient(135deg, var(--accent), #D4B570);
-            color: var(--primary); text-decoration: none; border-radius: 50px;
-            font-weight: 600; font-size: 1rem; letter-spacing: 1px;
-            transition: all 0.3s ease; box-shadow: 0 10px 30px rgba(201,169,97,0.4);
+        /* TOC */
+        .toc {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+            gap: 0.8rem;
+            background: var(--white);
+            padding: 1.8rem;
+            border-radius: 15px;
+            margin-bottom: 3rem;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.06);
+            border-left: 4px solid var(--accent);
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s ease;
         }
-        .btn-back:hover { transform: translateY(-3px); box-shadow: 0 15px 40px rgba(201,169,97,0.6); }
+        .toc.visible { opacity: 1; transform: translateY(0); }
+        .toc a {
+            display: flex;
+            align-items: center;
+            gap: 0.7rem;
+            padding: 0.8rem 1rem;
+            background: var(--bg);
+            border-radius: 10px;
+            color: var(--text);
+            text-decoration: none;
+            font-size: 0.88rem;
+            font-weight: 600;
+            transition: all 0.25s;
+            border: 1px solid transparent;
+        }
+        .toc a:before {
+            content: '';
+            width: 7px;
+            height: 7px;
+            border-radius: 50%;
+            background: var(--accent);
+            flex-shrink: 0;
+            transition: all 0.25s;
+        }
+        .toc a:hover {
+            background: var(--white);
+            border-color: var(--accent);
+            color: var(--primary);
+            transform: translateX(3px);
+        }
+        .toc a:hover:before {
+            background: var(--primary);
+            box-shadow: 0 0 8px var(--primary);
+        }
 
+        /* Document sections */
+        .doc-section {
+            background: var(--white);
+            border-radius: 15px;
+            padding: 2.5rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.06);
+            border-left: 4px solid var(--accent);
+            scroll-margin-top: 100px;
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .doc-section.visible { opacity: 1; transform: translateY(0); }
+
+        .doc-section h2 {
+            font-family: 'Playfair Display', serif;
+            color: var(--primary);
+            font-size: 1.6rem;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid var(--bg);
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        .doc-section h2 .num {
+            background: linear-gradient(135deg, var(--primary), var(--primary-light));
+            color: var(--white);
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.05rem;
+            font-weight: 700;
+            flex-shrink: 0;
+            font-family: 'Raleway', sans-serif;
+            box-shadow: 0 4px 15px rgba(13,59,46,0.3);
+        }
+
+        .doc-section h3 {
+            font-family: 'Playfair Display', serif;
+            color: var(--primary);
+            font-size: 1.15rem;
+            margin: 1.5rem 0 0.8rem;
+            font-weight: 600;
+        }
+        .doc-section h3 .sub {
+            color: var(--accent);
+            font-family: 'Raleway', sans-serif;
+            font-weight: 700;
+            font-size: 1rem;
+            margin-right: 0.5rem;
+        }
+
+        .clause {
+            font-size: 0.95rem;
+            line-height: 1.75;
+            color: var(--text);
+            margin-bottom: 0.9rem;
+            opacity: 0.9;
+        }
+        .clause .n {
+            font-weight: 700;
+            color: var(--accent);
+            margin-right: 0.5rem;
+        }
+
+        .doc-list {
+            list-style: none;
+            padding-left: 0;
+            margin: 0.8rem 0 1.2rem;
+        }
+        .doc-list li {
+            position: relative;
+            padding: 0.5rem 0 0.5rem 1.8rem;
+            font-size: 0.93rem;
+            line-height: 1.65;
+            color: var(--text);
+            opacity: 0.9;
+        }
+        .doc-list li:before {
+            content: "–";
+            position: absolute;
+            left: 0;
+            color: var(--accent);
+            font-weight: 700;
+            font-size: 1.05rem;
+        }
+
+        /* Плашка-заглушка */
+        .placeholder-note {
+            background: linear-gradient(135deg, rgba(201,169,97,0.1), rgba(201,169,97,0.05));
+            border-left: 3px solid var(--accent);
+            padding: 1rem 1.3rem;
+            border-radius: 10px;
+            font-size: 0.88rem;
+            color: var(--text);
+            opacity: 0.85;
+            font-style: italic;
+            margin-top: 1rem;
+        }
+
+        /* Quote */
+        .quote-block {
+            text-align: center;
+            padding: 3rem 1rem 1rem;
+            margin-top: 1rem;
+        }
+        .quote-block .quote-mark {
+            display: block;
+            font-family: 'Playfair Display', serif;
+            font-size: 5rem;
+            color: var(--accent);
+            line-height: 0.8;
+            margin-bottom: 0.5rem;
+            opacity: 0.5;
+        }
+        .quote-block .quote-text {
+            font-family: 'Playfair Display', serif;
+            font-style: italic;
+            font-weight: 400;
+            font-size: clamp(1.2rem, 2.5vw, 1.9rem);
+            line-height: 1.45;
+            max-width: 700px;
+            margin: 0 auto;
+            color: var(--primary);
+        }
+        .quote-block .quote-author {
+            margin-top: 1.5rem;
+            font-size: 0.8rem;
+            color: var(--accent);
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            font-weight: 700;
+        }
+
+        /* Footer */
         footer {
             background: linear-gradient(135deg, var(--text), #1a1a2e);
-            color: var(--white); text-align: center; padding: 2.5rem; font-size: 0.9rem; position: relative;
+            color: var(--white);
+            text-align: center;
+            padding: 2.5rem;
+            margin-top: 5rem;
+            font-size: 0.9rem;
+            position: relative;
+            overflow: hidden;
         }
-        footer:before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; background: linear-gradient(90deg, var(--accent), var(--accent-light)); }
+        footer:before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--accent), var(--accent-light));
+        }
 
+        /* ============================================================
+           КНОПКА НАВЕРХ
+           ============================================================ */
+        .to-top {
+            position: fixed;
+            bottom: 6.5rem;
+            right: 2rem;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: var(--primary);
+            color: var(--white);
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 10px 30px rgba(13,59,46,0.35);
+            opacity: 0;
+            pointer-events: none;
+            transition: all 0.3s;
+            z-index: 997;
+        }
+        .to-top.show { opacity: 1; pointer-events: auto; }
+        .to-top:hover {
+            transform: translateY(-3px);
+            background: var(--primary-light);
+        }
+
+        /* ============================================================
+           СКАЧИВАНИЕ
+           ============================================================ */
+        .download-fab {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            z-index: 998;
+            font-family: 'Raleway', sans-serif;
+        }
+        .download-main {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary), var(--primary-light));
+            color: var(--white);
+            border: none;
+            box-shadow: 0 10px 30px rgba(13,59,46,0.35);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+        }
+        .download-main:before {
+            content: '';
+            position: absolute;
+            inset: -3px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--accent), var(--accent-light));
+            z-index: -1;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+        .download-main:hover {
+            transform: scale(1.08) translateY(-2px);
+            box-shadow: 0 15px 40px rgba(13,59,46,0.5);
+        }
+        .download-main:hover:before { opacity: 1; }
+        .download-main.active svg { transform: rotate(180deg); }
+        .download-main svg { transition: transform 0.3s; }
+
+        .download-popup {
+            position: absolute;
+            bottom: 78px;
+            right: 0;
+            background: var(--white);
+            border-radius: 16px;
+            padding: 0.6rem;
+            box-shadow: 0 15px 50px rgba(13,59,46,0.25);
+            min-width: 260px;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(15px) scale(0.95);
+            transform-origin: bottom right;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            border: 1px solid rgba(201,169,97,0.2);
+        }
+        .download-popup.active {
+            opacity: 1; visibility: visible;
+            transform: translateY(0) scale(1);
+        }
+        .download-popup-header {
+            padding: 0.6rem 1rem 0.5rem;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            color: var(--accent);
+            font-weight: 700;
+            border-bottom: 1px solid rgba(201,169,97,0.15);
+            margin-bottom: 0.4rem;
+        }
+        .download-option {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            width: 100%;
+            padding: 12px 14px;
+            border: none;
+            background: transparent;
+            border-radius: 10px;
+            cursor: pointer;
+            text-align: left;
+            transition: background 0.2s;
+            font-family: 'Raleway', sans-serif;
+        }
+        .download-option:hover { background: rgba(201,169,97,0.1); }
+        .download-option:hover .download-option-icon {
+            background: var(--accent);
+            color: var(--white);
+        }
+        .download-option-icon {
+            font-size: 1.3rem;
+            width: 40px; height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(201,169,97,0.15);
+            border-radius: 10px;
+            flex-shrink: 0;
+            transition: all 0.2s;
+        }
+        .download-option-text { flex: 1; min-width: 0; }
+        .download-option strong {
+            display: block;
+            color: var(--primary);
+            font-size: 0.92rem;
+            margin-bottom: 2px;
+            font-weight: 600;
+        }
+        .download-option small {
+            display: block;
+            color: #888;
+            font-size: 0.75rem;
+            line-height: 1.3;
+        }
+
+        .download-toast {
+            position: fixed;
+            bottom: 7rem;
+            right: 2rem;
+            background: var(--primary);
+            color: var(--white);
+            padding: 0.9rem 1.3rem;
+            border-radius: 12px;
+            font-size: 0.88rem;
+            box-shadow: 0 10px 30px rgba(13,59,46,0.4);
+            z-index: 999;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            opacity: 0;
+            transform: translateY(15px);
+            pointer-events: none;
+            transition: all 0.3s;
+            max-width: calc(100vw - 4rem);
+        }
+        .download-toast.show { opacity: 1; transform: translateY(0); }
+
+        /* Responsive */
         @media (max-width: 768px) {
             .nav { padding: 1rem 1.5rem; }
             .nav-links { display: none; }
             .burger { display: flex; }
-            .content-wrapper { padding: 6rem 1.5rem 3rem; }
-            .coming-soon-card { padding: 3rem 2rem; }
-            .coming-soon-card h1 { font-size: 1.8rem; }
+            .header { padding: 6.5rem 1.5rem 3rem; }
+            .header h1 { font-size: 2rem; }
+            .header p { font-size: 1rem; }
+            .content { padding: 3rem 1.5rem; }
+            .doc-section { padding: 1.6rem 1.3rem; }
+            .doc-section h2 { font-size: 1.25rem; gap: 0.7rem; }
+            .doc-section h2 .num { width: 38px; height: 38px; font-size: 0.95rem; }
+            .toc { padding: 1.3rem; gap: 0.6rem; }
+            .toc a { padding: 0.7rem 0.9rem; font-size: 0.82rem; }
+            .clause { font-size: 0.9rem; }
+            .doc-list li { font-size: 0.88rem; }
+
+            .to-top {
+                width: 44px; height: 44px;
+                bottom: 5.4rem; right: 1.2rem;
+            }
+            .download-fab { bottom: 1.2rem; right: 1.2rem; }
+            .download-main { width: 54px; height: 54px; }
+            .download-popup {
+                bottom: 70px;
+                min-width: calc(100vw - 3rem);
+                right: 0;
+            }
+            .download-toast {
+                bottom: 5.5rem;
+                right: 1.2rem;
+                left: 1.2rem;
+                max-width: none;
+            }
+        }
+
+        .scroll-animate {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .scroll-animate.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* ============================================================
+           PRINT
+           ============================================================ */
+        @media print {
+            @page { margin: 1.5cm; size: A4; }
+            body { background: white !important; }
+            .nav, .mobile-menu, .burger,
+            .download-fab, .download-popup, .download-toast,
+            .to-top { display: none !important; }
+            .header {
+                background: var(--primary) !important;
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+                animation: none !important;
+                padding: 2rem 1.5rem !important;
+            }
+            .header:before { display: none !important; }
+            .header h1, .header p {
+                animation: none !important;
+                color: white !important;
+            }
+            .content { padding: 1.5rem 0 !important; max-width: 100% !important; }
+            .toc, .doc-section {
+                box-shadow: 0 2px 8px rgba(0,0,0,0.08) !important;
+                opacity: 1 !important;
+                transform: none !important;
+                page-break-inside: avoid;
+                break-inside: avoid;
+            }
+            .toc { margin-bottom: 1.5rem !important; }
+            .doc-section { margin-bottom: 1.5rem !important; padding: 1.5rem !important; }
+            .scroll-animate { opacity: 1 !important; transform: none !important; }
+            footer {
+                background: var(--text) !important;
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+                margin-top: 2rem !important;
+            }
+            footer:before { display: none !important; }
         }
     </style>
 </head>
@@ -104,11 +664,11 @@
 
     <nav class="nav">
         <div class="nav-container">
-            <a href="index.html" class="nav-logo">⚗️ ХИМИЯ</a>
+            <div class="nav-logo">🧪 ХИМИЯ</div>
             <ul class="nav-links">
                 <li><a href="index.html">Главная</a></li>
-                <li><a href="index.html#about">О центре</a></li>
-                <li><a href="index.html#sections">Разделы</a></li>
+                <li><a href="programma.html">Программа</a></li>
+                <li><a href="plan.html">План</a></li>
                 <li><a href="contacts.html">Контакты</a></li>
             </ul>
             <button class="burger" id="burger" aria-label="Меню">
@@ -122,44 +682,417 @@
     <div class="mobile-menu" id="mobileMenu">
         <ul>
             <li><a href="index.html" class="mobile-link">Главная</a></li>
-            <li><a href="index.html#about" class="mobile-link">О центре</a></li>
-            <li><a href="index.html#sections" class="mobile-link">Разделы</a></li>
+            <li><a href="programma.html" class="mobile-link">Программа</a></li>
+            <li><a href="plan.html" class="mobile-link">План</a></li>
             <li><a href="contacts.html" class="mobile-link">Контакты</a></li>
         </ul>
     </div>
 
-    <div class="content-wrapper">
-        <div class="coming-soon-card">
-            <span class="coming-soon-icon">📋</span>
-            <h1>Программа занятий</h1>
-            <p>Раздел наполняется актуальными материалами.<br>Скоро здесь появится учебная программа ресурсного центра.</p>
-            <a href="index.html" class="btn-back">Вернуться на главную</a>
+    <div class="header">
+        <h1>📋 Программа</h1>
+        <p>Программа ресурсного центра по учебному предмету «Химия»</p>
+    </div>
+
+    <div class="content">
+
+        <!-- ОГЛАВЛЕНИЕ -->
+        <nav class="toc scroll-animate" id="toc">
+            <a href="#s1">1. Пояснительная записка</a>
+            <a href="#s2">2. Цели и задачи</a>
+            <a href="#s3">3. Содержание программы</a>
+            <a href="#s4">4. Учебно-тематический план</a>
+            <a href="#s5">5. Формы и методы</a>
+            <a href="#s6">6. Ожидаемые результаты</a>
+            <a href="#s7">7. Список литературы</a>
+        </nav>
+
+        <!-- ============================================================
+             РАЗДЕЛ 1
+             ============================================================ -->
+        <section class="doc-section scroll-animate" id="s1">
+            <h2><span class="num">1</span> Пояснительная записка</h2>
+            <p class="clause">
+                <span class="n">1.1.</span> Настоящая программа определяет содержание, цели, задачи и организацию образовательного процесса в ресурсном центре по учебному предмету «Химия» ГУО «Средняя школа №3 г. Хойники».
+            </p>
+            <p class="clause">
+                <span class="n">1.2.</span> Программа разработана в соответствии с нормативными документами Министерства образования Республики Беларусь и направлена на углублённое изучение химии, развитие исследовательских навыков и подготовку учащихся к олимпиадам.
+            </p>
+            <div class="placeholder-note">
+                ✏️ <strong>Сюда вставляется текст раздела 1 из вашей программы.</strong> Скиньте содержимое — оформлю 1 в 1 в этом же стиле.
+            </div>
+        </section>
+
+        <!-- ============================================================
+             РАЗДЕЛ 2
+             ============================================================ -->
+        <section class="doc-section scroll-animate" id="s2">
+            <h2><span class="num">2</span> Цели и задачи программы</h2>
+            <p class="clause">
+                <span class="n">2.1.</span> <strong>Цель программы:</strong> создание условий для углублённого изучения химии, развития познавательного интереса и подготовки учащихся к участию в олимпиадах и научно-исследовательской деятельности.
+            </p>
+            <p class="clause">
+                <span class="n">2.2.</span> <strong>Задачи программы:</strong>
+            </p>
+            <ul class="doc-list">
+                <li>формирование системы химических знаний и умений;</li>
+                <li>развитие навыков решения расчётных и экспериментальных задач;</li>
+                <li>совершенствование практических навыков работы в химической лаборатории;</li>
+                <li>подготовка к олимпиадам и конкурсам по химии;</li>
+                <li>воспитание безопасного и ответственного отношения к химическим веществам.</li>
+            </ul>
+            <div class="placeholder-note">
+                ✏️ <strong>Сюда вставляется текст раздела 2.</strong>
+            </div>
+        </section>
+
+        <!-- ============================================================
+             РАЗДЕЛ 3
+             ============================================================ -->
+        <section class="doc-section scroll-animate" id="s3">
+            <h2><span class="num">3</span> Содержание программы</h2>
+            <h3><span class="sub">3.1.</span> 9 класс</h3>
+            <p class="clause">
+                Основы химии. Периодический закон и строение атома. Химическая связь и строение вещества. Основные классы неорганических веществ. Основы термохимии, кинетики, электролитической диссоциации. Введение в органическую химию.
+            </p>
+            <h3><span class="sub">3.2.</span> 10 класс</h3>
+            <p class="clause">
+                Теория строения атома и химической связи. Строение вещества. Протолитическая теория кислот и оснований. Химическая термодинамика и кинетика. Углеводороды. Кислород- и азотсодержащие органические соединения.
+            </p>
+            <h3><span class="sub">3.3.</span> 11 класс</h3>
+            <p class="clause">
+                Углублённое изучение строения вещества и химических процессов. Химическая термодинамика и кинетика. Комплексные соединения. Органическая химия. Основы биохимии.
+            </p>
+            <div class="placeholder-note">
+                ✏️ <strong>Сюда вставляется подробное содержание программы.</strong>
+            </div>
+        </section>
+
+        <!-- ============================================================
+             РАЗДЕЛ 4
+             ============================================================ -->
+        <section class="doc-section scroll-animate" id="s4">
+            <h2><span class="num">4</span> Учебно-тематический план</h2>
+            <p class="clause">
+                Программа рассчитана на учащихся 9–11 классов и включает теоретические и практические занятия по основным разделам химии.
+            </p>
+            <ul class="doc-list">
+                <li>Общее количество занятий — 37;</li>
+                <li>Теоретические занятия — 31;</li>
+                <li>Практические занятия — 6;</li>
+                <li>Период реализации — сентябрь 2026 — май 2027.</li>
+            </ul>
+            <div class="placeholder-note">
+                ✏️ <strong>Сюда вставляется учебно-тематический план.</strong>
+            </div>
+        </section>
+
+        <!-- ============================================================
+             РАЗДЕЛ 5
+             ============================================================ -->
+        <section class="doc-section scroll-animate" id="s5">
+            <h2><span class="num">5</span> Формы и методы работы</h2>
+            <p class="clause">
+                Основные формы организации занятий:
+            </p>
+            <ul class="doc-list">
+                <li>теоретические занятия (лекции, семинары);</li>
+                <li>практические и лабораторные работы;</li>
+                <li>решение олимпиадных задач;</li>
+                <li>индивидуальные и групповые консультации;</li>
+                <li>самостоятельная работа учащихся.</li>
+            </ul>
+            <p class="clause">
+                Основные методы обучения: объяснительно-иллюстративный, проблемный, исследовательский, проектный.
+            </p>
+            <div class="placeholder-note">
+                ✏️ <strong>Сюда вставляется описание форм и методов.</strong>
+            </div>
+        </section>
+
+        <!-- ============================================================
+             РАЗДЕЛ 6
+             ============================================================ -->
+        <section class="doc-section scroll-animate" id="s6">
+            <h2><span class="num">6</span> Ожидаемые результаты</h2>
+            <p class="clause">
+                По окончании программы учащиеся должны:
+            </p>
+            <ul class="doc-list">
+                <li>владеть системой химических знаний в объёме программы;</li>
+                <li>уметь решать расчётные и экспериментальные задачи;</li>
+                <li>владеть навыками безопасной работы с реактивами и оборудованием;</li>
+                <li>уметь применять полученные знания на олимпиадах и конкурсах;</li>
+                <li>демонстрировать устойчивый интерес к изучению химии.</li>
+            </ul>
+            <div class="placeholder-note">
+                ✏️ <strong>Сюда вставляются ожидаемые результаты.</strong>
+            </div>
+        </section>
+
+        <!-- ============================================================
+             РАЗДЕЛ 7
+             ============================================================ -->
+        <section class="doc-section scroll-animate" id="s7">
+            <h2><span class="num">7</span> Список литературы</h2>
+            <p class="clause">
+                Для реализации программы используются следующие источники:
+            </p>
+            <ul class="doc-list">
+                <li>учебные пособия по химии для 9–11 классов;</li>
+                <li>сборники олимпиадных задач;</li>
+                <li>методические рекомендации по проведению лабораторных работ;</li>
+                <li>справочники по химии;</li>
+                <li>электронные образовательные ресурсы.</li>
+            </ul>
+            <div class="placeholder-note">
+                ✏️ <strong>Сюда вставляется список литературы из вашей программы.</strong>
+            </div>
+        </section>
+
+        <!-- ЦИТАТА -->
+        <div class="quote-block scroll-animate">
+            <span class="quote-mark">"</span>
+            <div class="quote-text">Широко распростирает химия руки свои в дела человеческие.</div>
+            <div class="quote-author">— М. В. Ломоносов</div>
         </div>
     </div>
 
     <footer>
-        <p>© 2026 Ресурсный центр «Химия» | Корольчук О.Г.</p>
-        <p>ГУО «Средняя школа №3 г. Хойники»</p>
+        <p>© 2026 Ресурсный центр «Химия» | ГУО «Средняя школа №3 г. Хойники»</p>
+        <p>г. Хойники, школа №3</p>
     </footer>
 
+    <!-- КНОПКА НАВЕРХ -->
+    <button class="to-top" id="toTop" aria-label="Наверх">
+        <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="18 15 12 9 6 15"/>
+        </svg>
+    </button>
+
+    <!-- СКАЧИВАНИЕ -->
+    <div class="download-fab">
+        <div class="download-popup" id="downloadPopup">
+            <div class="download-popup-header">Скачать документ</div>
+            <button class="download-option" data-action="pdf">
+                <div class="download-option-icon">📄</div>
+                <div class="download-option-text">
+                    <strong>PDF</strong>
+                    <small>Для печати и отправки</small>
+                </div>
+            </button>
+            <button class="download-option" data-action="html">
+                <div class="download-option-icon">💻</div>
+                <div class="download-option-text">
+                    <strong>HTML</strong>
+                    <small>Точная копия страницы</small>
+                </div>
+            </button>
+            <button class="download-option" data-action="doc">
+                <div class="download-option-icon">📝</div>
+                <div class="download-option-text">
+                    <strong>Word (DOC)</strong>
+                    <small>Для редактирования</small>
+                </div>
+            </button>
+        </div>
+        <button class="download-main" id="downloadMain" aria-label="Скачать документ" title="Скачать">
+            <svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                <polyline points="7 10 12 15 17 10"/>
+                <line x1="12" y1="15" x2="12" y2="3"/>
+            </svg>
+        </button>
+    </div>
+
+    <div class="download-toast" id="downloadToast">
+        <span id="downloadToastIcon">⏳</span>
+        <span id="downloadToastText">Подготовка файла…</span>
+    </div>
+
     <script>
+        // ============ BURGER MENU ============
         const burger = document.getElementById('burger');
         const mobileMenu = document.getElementById('mobileMenu');
         const mobileLinks = document.querySelectorAll('.mobile-link');
 
-        burger.addEventListener('click', () => {
-            burger.classList.toggle('active');
-            mobileMenu.classList.toggle('active');
-            document.body.style.overflow = mobileMenu.classList.contains('active') ? 'hidden' : '';
+        if (burger) {
+            burger.addEventListener('click', () => {
+                burger.classList.toggle('active');
+                mobileMenu.classList.toggle('active');
+                document.body.style.overflow = mobileMenu.classList.contains('active') ? 'hidden' : '';
+            });
+            mobileLinks.forEach(link => {
+                link.addEventListener('click', () => {
+                    burger.classList.remove('active');
+                    mobileMenu.classList.remove('active');
+                    document.body.style.overflow = '';
+                });
+            });
+        }
+
+        // ============ SCROLL ANIMATIONS ============
+        const observerOptions = { threshold: 0.1, rootMargin: "0px 0px -50px 0px" };
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach((entry, index) => {
+                if (entry.isIntersecting) {
+                    setTimeout(() => {
+                        entry.target.classList.add('visible');
+                    }, index * 50);
+                }
+            });
+        }, observerOptions);
+        document.querySelectorAll('.scroll-animate').forEach((el) => observer.observe(el));
+
+        // ============ КНОПКА НАВЕРХ ============
+        const toTop = document.getElementById('toTop');
+        window.addEventListener('scroll', () => {
+            toTop.classList.toggle('show', window.scrollY > 500);
+        });
+        toTop.addEventListener('click', () => {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
         });
 
-        mobileLinks.forEach(link => {
-            link.addEventListener('click', () => {
-                burger.classList.remove('active');
-                mobileMenu.classList.remove('active');
-                document.body.style.overflow = '';
+        // ============ ПЛАВНЫЙ СКРОЛЛ ПО ОГЛАВЛЕНИЮ ============
+        document.querySelectorAll('.toc a').forEach(a => {
+            a.addEventListener('click', (e) => {
+                const target = document.querySelector(a.getAttribute('href'));
+                if (target) {
+                    e.preventDefault();
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            });
+        });
+
+        // ============ СКАЧИВАНИЕ ============
+        const downloadMain = document.getElementById('downloadMain');
+        const downloadPopup = document.getElementById('downloadPopup');
+        const downloadToast = document.getElementById('downloadToast');
+        const downloadToastIcon = document.getElementById('downloadToastIcon');
+        const downloadToastText = document.getElementById('downloadToastText');
+        let toastTimer = null;
+
+        downloadMain.addEventListener('click', (e) => {
+            e.stopPropagation();
+            downloadMain.classList.toggle('active');
+            downloadPopup.classList.toggle('active');
+        });
+
+        document.addEventListener('click', (e) => {
+            if (!e.target.closest('.download-fab')) {
+                downloadMain.classList.remove('active');
+                downloadPopup.classList.remove('active');
+            }
+        });
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                downloadMain.classList.remove('active');
+                downloadPopup.classList.remove('active');
+            }
+        });
+
+        function showToast(icon, text, duration = 3000) {
+            downloadToastIcon.textContent = icon;
+            downloadToastText.textContent = text;
+            downloadToast.classList.add('show');
+            clearTimeout(toastTimer);
+            toastTimer = setTimeout(() => downloadToast.classList.remove('show'), duration);
+        }
+
+        function closeMenu() {
+            downloadMain.classList.remove('active');
+            downloadPopup.classList.remove('active');
+        }
+
+        function downloadPDF() {
+            closeMenu();
+            showToast('📄', 'Открывается окно печати — выберите «Сохранить как PDF»', 4000);
+            setTimeout(() => window.print(), 400);
+        }
+
+        function downloadHTML() {
+            closeMenu();
+            showToast('💻', 'Готовим HTML-файл…', 1500);
+            try {
+                const clone = document.documentElement.cloneNode(true);
+                clone.querySelectorAll('.visible').forEach(el => el.classList.remove('visible'));
+                const fab = clone.querySelector('.download-fab');
+                if (fab) fab.remove();
+                const toast = clone.querySelector('.download-toast');
+                if (toast) toast.remove();
+                const tt = clone.querySelector('.to-top');
+                if (tt) tt.remove();
+                const mm = clone.querySelector('#mobileMenu');
+                if (mm) mm.classList.remove('active');
+                const burgerClone = clone.querySelector('#burger');
+                if (burgerClone) burgerClone.classList.remove('active');
+
+                const html = '<!DOCTYPE html>\n' + clone.outerHTML;
+                const blob = new Blob([html], { type: 'text/html;charset=utf-8' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = 'programma-himiya.html';
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                setTimeout(() => URL.revokeObjectURL(url), 1000);
+                setTimeout(() => showToast('✅', 'HTML-файл скачан', 2500), 400);
+            } catch (err) {
+                showToast('⚠️', 'Не удалось скачать HTML', 3000);
+            }
+        }
+
+        function downloadDOC() {
+            closeMenu();
+            showToast('📝', 'Готовим Word-документ…', 1500);
+            try {
+                const styles = Array.from(document.querySelectorAll('style')).map(s => s.textContent).join('\n');
+                const headerHTML = document.querySelector('.header').outerHTML;
+                const contentHTML = document.querySelector('.content').outerHTML;
+                const footerHTML = document.querySelector('footer').outerHTML;
+
+                const doc = `<html xmlns:o="urn:schemas-microsoft-com:office:office"
+xmlns:w="urn:schemas-microsoft-com:office:word"
+xmlns="http://www.w3.org/TR/REC-html40">
+<head>
+<meta charset="UTF-8">
+<meta name=ProgId content=Word.Document>
+<meta name=Generator content="Microsoft Word 15">
+<title>Программа — Ресурсный центр «Химия»</title>
+<style>${styles}</style>
+</head>
+<body>
+${headerHTML}
+${contentHTML}
+${footerHTML}
+</body>
+</html>`;
+
+                const blob = new Blob(['\ufeff', doc], { type: 'application/msword' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = 'programma-himiya.doc';
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                setTimeout(() => URL.revokeObjectURL(url), 1000);
+                setTimeout(() => showToast('✅', 'Word-документ скачан', 2500), 400);
+            } catch (err) {
+                showToast('⚠️', 'Не удалось скачать DOC', 3000);
+            }
+        }
+
+        document.querySelectorAll('.download-option').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const action = btn.dataset.action;
+                if (action === 'pdf') downloadPDF();
+                else if (action === 'html') downloadHTML();
+                else if (action === 'doc') downloadDOC();
             });
         });
     </script>
+
 </body>
 </html>
