@@ -7,7 +7,7 @@
 <style>
   :root {
     --bg: #f8fafc; --card: #fff; --text: #1e293b; --muted: #64748b;
-    --border: #e2e8f0; --accent: #2563eb;
+    --border: #e2e8f0; --accent: #2563eb; --accent-soft: rgba(37,99,235,.15);
     --c-nonmetal: #6ee7b7; --c-noble: #c4b5fd; --c-alkali: #fca5a5;
     --c-alkaline: #fdba74; --c-metalloid: #86efac; --c-halogen: #67e8f9;
     --c-post: #d1d5db; --c-transition: #fde68a; --c-lanthanide: #fbcfe8;
@@ -19,10 +19,13 @@
     background: var(--bg); color: var(--text); line-height: 1.6;
   }
   body.modal-open { overflow: hidden; }
+
+  /* ===== HEADER ===== */
   header {
     background: var(--card); border-bottom: 1px solid var(--border);
     padding: 1rem 2rem; position: sticky; top: 0; z-index: 50;
     box-shadow: 0 1px 3px rgba(0,0,0,.05);
+    animation: fadeIn .4s ease;
   }
   header nav {
     display: flex; gap: 1.5rem; align-items: center; flex-wrap: wrap;
@@ -30,32 +33,68 @@
   }
   header nav a {
     color: var(--text); text-decoration: none; font-weight: 500;
-    padding: .25rem .5rem; border-radius: 6px; transition: background .2s;
+    padding: .25rem .5rem; border-radius: 6px;
+    transition: background .2s, color .2s, transform .15s;
+    position: relative;
   }
-  header nav a:hover { background: var(--border); }
+  header nav a::after {
+    content: ''; position: absolute; left: 50%; bottom: -2px;
+    width: 0; height: 2px; background: var(--accent);
+    transition: width .25s ease, left .25s ease;
+    border-radius: 1px;
+  }
+  header nav a:hover { background: var(--border); transform: translateY(-1px); }
+  header nav a:hover::after { width: 70%; left: 15%; }
   header nav a.active { background: var(--accent); color: #fff; }
+  header nav a.active::after { display: none; }
+
+  /* ===== MAIN ===== */
   main { max-width: 1400px; margin: 0 auto; padding: 2rem; }
-  h1 { font-size: 1.75rem; margin: 0 0 .5rem; }
-  .subtitle { color: var(--muted); margin: 0 0 1.5rem; }
-  .controls { display: flex; gap: 1rem; flex-wrap: wrap; margin-bottom: 1rem; align-items: center; }
+  h1 { font-size: 1.75rem; margin: 0 0 .5rem; opacity: 0; animation: fadeUp .5s ease .05s forwards; }
+  .subtitle { color: var(--muted); margin: 0 0 1.5rem; opacity: 0; animation: fadeUp .5s ease .15s forwards; }
+  .controls { display: flex; gap: 1rem; flex-wrap: wrap; margin-bottom: 1rem; align-items: center; opacity: 0; animation: fadeUp .5s ease .25s forwards; }
+
+  /* ===== SEARCH ===== */
   .search-box { flex: 1; min-width: 250px; }
   .search-box input {
     width: 100%; padding: .75rem 1rem; border: 2px solid var(--border);
-    border-radius: 10px; font-size: 1rem; outline: none; transition: border-color .2s;
+    border-radius: 10px; font-size: 1rem; outline: none;
     background: var(--card); color: var(--text);
+    transition: border-color .2s, box-shadow .25s, transform .15s;
   }
-  .search-box input:focus { border-color: var(--accent); }
+  .search-box input:focus {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 4px var(--accent-soft);
+  }
+  .search-box input.no-results {
+    border-color: #ef4444;
+    box-shadow: 0 0 0 4px rgba(239,68,68,.15);
+    animation: shake .4s ease;
+  }
+
+  /* ===== FILTER BUTTONS ===== */
   .filter-buttons { display: flex; gap: .5rem; flex-wrap: wrap; }
   .filter-btn {
     padding: .45rem .9rem; border: 2px solid var(--border); background: var(--card);
     border-radius: 8px; cursor: pointer; font-size: .85rem; font-weight: 500;
-    transition: all .2s; color: var(--text);
+    color: var(--text);
+    transition: transform .15s ease, border-color .2s, background .2s, color .2s, box-shadow .2s;
   }
-  .filter-btn:hover { border-color: var(--accent); }
-  .filter-btn.active { background: var(--accent); color: #fff; border-color: var(--accent); }
+  .filter-btn:hover {
+    border-color: var(--accent); transform: translateY(-2px);
+    box-shadow: 0 4px 10px rgba(37,99,235,.12);
+  }
+  .filter-btn:active { transform: translateY(0) scale(.97); }
+  .filter-btn.active {
+    background: var(--accent); color: #fff; border-color: var(--accent);
+    animation: btnPop .35s ease;
+  }
+
+  /* ===== TABLE ===== */
   .table-wrapper {
     overflow-x: auto; background: var(--card); border-radius: 12px;
     padding: 1.5rem; box-shadow: 0 1px 3px rgba(0,0,0,.05); margin-bottom: 1.5rem;
+    opacity: 0; animation: fadeUp .5s ease .35s forwards;
   }
   .periodic-table {
     display: grid;
@@ -63,35 +102,64 @@
     grid-template-rows: repeat(10, auto);
     gap: 4px; min-width: 1080px;
   }
+
+  /* ===== ELEMENTS ===== */
   .element {
     aspect-ratio: 1; border-radius: 6px; padding: 4px; cursor: pointer;
     display: flex; flex-direction: column; align-items: center; justify-content: center;
-    transition: all .15s; border: 2px solid transparent; position: relative;
+    border: 2px solid transparent; position: relative;
     user-select: none; overflow: hidden;
+    transition: transform .15s ease, box-shadow .25s ease,
+                opacity .35s ease, border-color .25s ease, background .25s ease;
+    animation: popIn .5s cubic-bezier(.34,1.56,.64,1) backwards;
+    animation-delay: var(--anim-delay, 0ms);
+    will-change: transform, opacity;
   }
-  .element:hover { transform: scale(1.08); z-index: 10; box-shadow: 0 4px 12px rgba(0,0,0,.15); }
-  .element.selected { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(37,99,235,.3); }
-  .element.dimmed { opacity: .18; }
+  .element:hover {
+    transform: scale(1.12) translateY(-2px); z-index: 10;
+    box-shadow: 0 8px 20px rgba(0,0,0,.2), 0 0 0 2px rgba(255,255,255,.9);
+  }
+  .element:active { transform: scale(.96); transition: transform .08s; }
+  .element.selected {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px var(--accent-soft), 0 0 24px rgba(37,99,235,.4);
+    z-index: 11;
+  }
+  .element.dimmed {
+    opacity: .18; pointer-events: none;
+    transform: scale(.85);
+  }
   .element .num {
     font-size: .6rem; position: absolute; top: 2px; left: 4px;
     color: rgba(0,0,0,.55); font-variant-numeric: tabular-nums;
+    transition: transform .25s;
   }
-  .element .sym { font-size: 1.1rem; font-weight: 700; line-height: 1; }
+  .element:hover .num { transform: translateY(-1px); }
+  .element .sym {
+    font-size: 1.1rem; font-weight: 700; line-height: 1;
+    transition: transform .3s cubic-bezier(.34,1.56,.64,1);
+  }
+  .element:hover .sym { transform: scale(1.18) rotate(-6deg); }
   .element .name {
     font-size: .55rem; text-align: center; line-height: 1.1; margin-top: 2px;
     color: rgba(0,0,0,.75); white-space: nowrap; overflow: hidden;
     text-overflow: ellipsis; max-width: 100%;
+    transition: opacity .2s;
   }
-  .cat-nonmetal { background: var(--c-nonmetal); }
-  .cat-noble { background: var(--c-noble); }
-  .cat-alkali { background: var(--c-alkali); }
-  .cat-alkaline { background: var(--c-alkaline); }
-  .cat-metalloid { background: var(--c-metalloid); }
-  .cat-halogen { background: var(--c-halogen); }
-  .cat-post { background: var(--c-post); }
+  .element:hover .name { opacity: .9; }
+
+  /* ===== CATEGORIES ===== */
+  .cat-nonmetal   { background: var(--c-nonmetal); }
+  .cat-noble      { background: var(--c-noble); }
+  .cat-alkali     { background: var(--c-alkali); }
+  .cat-alkaline   { background: var(--c-alkaline); }
+  .cat-metalloid  { background: var(--c-metalloid); }
+  .cat-halogen    { background: var(--c-halogen); }
+  .cat-post       { background: var(--c-post); }
   .cat-transition { background: var(--c-transition); }
   .cat-lanthanide { background: var(--c-lanthanide); }
-  .cat-actinide { background: var(--c-actinide); }
+  .cat-actinide   { background: var(--c-actinide); }
+
   .fblock-label {
     display: flex; align-items: center; justify-content: center; font-size: .7rem;
     font-weight: 600; color: var(--muted); background: var(--bg); border-radius: 6px;
@@ -101,40 +169,84 @@
     display: flex; align-items: center; justify-content: center;
     background: var(--bg); border: 2px dashed var(--border); border-radius: 6px;
     font-size: .65rem; color: var(--muted); font-weight: 600; aspect-ratio: 1;
+    transition: background .25s;
   }
+  .placeholder:hover { background: #eef2f7; }
+
+  /* ===== LEGEND ===== */
   .legend {
     background: var(--card); border-radius: 12px; padding: 1rem 1.5rem;
     box-shadow: 0 1px 3px rgba(0,0,0,.05); display: flex; gap: 1rem;
     flex-wrap: wrap; font-size: .82rem;
+    opacity: 0; animation: fadeUp .5s ease .5s forwards;
   }
-  .legend-item { display: flex; align-items: center; gap: .5rem; }
-  .legend-swatch { width: 18px; height: 18px; border-radius: 4px; }
+  .legend-item {
+    display: flex; align-items: center; gap: .5rem;
+    transition: transform .15s;
+  }
+  .legend-item:hover { transform: translateY(-1px); }
+  .legend-swatch {
+    width: 18px; height: 18px; border-radius: 4px;
+    transition: transform .2s, box-shadow .2s;
+  }
+  .legend-item:hover .legend-swatch {
+    transform: rotate(8deg) scale(1.15);
+    box-shadow: 0 2px 8px rgba(0,0,0,.15);
+  }
 
   /* ===== MODAL ===== */
   .modal-overlay {
     position: fixed; inset: 0; background: rgba(15, 23, 42, .55);
-    backdrop-filter: blur(3px); display: flex; align-items: center; justify-content: center;
+    backdrop-filter: blur(3px); -webkit-backdrop-filter: blur(3px);
+    display: flex; align-items: center; justify-content: center;
     padding: 1rem; z-index: 1000; opacity: 0; pointer-events: none;
-    transition: opacity .2s ease;
+    transition: opacity .25s ease;
   }
   .modal-overlay.visible { opacity: 1; pointer-events: auto; }
   .modal {
     background: var(--card); border-radius: 16px; max-width: 520px; width: 100%;
-    padding: 1.75rem; box-shadow: 0 20px 60px rgba(0,0,0,.3);
-    position: relative; transform: scale(.92); opacity: 0;
-    transition: transform .25s cubic-bezier(.4,0,.2,1), opacity .2s ease;
-    max-height: 90vh; overflow-y: auto;
+    padding: 1.75rem; box-shadow: 0 20px 60px rgba(0,0,0,.35);
+    position: relative; max-height: 90vh; overflow-y: auto;
+    transform: scale(.9) translateY(20px); opacity: 0;
+    transition: transform .3s cubic-bezier(.34,1.56,.64,1), opacity .25s ease;
   }
-  .modal-overlay.visible .modal { transform: scale(1); opacity: 1; }
+  .modal-overlay.visible .modal {
+    transform: scale(1) translateY(0); opacity: 1;
+  }
   .modal-close {
     position: absolute; top: .75rem; right: .75rem;
     width: 36px; height: 36px; border-radius: 50%; border: none;
     background: var(--bg); color: var(--muted); font-size: 1.25rem;
     cursor: pointer; display: flex; align-items: center; justify-content: center;
-    transition: all .2s; line-height: 1;
+    transition: transform .25s cubic-bezier(.34,1.56,.64,1), background .2s, color .2s;
+    line-height: 1;
   }
-  .modal-close:hover { background: #fee2e2; color: #dc2626; transform: rotate(90deg); }
+  .modal-close:hover {
+    background: #fee2e2; color: #dc2626;
+    transform: rotate(90deg) scale(1.1);
+  }
+  .modal-close:active { transform: rotate(90deg) scale(.95); }
   .modal-close:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+  /* ===== MODAL CONTENT ANIMATIONS (гейтятся .visible) ===== */
+  .modal-overlay.visible .detail-symbol {
+    animation: popIn .55s cubic-bezier(.34,1.56,.64,1) .1s both;
+  }
+  .modal-overlay.visible .detail-title {
+    animation: fadeUp .45s ease .18s both;
+  }
+  .modal-overlay.visible .detail-item {
+    animation: fadeUp .4s ease both;
+  }
+  .modal-overlay.visible .detail-item:nth-child(1) { animation-delay: .26s; }
+  .modal-overlay.visible .detail-item:nth-child(2) { animation-delay: .31s; }
+  .modal-overlay.visible .detail-item:nth-child(3) { animation-delay: .36s; }
+  .modal-overlay.visible .detail-item:nth-child(4) { animation-delay: .41s; }
+  .modal-overlay.visible .detail-item:nth-child(5) { animation-delay: .46s; }
+  .modal-overlay.visible .modal-close {
+    animation: fadeIn .3s ease .2s both;
+  }
+
   .detail-header { display: flex; align-items: center; gap: 1.25rem; margin-bottom: 1.5rem; padding-right: 2.5rem; }
   .detail-symbol {
     width: 88px; height: 88px; border-radius: 12px; display: flex; flex-direction: column;
@@ -145,7 +257,13 @@
   .detail-title h2 { margin: 0 0 .25rem; font-size: 1.4rem; }
   .detail-title .cat-label { font-size: .9rem; color: var(--muted); }
   .detail-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: .75rem; }
-  .detail-item { background: var(--bg); padding: .7rem .9rem; border-radius: 8px; }
+  .detail-item {
+    background: var(--bg); padding: .7rem .9rem; border-radius: 8px;
+    transition: background .2s, transform .2s;
+  }
+  .detail-item:hover {
+    background: #eef2f7; transform: translateY(-1px);
+  }
   .detail-item .label {
     font-size: .7rem; color: var(--muted); text-transform: uppercase;
     letter-spacing: .05em; margin-bottom: .2rem;
@@ -153,6 +271,32 @@
   .detail-item .value { font-size: 1rem; font-weight: 600; font-variant-numeric: tabular-nums; }
 
   footer { text-align: center; padding: 2rem; color: var(--muted); font-size: .875rem; }
+
+  /* ===== KEYFRAMES ===== */
+  @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(14px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes popIn {
+    0% { opacity: 0; transform: scale(.35); }
+    60% { opacity: 1; transform: scale(1.08); }
+    100% { opacity: 1; transform: scale(1); }
+  }
+  @keyframes btnPop {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.09); }
+    100% { transform: scale(1); }
+  }
+  @keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    20% { transform: translateX(-6px); }
+    40% { transform: translateX(6px); }
+    60% { transform: translateX(-4px); }
+    80% { transform: translateX(4px); }
+  }
+
+  /* ===== RESPONSIVE ===== */
   @media (max-width: 768px) {
     main { padding: 1rem; }
     .periodic-table { min-width: 900px; }
@@ -160,17 +304,28 @@
     .element .sym { font-size: .9rem; }
     .modal { padding: 1.25rem; }
   }
+
+  /* ===== REDUCED MOTION ===== */
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+      animation-duration: .01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: .01ms !important;
+    }
+    .element { opacity: 1 !important; transform: none !important; }
+  }
 </style>
 </head>
 <body>
 <header>
   <nav>
-    <a href="index.html">⚗️ Главная</a>
-    <a href="materials.html">📚 Материалы</a>
-    <a href="periodic-table.html" class="active">⚛️ Таблица Менделеева</a>
-    <a href="olimpiads.html">🏆 Олимпиады</a>
-    <a href="plan.html">📅 План</a>
-    <a href="contacts.html">✉️ Контакты</a>
+    <a href="index.html">Главная</a>
+    <a href="index.html#about">О центре</a>
+    <a href="index.html#sections">Разделы</a>
+    <a href="materials.html">Материалы</a>
+    <a href="olimpiads.html">Олимпиады</a>
+    <a href="plan.html">План</a>
+    <a href="contacts.html">Контакты</a>
   </nav>
 </header>
 
@@ -192,7 +347,6 @@
   <div class="legend" id="legend"></div>
 </main>
 
-<!-- Модальное окно -->
 <div class="modal-overlay" id="modalOverlay" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
   <div class="modal">
     <button class="modal-close" id="modalClose" aria-label="Закрыть">✕</button>
@@ -368,6 +522,11 @@ ELEMENTS.forEach(el => {
   const [num, sym, name, , cat, group, period] = el;
   const { row, col } = gridPos(num, group, period);
   const div = document.createElement('div');
+
+  // Диагональная волна: задержка растёт от верхнего левого к нижнему правому
+  const delay = (row + col) * 20;
+  div.style.setProperty('--anim-delay', `${delay}ms`);
+
   div.className = `element cat-${cat}`;
   div.style.gridRow = row;
   div.style.gridColumn = col;
@@ -378,6 +537,7 @@ ELEMENTS.forEach(el => {
   cells[num] = div;
 });
 
+// Легенда
 Object.entries(CAT_LABELS).forEach(([cat, label]) => {
   const item = document.createElement('div');
   item.className = 'legend-item';
@@ -385,6 +545,7 @@ Object.entries(CAT_LABELS).forEach(([cat, label]) => {
   legend.appendChild(item);
 });
 
+// Фильтры
 let activeCat = null;
 Object.entries(CAT_LABELS).forEach(([cat, label]) => {
   const btn = document.createElement('button');
@@ -401,17 +562,29 @@ Object.entries(CAT_LABELS).forEach(([cat, label]) => {
 
 searchInput.addEventListener('input', applyFilters);
 
+let prevNoResults = false;
 function applyFilters() {
   const q = searchInput.value.trim().toLowerCase();
+  let visible = 0;
   ELEMENTS.forEach(el => {
     const [num, sym, name, , cat] = el;
     const matchesQ = !q || sym.toLowerCase().includes(q) || name.toLowerCase().includes(q) || String(num) === q;
     const matchesCat = !activeCat || cat === activeCat;
-    cells[num].classList.toggle('dimmed', !(matchesQ && matchesCat));
+    const match = matchesQ && matchesCat;
+    cells[num].classList.toggle('dimmed', !match);
+    if (match) visible++;
   });
+  const noResults = visible === 0 && q.length > 0;
+  if (noResults && !prevNoResults) {
+    searchInput.classList.remove('no-results');
+    void searchInput.offsetWidth; // перезапуск анимации
+    searchInput.classList.add('no-results');
+    setTimeout(() => searchInput.classList.remove('no-results'), 420);
+  }
+  prevNoResults = noResults;
 }
 
-/* ===== MODAL LOGIC ===== */
+/* ===== MODAL ===== */
 const overlay = document.getElementById('modalOverlay');
 const modalContent = document.getElementById('modalContent');
 const closeBtn = document.getElementById('modalClose');
@@ -456,18 +629,15 @@ function openModal(num) {
 function closeModal() {
   overlay.classList.remove('visible');
   document.body.classList.remove('modal-open');
-  Object.values(cells).forEach(c => c.classList.remove('selected'));
+  // Даём анимации закрытия доиграть, потом снимаем выделение
+  setTimeout(() => {
+    Object.values(cells).forEach(c => c.classList.remove('selected'));
+  }, 250);
   if (lastFocused) lastFocused.focus();
 }
 
 closeBtn.addEventListener('click', closeModal);
-
-// Клик по фону (не по самому окну) — закрыть
-overlay.addEventListener('click', (e) => {
-  if (e.target === overlay) closeModal();
-});
-
-// Escape — закрыть
+overlay.addEventListener('click', (e) => { if (e.target === overlay) closeModal(); });
 document.addEventListener('keydown', (e) => {
   if (e.key === 'Escape' && overlay.classList.contains('visible')) closeModal();
 });
