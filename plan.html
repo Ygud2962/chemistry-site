@@ -1,165 +1,593 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>План занятий - Ресурсный центр "Химия"</title>
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Raleway:wght@300;400;600&display=swap" rel="stylesheet">
-    <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        :root {
-            --primary: #0D3B2E; --primary-light: #1B5E5B; --accent: #C9A961;
-            --bg: #FAFAF7; --text: #2B2D42; --white: #FFFFFF;
-        }
-        html { scroll-behavior: smooth; }
-        body { font-family: 'Raleway', sans-serif; background: var(--bg); color: var(--text); line-height: 1.6; display: flex; flex-direction: column; min-height: 100vh; }
-        h1, h2, h3 { font-family: 'Playfair Display', serif; }
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+<meta name="theme-color" content="#08061a" />
+<title>План занятий — Ресурсный центр «Химия»</title>
 
-        .nav {
-            position: fixed; top: 0; left: 0; right: 0;
-            background: rgba(255, 255, 255, 0.98); backdrop-filter: blur(15px);
-            padding: 1rem 2rem; box-shadow: 0 2px 20px rgba(13,59,46,0.1); z-index: 1000;
-        }
-        .nav-container { max-width: 1200px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; }
-        .nav-logo { font-family: 'Playfair Display', serif; font-size: 1.3rem; font-weight: 700; color: var(--primary); text-decoration: none; letter-spacing: 1px; }
-        .nav-links { display: flex; gap: 2rem; list-style: none; }
-        .nav-links a { color: var(--text); text-decoration: none; font-size: 0.9rem; font-weight: 600; transition: color 0.3s; position: relative; }
-        .nav-links a:after { content: ''; position: absolute; bottom: -4px; left: 0; width: 0; height: 2px; background: var(--accent); transition: width 0.3s; }
-        .nav-links a:hover { color: var(--accent); }
-        .nav-links a:hover:after { width: 100%; }
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,500&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 
-        .burger { display: none; flex-direction: column; justify-content: space-between; width: 28px; height: 20px; cursor: pointer; z-index: 1001; background: none; border: none; padding: 0; }
-        .burger span { display: block; width: 100%; height: 2px; background: var(--primary); transition: all 0.3s ease; border-radius: 2px; }
-        .burger.active span:nth-child(1) { transform: translateY(9px) rotate(45deg); }
-        .burger.active span:nth-child(2) { opacity: 0; transform: translateX(-10px); }
-        .burger.active span:nth-child(3) { transform: translateY(-9px) rotate(-45deg); }
+<style>
+:root{
+  --bg:#08061a;
+  --bg-2:#0e0a24;
+  --panel:rgba(14,10,36,.9);
+  --panel-solid:rgba(14,10,36,.97);
+  --cyan:#00e5ff;
+  --violet:#b44aff;
+  --magenta:#ff3d9a;
+  --amber:#ffb800;
+  --text:#ece6ff;
+  --muted:#9a8fb8;
+  --line:rgba(0,229,255,.15);
+  --grad:linear-gradient(135deg,#00e5ff 0%,#b44aff 50%,#ff3d9a 100%);
+}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html{background:var(--bg);scroll-behavior:smooth}
+body{
+  font-family:'Inter',system-ui,-apple-system,sans-serif;
+  background:var(--bg);
+  color:var(--text);
+  -webkit-font-smoothing:antialiased;
+  overflow-x:hidden;
+  min-height:100vh;
+}
+button{font-family:inherit;cursor:pointer;border:none;background:transparent;color:inherit}
+a{color:inherit;text-decoration:none}
 
-        .mobile-menu {
-            display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0;
-            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
-            z-index: 999; flex-direction: column; justify-content: center; align-items: center; opacity: 0; transition: opacity 0.4s ease;
-        }
-        .mobile-menu.active { display: flex; opacity: 1; }
-        .mobile-menu ul { list-style: none; text-align: center; }
-        .mobile-menu li { margin: 1.5rem 0; transform: translateY(20px); opacity: 0; transition: all 0.4s ease; }
-        .mobile-menu.active li { transform: translateY(0); opacity: 1; }
-        .mobile-menu.active li:nth-child(1) { transition-delay: 0.1s; }
-        .mobile-menu.active li:nth-child(2) { transition-delay: 0.2s; }
-        .mobile-menu.active li:nth-child(3) { transition-delay: 0.3s; }
-        .mobile-menu.active li:nth-child(4) { transition-delay: 0.4s; }
-        .mobile-menu a { color: var(--white); text-decoration: none; font-family: 'Playfair Display', serif; font-size: 2rem; font-weight: 600; letter-spacing: 1px; }
-        .mobile-menu a:hover { color: var(--accent); }
+body::before{
+  content:'';
+  position:fixed;
+  inset:0;
+  background:
+    radial-gradient(circle at 15% 20%, rgba(0,229,255,.06), transparent 40%),
+    radial-gradient(circle at 85% 80%, rgba(180,74,255,.06), transparent 45%),
+    radial-gradient(circle at 50% 100%, rgba(255,61,154,.04), transparent 55%);
+  z-index:0;
+  pointer-events:none;
+}
 
-        .content-wrapper { flex: 1; display: flex; align-items: center; justify-content: center; padding: 8rem 2rem 4rem; }
-        
-        .coming-soon-card {
-            background: var(--white);
-            border-radius: 20px;
-            padding: 4rem 3rem;
-            text-align: center;
-            box-shadow: 0 15px 40px rgba(13,59,46,0.1);
-            max-width: 600px;
-            width: 100%;
-            animation: fadeIn 0.8s ease-out;
-            border-top: 5px solid var(--accent);
-        }
+/* ХЕДЕР */
+header{
+  position:fixed;
+  top:0;left:0;right:0;
+  z-index:100;
+  padding:16px clamp(16px, 4vw, 40px);
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:16px;
+  background:rgba(8,6,26,.75);
+  backdrop-filter:blur(14px);
+  -webkit-backdrop-filter:blur(14px);
+  border-bottom:1px solid var(--line);
+}
+.logo{
+  font-family:'Playfair Display',serif;
+  font-weight:700;
+  font-size:15px;
+  letter-spacing:1px;
+  display:flex;
+  align-items:center;
+  gap:10px;
+  white-space:nowrap;
+}
+.logo-dot{
+  width:9px;height:9px;
+  border-radius:50%;
+  background:var(--cyan);
+  box-shadow:0 0 14px var(--cyan);
+  animation:pulseDot 2s infinite;
+}
+@keyframes pulseDot{
+  0%,100%{opacity:1;transform:scale(1)}
+  50%{opacity:.5;transform:scale(1.4)}
+}
+nav ul{
+  list-style:none;
+  display:flex;
+  gap:clamp(10px, 2vw, 24px);
+  align-items:center;
+}
+nav a{
+  font-size:13px;
+  color:var(--muted);
+  position:relative;
+  padding:6px 0;
+  transition:color .3s;
+  white-space:nowrap;
+}
+nav a::after{
+  content:'';
+  position:absolute;
+  bottom:0;left:0;
+  width:0;height:1.5px;
+  background:var(--grad);
+  transition:width .3s ease;
+}
+nav a:hover{color:var(--cyan)}
+nav a:hover::after{width:100%}
+nav a.active{color:var(--cyan)}
+nav a.active::after{width:100%}
+@media (max-width:820px){
+  nav ul{display:none}
+}
 
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
+/* КОНТЕНТ */
+main{
+  position:relative;
+  z-index:1;
+  max-width:1200px;
+  margin:0 auto;
+  padding:120px clamp(16px, 4vw, 40px) 80px;
+}
+.page-header{
+  text-align:center;
+  margin-bottom:56px;
+}
+.eyebrow{
+  display:inline-block;
+  font-family:'Playfair Display',serif;
+  font-style:italic;
+  font-size:14px;
+  color:var(--amber);
+  letter-spacing:1px;
+  margin-bottom:14px;
+}
+.page-header h1{
+  font-family:'Playfair Display',serif;
+  font-weight:700;
+  font-size:clamp(34px, 5vw, 56px);
+  line-height:1.1;
+  letter-spacing:-.01em;
+  margin-bottom:14px;
+}
+.page-header h1 .grad{
+  background:var(--grad);
+  -webkit-background-clip:text;
+  background-clip:text;
+  -webkit-text-fill-color:transparent;
+}
+.page-header p{
+  color:var(--muted);
+  font-size:15px;
+  max-width:700px;
+  margin:0 auto;
+  line-height:1.6;
+}
 
-        .coming-soon-icon { font-size: 5rem; margin-bottom: 1.5rem; display: block; animation: pulse 2s infinite; }
-        @keyframes pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.1); } }
+.section-title{
+  font-family:'Playfair Display',serif;
+  font-weight:600;
+  font-size:clamp(22px, 3vw, 32px);
+  letter-spacing:-.01em;
+  margin-bottom:24px;
+  display:flex;
+  align-items:center;
+  gap:12px;
+}
+.section-title::before{
+  content:'';
+  width:4px;height:28px;
+  background:var(--grad);
+  border-radius:2px;
+  flex-shrink:0;
+}
 
-        .coming-soon-card h1 { font-size: 2.2rem; color: var(--primary); margin-bottom: 1rem; }
-        .coming-soon-card p { font-size: 1.1rem; color: var(--text); opacity: 0.8; margin-bottom: 2.5rem; line-height: 1.7; }
+/* ТАБЛИЦА */
+.table-wrap{
+  overflow-x:auto;
+  border-radius:18px;
+  border:1px solid var(--line);
+  background:rgba(14,10,36,.5);
+  margin-bottom:56px;
+  -webkit-overflow-scrolling:touch;
+}
+.table-wrap::-webkit-scrollbar{height:6px}
+.table-wrap::-webkit-scrollbar-track{background:rgba(0,229,255,.05)}
+.table-wrap::-webkit-scrollbar-thumb{background:rgba(0,229,255,.3);border-radius:4px}
 
-        .btn-back {
-            display: inline-block; padding: 1rem 2.5rem;
-            background: linear-gradient(135deg, var(--accent), #D4B570);
-            color: var(--primary); text-decoration: none; border-radius: 50px;
-            font-weight: 600; font-size: 1rem; letter-spacing: 1px;
-            transition: all 0.3s ease; box-shadow: 0 10px 30px rgba(201,169,97,0.4);
-        }
-        .btn-back:hover { transform: translateY(-3px); box-shadow: 0 15px 40px rgba(201,169,97,0.6); }
+.plan-table{
+  width:100%;
+  border-collapse:collapse;
+  min-width:760px;
+}
+.plan-table th{
+  background:rgba(0,229,255,.08);
+  padding:16px 18px;
+  text-align:left;
+  font-family:'Playfair Display',serif;
+  font-weight:600;
+  font-size:14px;
+  color:var(--text);
+  border-bottom:1px solid var(--line);
+  white-space:nowrap;
+}
+.plan-table td{
+  padding:16px 18px;
+  border-bottom:1px solid rgba(0,229,255,.08);
+  vertical-align:top;
+  font-size:13.5px;
+  line-height:1.55;
+  color:var(--muted);
+}
+.plan-table tr:last-child td{border-bottom:none}
+.plan-table tr:hover td{background:rgba(0,229,255,.02)}
 
-        footer {
-            background: linear-gradient(135deg, var(--text), #1a1a2e);
-            color: var(--white); text-align: center; padding: 2.5rem; font-size: 0.9rem; position: relative;
-        }
-        footer:before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; background: linear-gradient(90deg, var(--accent), var(--accent-light)); }
+.plan-table .num{
+  font-family:'JetBrains Mono',monospace;
+  color:var(--cyan);
+  font-weight:500;
+  font-size:13px;
+  white-space:nowrap;
+}
+.plan-table .hours{
+  font-family:'JetBrains Mono',monospace;
+  color:var(--amber);
+  font-weight:500;
+  font-size:12.5px;
+  white-space:nowrap;
+}
+.plan-table .class-col{
+  min-width:180px;
+}
 
-        @media (max-width: 768px) {
-            .nav { padding: 1rem 1.5rem; }
-            .nav-links { display: none; }
-            .burger { display: flex; }
-            .content-wrapper { padding: 6rem 1.5rem 3rem; }
-            .coming-soon-card { padding: 3rem 2rem; }
-            .coming-soon-card h1 { font-size: 1.8rem; }
-        }
-    </style>
+/* ПРАКТИКА */
+.practice-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fill, minmax(220px, 1fr));
+  gap:16px;
+  margin-bottom:56px;
+}
+.practice-card{
+  padding:22px 20px;
+  border-radius:16px;
+  background:rgba(14,10,36,.7);
+  border:1px solid var(--line);
+  display:flex;
+  align-items:flex-start;
+  gap:14px;
+  transition:all .3s;
+}
+.practice-card:hover{
+  border-color:rgba(0,229,255,.4);
+  transform:translateY(-3px);
+  box-shadow:0 16px 40px -16px rgba(0,229,255,.4);
+}
+.practice-icon{
+  width:44px;height:44px;
+  border-radius:12px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:22px;
+  flex-shrink:0;
+  background:linear-gradient(135deg, rgba(0,229,255,.12), rgba(180,74,255,.12));
+  border:1px solid rgba(0,229,255,.2);
+}
+.practice-text{
+  flex:1;
+  min-width:0;
+}
+.practice-num{
+  font-family:'JetBrains Mono',monospace;
+  font-size:11px;
+  color:var(--cyan);
+  letter-spacing:1px;
+  margin-bottom:4px;
+  opacity:.7;
+}
+.practice-name{
+  font-family:'Playfair Display',serif;
+  font-weight:600;
+  font-size:15px;
+  line-height:1.3;
+  color:var(--text);
+}
+
+/* CTA */
+.cta{
+  position:relative;
+  padding:48px clamp(24px, 5vw, 56px);
+  border-radius:24px;
+  background:
+    radial-gradient(circle at 20% 30%, rgba(0,229,255,.12), transparent 50%),
+    radial-gradient(circle at 80% 70%, rgba(180,74,255,.15), transparent 50%),
+    linear-gradient(160deg, rgba(14,10,36,.95), rgba(8,6,26,.95));
+  border:1px solid var(--line);
+  text-align:center;
+  overflow:hidden;
+}
+.cta h2{
+  font-family:'Playfair Display',serif;
+  font-weight:700;
+  font-size:clamp(22px, 3.5vw, 36px);
+  margin-bottom:14px;
+  letter-spacing:-.01em;
+}
+.cta h2 span{
+  background:var(--grad);
+  -webkit-background-clip:text;
+  background-clip:text;
+  -webkit-text-fill-color:transparent;
+}
+.cta p{
+  color:var(--muted);
+  max-width:520px;
+  margin:0 auto 28px;
+  font-size:15px;
+  line-height:1.6;
+}
+.btn{
+  display:inline-flex;
+  align-items:center;
+  gap:10px;
+  padding:15px 32px;
+  border-radius:50px;
+  font-family:'Playfair Display',serif;
+  font-weight:600;
+  font-size:14px;
+  letter-spacing:.3px;
+  border:none;
+  cursor:pointer;
+  transition:transform .3s, box-shadow .3s;
+}
+.btn-primary{
+  background:var(--grad);
+  background-size:200% 200%;
+  color:#08061a;
+  box-shadow:0 10px 40px -10px rgba(0,229,255,.5);
+}
+.btn-primary:hover{
+  transform:translateY(-3px) scale(1.03);
+  box-shadow:0 20px 60px -10px rgba(0,229,255,.7),0 0 30px rgba(180,74,255,.4);
+}
+
+/* ФУТЕР */
+footer{
+  position:relative;
+  z-index:1;
+  padding:50px clamp(16px, 4vw, 40px) 40px;
+  border-top:1px solid var(--line);
+  text-align:center;
+  color:var(--muted);
+  font-size:13px;
+}
+footer .socials{
+  display:flex;
+  justify-content:center;
+  gap:12px;
+  margin-bottom:22px;
+}
+footer .socials a{
+  width:42px;height:42px;
+  border-radius:50%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  border:1px solid var(--line);
+  transition:all .3s;
+  font-size:15px;
+}
+footer .socials a:hover{
+  border-color:var(--cyan);
+  color:var(--cyan);
+  transform:translateY(-4px);
+  box-shadow:0 10px 30px -10px var(--cyan);
+}
+footer .grad-text{
+  background:var(--grad);
+  -webkit-background-clip:text;
+  background-clip:text;
+  -webkit-text-fill-color:transparent;
+  font-family:'Playfair Display',serif;
+  font-style:italic;
+  font-size:14px;
+  margin-bottom:14px;
+  display:block;
+}
+
+/* АДАПТИВ */
+@media (max-width:600px){
+  main{padding:100px 16px 60px}
+  .page-header{margin-bottom:40px}
+  .section-title{font-size:20px;margin-bottom:18px}
+  .plan-table th, .plan-table td{padding:12px 14px;font-size:12.5px}
+  .practice-grid{grid-template-columns:1fr;gap:12px}
+  .practice-card{padding:18px 16px}
+  .cta{padding:36px 20px}
+}
+</style>
 </head>
 <body>
 
-    <nav class="nav">
-        <div class="nav-container">
-            <a href="index.html" class="nav-logo">️ ХИМИЯ</a>
-            <ul class="nav-links">
-                <li><a href="index.html">Главная</a></li>
-                <li><a href="index.html#about">О центре</a></li>
-                <li><a href="index.html#sections">Разделы</a></li>
-                <li><a href="contacts.html">Контакты</a></li>
-            </ul>
-            <button class="burger" id="burger" aria-label="Меню">
-                <span></span>
-                <span></span>
-                <span></span>
-            </button>
-        </div>
-    </nav>
+<header>
+  <a href="index.html" class="logo">
+    <span class="logo-dot"></span>
+    РЕСУРСНЫЙ ЦЕНТР · ХИМИЯ
+  </a>
+  <nav>
+    <ul>
+      <li><a href="index.html">Главная</a></li>
+      <li><a href="plan.html" class="active">План занятий</a></li>
+      <li><a href="polozhenie.html">Положение</a></li>
+      <li><a href="index.html#periodic">Таблица Менделеева</a></li>
+    </ul>
+  </nav>
+</header>
 
-    <div class="mobile-menu" id="mobileMenu">
-        <ul>
-            <li><a href="index.html" class="mobile-link">Главная</a></li>
-            <li><a href="index.html#about" class="mobile-link">О центре</a></li>
-            <li><a href="index.html#sections" class="mobile-link">Разделы</a></li>
-            <li><a href="contacts.html" class="mobile-link">Контакты</a></li>
-        </ul>
+<main>
+  <div class="page-header">
+    <span class="eyebrow">— Документация —</span>
+    <h1>План <span class="grad">занятий</span></h1>
+    <p>Ресурсный центр по учебному предмету «Химия» · ГУО «Средняя школа №3 г. Хойники»</p>
+  </div>
+
+  <section>
+    <h2 class="section-title">Темы занятий по классам</h2>
+    <div class="table-wrap">
+      <table class="plan-table">
+        <thead>
+          <tr>
+            <th>№</th>
+            <th>Часы</th>
+            <th class="class-col">9 класс</th>
+            <th class="class-col">10 класс</th>
+            <th class="class-col">11 класс</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="num">1</td>
+            <td class="hours">4 ч</td>
+            <td>Основы химии: вещество, смеси, химический элемент, атом, молекула, простые и сложные вещества.</td>
+            <td>Основы химии: вещество, смеси, химический элемент, атом, молекула, простые и сложные вещества.</td>
+            <td>Основы химии: вещество, смеси, химический элемент, атом, молекула, простые и сложные вещества.</td>
+          </tr>
+          <tr>
+            <td class="num">2</td>
+            <td class="hours">2 ч</td>
+            <td>Периодический закон и строение атома.</td>
+            <td>Теория строения атома и химической связи.</td>
+            <td>Теория строения атома и химической связи.</td>
+          </tr>
+          <tr>
+            <td class="num">3</td>
+            <td class="hours">4 ч</td>
+            <td>Химическая связь, строение молекул, кристаллические решётки.</td>
+            <td>Строение вещества (типы гибридизации, геометрия молекул, теория молекулярных орбиталей).</td>
+            <td>Строение вещества (типы гибридизации, геометрия молекул, теория молекулярных орбиталей).</td>
+          </tr>
+          <tr>
+            <td class="num">4</td>
+            <td class="hours">6 ч</td>
+            <td>Основные классы неорганических веществ: оксиды, основания, кислоты, соли, их получение и свойства.</td>
+            <td>Протолитическая теория кислот и оснований Бренстеда–Лоури.</td>
+            <td>Протолитическая теория кислот и оснований Бренстеда–Лоури.</td>
+          </tr>
+          <tr>
+            <td class="num">5</td>
+            <td class="hours">4 ч</td>
+            <td>Химия отдельных элементов.</td>
+            <td>Химия элементов по группам.</td>
+            <td>Химия элементов по группам.</td>
+          </tr>
+          <tr>
+            <td class="num">6</td>
+            <td class="hours">6 ч</td>
+            <td>Основы термохимии (тепловой эффект, закон Гесса).</td>
+            <td>Углублённая термодинамика (энергия Гиббса).</td>
+            <td>Химическая термодинамика (расчёты энергии Гиббса, констант равновесия).</td>
+          </tr>
+          <tr>
+            <td class="num">7</td>
+            <td class="hours">6 ч</td>
+            <td>Понятие о скорости химических реакций.</td>
+            <td>Химическая кинетика (закон действующих масс, уравнение Аррениуса). Химическое равновесие, принцип Ле Шателье.</td>
+            <td>Химическая кинетика (механизмы реакций, катализ).</td>
+          </tr>
+          <tr>
+            <td class="num">8</td>
+            <td class="hours">6 ч</td>
+            <td>Теория электролитической диссоциации.</td>
+            <td>Теория электролитической диссоциации (константа диссоциации, водородный показатель pH).</td>
+            <td>Комплексные соединения, теория кристаллического поля.</td>
+          </tr>
+          <tr>
+            <td class="num">9</td>
+            <td class="hours">6 ч</td>
+            <td rowspan="3">Введение в органическую химию: теория строения, классификация, номенклатура, основные механизмы реакций.</td>
+            <td>Углеводороды.</td>
+            <td>Углеводороды. Кислородсодержащие органические соединения. Азотсодержащие органические соединения.</td>
+          </tr>
+          <tr>
+            <td class="num">10</td>
+            <td class="hours">4 ч</td>
+            <td>Кислородсодержащие органические соединения.</td>
+            <td>Углублённая органическая химия (бифункциональные соединения, гетероциклы, полимеры).</td>
+          </tr>
+          <tr>
+            <td class="num">11</td>
+            <td class="hours">4 ч</td>
+            <td>Азотсодержащие органические соединения.</td>
+            <td>Основы биохимии (белки, жиры, углеводы, нуклеиновые кислоты).</td>
+          </tr>
+        </tbody>
+      </table>
     </div>
+  </section>
 
-    <div class="content-wrapper">
-        <div class="coming-soon-card">
-            <span class="coming-soon-icon">📅</span>
-            <h1>План занятий</h1>
-            <p>Раздел наполняется актуальными материалами.<br>Скоро здесь появится календарный план работы ресурсного центра.</p>
-            <a href="index.html" class="btn-back">Вернуться на главную</a>
+  <section>
+    <h2 class="section-title">Практические занятия</h2>
+    <div class="practice-grid">
+      <div class="practice-card">
+        <div class="practice-icon">🧪</div>
+        <div class="practice-text">
+          <div class="practice-num">01</div>
+          <div class="practice-name">Перекристаллизация</div>
         </div>
+      </div>
+      <div class="practice-card">
+        <div class="practice-icon">⚗️</div>
+        <div class="practice-text">
+          <div class="practice-num">02</div>
+          <div class="practice-name">Кислотно-основное титрование</div>
+        </div>
+      </div>
+      <div class="practice-card">
+        <div class="practice-icon">🧫</div>
+        <div class="practice-text">
+          <div class="practice-num">03</div>
+          <div class="practice-name">Перманганатометрия</div>
+        </div>
+      </div>
+      <div class="practice-card">
+        <div class="practice-icon">💧</div>
+        <div class="practice-text">
+          <div class="practice-num">04</div>
+          <div class="practice-name">Иодометрия</div>
+        </div>
+      </div>
+      <div class="practice-card">
+        <div class="practice-icon">🔬</div>
+        <div class="practice-text">
+          <div class="practice-num">05</div>
+          <div class="practice-name">Качественное определение неорганических соединений</div>
+        </div>
+      </div>
+      <div class="practice-card">
+        <div class="practice-icon">🔥</div>
+        <div class="practice-text">
+          <div class="practice-num">06</div>
+          <div class="practice-name">Качественное определение органических соединений</div>
+        </div>
+      </div>
     </div>
+  </section>
 
-    <footer>
-        <p>© 2026 Ресурсный центр «Химия» | Корольчук О.Г.</p>
-        <p>ГУО «Средняя школа №3 г. Хойники»</p>
-    </footer>
+  <div class="cta">
+    <h2>Нужно <span>Положение</span>?</h2>
+    <p>Ознакомьтесь с официальным документом, регулирующим деятельность ресурсного центра.</p>
+    <a href="polozhenie.html" class="btn btn-primary">Открыть Положение →</a>
+  </div>
+</main>
 
-    <script>
-        const burger = document.getElementById('burger');
-        const mobileMenu = document.getElementById('mobileMenu');
-        const mobileLinks = document.querySelectorAll('.mobile-link');
+<footer>
+  <span class="grad-text">«Химия — это область чудес, в ней скрыто счастье человечества»</span>
+  <div class="socials">
+    <a href="#" title="Telegram">✈</a>
+    <a href="#" title="VK">VK</a>
+    <a href="#" title="Email">✉</a>
+    <a href="#" title="YouTube">▶</a>
+  </div>
+  <p>© <span id="year"></span> Ресурсный центр «Химия» · ГУО «Средняя школа №3 г. Хойники»</p>
+</footer>
 
-        burger.addEventListener('click', () => {
-            burger.classList.toggle('active');
-            mobileMenu.classList.toggle('active');
-            document.body.style.overflow = mobileMenu.classList.contains('active') ? 'hidden' : '';
-        });
-
-        mobileLinks.forEach(link => {
-            link.addEventListener('click', () => {
-                burger.classList.remove('active');
-                mobileMenu.classList.remove('active');
-                document.body.style.overflow = '';
-            });
-        });
-    </script>
+<script>
+document.getElementById('year').textContent = new Date().getFullYear();
+</script>
 </body>
 </html>
