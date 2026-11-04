@@ -385,7 +385,7 @@
 
         .to-top {
             position: fixed;
-            bottom: 6.5rem;
+            bottom: 2rem;
             right: 2rem;
             width: 50px;
             height: 50px;
@@ -409,143 +409,6 @@
             background: var(--primary-light);
         }
 
-        .download-fab {
-            position: fixed;
-            bottom: 2rem;
-            right: 2rem;
-            z-index: 998;
-            font-family: 'Raleway', sans-serif;
-        }
-        .download-main {
-            width: 60px;
-            height: 60px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, var(--primary), var(--primary-light));
-            color: var(--white);
-            border: none;
-            box-shadow: 0 10px 30px rgba(13,59,46,0.35);
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            position: relative;
-        }
-        .download-main:before {
-            content: '';
-            position: absolute;
-            inset: -3px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, var(--accent), var(--accent-light));
-            z-index: -1;
-            opacity: 0;
-            transition: opacity 0.3s;
-        }
-        .download-main:hover {
-            transform: scale(1.08) translateY(-2px);
-            box-shadow: 0 15px 40px rgba(13,59,46,0.5);
-        }
-        .download-main:hover:before { opacity: 1; }
-        .download-main.active svg { transform: rotate(180deg); }
-        .download-main svg { transition: transform 0.3s; }
-
-        .download-popup {
-            position: absolute;
-            bottom: 78px;
-            right: 0;
-            background: var(--white);
-            border-radius: 16px;
-            padding: 0.6rem;
-            box-shadow: 0 15px 50px rgba(13,59,46,0.25);
-            min-width: 260px;
-            opacity: 0;
-            visibility: hidden;
-            transform: translateY(15px) scale(0.95);
-            transform-origin: bottom right;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            border: 1px solid rgba(201,169,97,0.2);
-        }
-        .download-popup.active {
-            opacity: 1; visibility: visible;
-            transform: translateY(0) scale(1);
-        }
-        .download-popup-header {
-            padding: 0.6rem 1rem 0.5rem;
-            font-size: 0.75rem;
-            text-transform: uppercase;
-            letter-spacing: 1.5px;
-            color: var(--accent);
-            font-weight: 700;
-            border-bottom: 1px solid rgba(201,169,97,0.15);
-            margin-bottom: 0.4rem;
-        }
-        .download-option {
-            display: flex;
-            align-items: center;
-            gap: 14px;
-            width: 100%;
-            padding: 12px 14px;
-            border: none;
-            background: transparent;
-            border-radius: 10px;
-            cursor: pointer;
-            text-align: left;
-            transition: background 0.2s;
-            font-family: 'Raleway', sans-serif;
-        }
-        .download-option:hover { background: rgba(201,169,97,0.1); }
-        .download-option:hover .download-option-icon {
-            background: var(--accent);
-            color: var(--white);
-        }
-        .download-option-icon {
-            font-size: 1.3rem;
-            width: 40px; height: 40px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background: rgba(201,169,97,0.15);
-            border-radius: 10px;
-            flex-shrink: 0;
-            transition: all 0.2s;
-        }
-        .download-option-text { flex: 1; min-width: 0; }
-        .download-option strong {
-            display: block;
-            color: var(--primary);
-            font-size: 0.92rem;
-            margin-bottom: 2px;
-            font-weight: 600;
-        }
-        .download-option small {
-            display: block;
-            color: #888;
-            font-size: 0.75rem;
-            line-height: 1.3;
-        }
-
-        .download-toast {
-            position: fixed;
-            bottom: 7rem;
-            right: 2rem;
-            background: var(--primary);
-            color: var(--white);
-            padding: 0.9rem 1.3rem;
-            border-radius: 12px;
-            font-size: 0.88rem;
-            box-shadow: 0 10px 30px rgba(13,59,46,0.4);
-            z-index: 999;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            opacity: 0;
-            transform: translateY(15px);
-            pointer-events: none;
-            transition: all 0.3s;
-            max-width: calc(100vw - 4rem);
-        }
-        .download-toast.show { opacity: 1; transform: translateY(0); }
-
         @media (max-width: 768px) {
             .nav { padding: 1rem 1.5rem; }
             .nav-links { display: none; }
@@ -564,20 +427,7 @@
 
             .to-top {
                 width: 44px; height: 44px;
-                bottom: 5.4rem; right: 1.2rem;
-            }
-            .download-fab { bottom: 1.2rem; right: 1.2rem; }
-            .download-main { width: 54px; height: 54px; }
-            .download-popup {
-                bottom: 70px;
-                min-width: calc(100vw - 3rem);
-                right: 0;
-            }
-            .download-toast {
-                bottom: 5.5rem;
-                right: 1.2rem;
-                left: 1.2rem;
-                max-width: none;
+                bottom: 1.2rem; right: 1.2rem;
             }
         }
 
@@ -594,9 +444,7 @@
         @media print {
             @page { margin: 1.5cm; size: A4; }
             body { background: white !important; }
-            .nav, .mobile-menu, .burger,
-            .download-fab, .download-popup, .download-toast,
-            .to-top { display: none !important; }
+            .nav, .mobile-menu, .burger, .to-top { display: none !important; }
             .header {
                 background: var(--primary) !important;
                 -webkit-print-color-adjust: exact;
@@ -820,45 +668,6 @@
         </svg>
     </button>
 
-    <div class="download-fab">
-        <div class="download-popup" id="downloadPopup">
-            <div class="download-popup-header">Скачать документ</div>
-            <button class="download-option" data-action="pdf">
-                <div class="download-option-icon">📄</div>
-                <div class="download-option-text">
-                    <strong>PDF</strong>
-                    <small>Для печати и отправки</small>
-                </div>
-            </button>
-            <button class="download-option" data-action="html">
-                <div class="download-option-icon">💻</div>
-                <div class="download-option-text">
-                    <strong>HTML</strong>
-                    <small>Точная копия страницы</small>
-                </div>
-            </button>
-            <button class="download-option" data-action="doc">
-                <div class="download-option-icon">📝</div>
-                <div class="download-option-text">
-                    <strong>Word (DOC)</strong>
-                    <small>Для редактирования</small>
-                </div>
-            </button>
-        </div>
-        <button class="download-main" id="downloadMain" aria-label="Скачать документ" title="Скачать">
-            <svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
-                <polyline points="7 10 12 15 17 10"/>
-                <line x1="12" y1="15" x2="12" y2="3"/>
-            </svg>
-        </button>
-    </div>
-
-    <div class="download-toast" id="downloadToast">
-        <span id="downloadToastIcon">⏳</span>
-        <span id="downloadToastText">Подготовка файла…</span>
-    </div>
-
     <script>
         // Burger
         const burger = document.getElementById('burger');
@@ -910,136 +719,6 @@
                     e.preventDefault();
                     target.scrollIntoView({ behavior: 'smooth', block: 'start' });
                 }
-            });
-        });
-
-        // ============ СКАЧИВАНИЕ ============
-        const downloadMain = document.getElementById('downloadMain');
-        const downloadPopup = document.getElementById('downloadPopup');
-        const downloadToast = document.getElementById('downloadToast');
-        const downloadToastIcon = document.getElementById('downloadToastIcon');
-        const downloadToastText = document.getElementById('downloadToastText');
-        let toastTimer = null;
-
-        downloadMain.addEventListener('click', (e) => {
-            e.stopPropagation();
-            downloadMain.classList.toggle('active');
-            downloadPopup.classList.toggle('active');
-        });
-
-        document.addEventListener('click', (e) => {
-            if (!e.target.closest('.download-fab')) {
-                downloadMain.classList.remove('active');
-                downloadPopup.classList.remove('active');
-            }
-        });
-
-        document.addEventListener('keydown', (e) => {
-            if (e.key === 'Escape') {
-                downloadMain.classList.remove('active');
-                downloadPopup.classList.remove('active');
-            }
-        });
-
-        function showToast(icon, text, duration = 3000) {
-            downloadToastIcon.textContent = icon;
-            downloadToastText.textContent = text;
-            downloadToast.classList.add('show');
-            clearTimeout(toastTimer);
-            toastTimer = setTimeout(() => downloadToast.classList.remove('show'), duration);
-        }
-
-        function closeMenu() {
-            downloadMain.classList.remove('active');
-            downloadPopup.classList.remove('active');
-        }
-
-        function downloadPDF() {
-            closeMenu();
-            showToast('📄', 'Открывается окно печати — выберите «Сохранить как PDF»', 4000);
-            setTimeout(() => window.print(), 400);
-        }
-
-        function downloadHTML() {
-            closeMenu();
-            showToast('💻', 'Готовим HTML-файл…', 1500);
-            try {
-                const clone = document.documentElement.cloneNode(true);
-                clone.querySelectorAll('.visible').forEach(el => el.classList.remove('visible'));
-                const fab = clone.querySelector('.download-fab');
-                if (fab) fab.remove();
-                const toast = clone.querySelector('.download-toast');
-                if (toast) toast.remove();
-                const tt = clone.querySelector('.to-top');
-                if (tt) tt.remove();
-                const mm = clone.querySelector('#mobileMenu');
-                if (mm) mm.classList.remove('active');
-                const burgerClone = clone.querySelector('#burger');
-                if (burgerClone) burgerClone.classList.remove('active');
-
-                const html = '<!DOCTYPE html>\n' + clone.outerHTML;
-                const blob = new Blob([html], { type: 'text/html;charset=utf-8' });
-                const url = URL.createObjectURL(blob);
-                const a = document.createElement('a');
-                a.href = url;
-                a.download = 'polozhenie-himiya.html';
-                document.body.appendChild(a);
-                a.click();
-                document.body.removeChild(a);
-                setTimeout(() => URL.revokeObjectURL(url), 1000);
-                setTimeout(() => showToast('✅', 'HTML-файл скачан', 2500), 400);
-            } catch (err) {
-                showToast('⚠️', 'Не удалось скачать HTML', 3000);
-            }
-        }
-
-        function downloadDOC() {
-            closeMenu();
-            showToast('📝', 'Готовим Word-документ…', 1500);
-            try {
-                const styles = Array.from(document.querySelectorAll('style')).map(s => s.textContent).join('\n');
-                const headerHTML = document.querySelector('.header').outerHTML;
-                const contentHTML = document.querySelector('.content').outerHTML;
-                const footerHTML = document.querySelector('footer').outerHTML;
-
-                const doc = `<html xmlns:o="urn:schemas-microsoft-com:office:office"
-xmlns:w="urn:schemas-microsoft-com:office:word"
-xmlns="http://www.w3.org/TR/REC-html40">
-<head>
-<meta charset="UTF-8">
-<meta name=ProgId content=Word.Document>
-<meta name=Generator content="Microsoft Word 15">
-<title>Положение — Ресурсный центр «Химия»</title>
-<style>${styles}</style>
-</head>
-<body>
-${headerHTML}
-${contentHTML}
-${footerHTML}
-</body>
-</html>`;
-
-                const blob = new Blob(['\ufeff', doc], { type: 'application/msword' });
-                const url = URL.createObjectURL(blob);
-                const a = document.createElement('a');
-                a.href = url;
-                a.download = 'polozhenie-himiya.doc';
-                document.body.appendChild(a);
-                a.click();
-                document.body.removeChild(a);
-                setTimeout(() => URL.revokeObjectURL(url), 1000);
-                setTimeout(() => showToast('✅', 'Word-документ скачан', 2500), 400);
-            } catch (err) {
-                showToast('⚠️', 'Не удалось скачать DOC', 3000);
-            }
-        }
-
-        document.querySelectorAll('.download-option').forEach(btn => {
-            btn.addEventListener('click', () => {
-                const action = btn.dataset.action;
-                if (action === 'pdf') downloadPDF();
-                else if (action === 'html') downloadHTML();
-                else if (action === 'doc') downloadDOC();
             });
         });
     </script>
