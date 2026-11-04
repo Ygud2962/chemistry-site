@@ -65,7 +65,6 @@
             color: var(--primary);
             letter-spacing: 1px;
             z-index: 1001;
-            text-decoration: none;
         }
 
         .nav-links {
@@ -232,7 +231,7 @@
             font-weight: 300;
         }
 
-        /* Content and Cards */
+        /* Content and Cards - ОДИН РЯД */
         .content {
             max-width: 1400px;
             margin: 0 auto;
@@ -346,37 +345,54 @@
             font-size: 1rem;
         }
 
-        /* Карточка "Скоро" */
-        .topic-card.coming-soon {
-            opacity: 0.75;
-            cursor: default;
+        /* Virtual Microscope Card - Special Style (Используем для Практикума) */
+        .topic-card.microscope {
+            background: linear-gradient(135deg, #0b1611 0%, #1a2e22 100%);
+            color: #f0e9d8;
+            border: 2px solid rgba(124, 232, 164, 0.3);
+            position: relative;
+            overflow: hidden;
         }
 
-        .topic-card.coming-soon:hover {
-            transform: none;
-            border-color: transparent;
-            box-shadow: 0 10px 30px rgba(13,59,46,0.08);
+        .topic-card.microscope:before {
+            background: linear-gradient(90deg, #7ce8a4, #d4af5a);
         }
 
-        .topic-card.coming-soon:hover:before {
-            transform: scaleX(0);
+        .topic-card.microscope:hover {
+            border-color: #7ce8a4;
+            box-shadow: 0 20px 50px rgba(124, 232, 164, 0.3);
         }
 
-        .topic-card.coming-soon:hover .topic-emoji {
-            transform: none;
+        .topic-card.microscope h3 {
+            color: #7ce8a4;
         }
 
-        .coming-soon-badge {
+        .topic-card.microscope > p {
+            color: #f0e9d8;
+            opacity: 0.9;
+        }
+
+        .topic-card.microscope li {
+            color: #f0e9d8;
+            border-bottom-color: rgba(124, 232, 164, 0.2);
+        }
+
+        .topic-card.microscope li:before {
+            color: #7ce8a4;
+        }
+
+        .microscope-badge {
             display: inline-block;
-            background: var(--accent);
-            color: var(--white);
-            font-size: 0.75rem;
-            font-weight: 600;
             padding: 0.3rem 0.8rem;
+            background: rgba(124, 232, 164, 0.15);
+            border: 1px solid rgba(124, 232, 164, 0.4);
             border-radius: 20px;
-            margin-top: 0.5rem;
-            letter-spacing: 0.5px;
+            font-size: 0.75rem;
+            color: #7ce8a4;
+            margin-bottom: 1rem;
+            letter-spacing: 1px;
             text-transform: uppercase;
+            font-weight: 600;
         }
 
         footer {
@@ -460,7 +476,7 @@
 
     <nav class="nav">
         <div class="nav-container">
-            <a href="index.html" class="nav-logo">⚗️ ХИМИЯ</a>
+            <div class="nav-logo">🧪 ХИМИЯ</div>
             <ul class="nav-links">
                 <li><a href="index.html">Главная</a></li>
                 <li><a href="index.html#about">О центре</a></li>
@@ -487,124 +503,82 @@
 
     <div class="header">
         <h1>📚 Материалы для самоподготовки</h1>
-        <p>Выберите раздел для углубленного изучения химии и подготовки к олимпиадам</p>
+        <p>Выберите раздел химии для углубленного изучения и подготовки к олимпиадам</p>
     </div>
 
     <div class="content">
         <div class="topics-grid">
-
             <!-- Общая и неорганическая химия -->
-            <a href="materials-general.html" class="topic-card">
-                <span class="topic-emoji">🧪</span>
-                <h3>Общая и неорганическая химия</h3>
-                <p>Фундаментальные законы и свойства веществ</p>
+            <a href="materials-inorganic.html" class="topic-card">
+                <span class="topic-emoji">⚛️</span>
+                <h3>Неорганическая химия</h3>
+                <p>Строение вещества и химия элементов</p>
                 <ul>
-                    <li>Строение атома и ПСХЭ</li>
-                    <li>Химическая связь</li>
-                    <li>Классы неорганических соединений</li>
-                    <li>Сборник задач с решениями</li>
+                    <li>Строение атома и связь</li>
+                    <li>Периодический закон</li>
+                    <li>s- и p-элементы</li>
+                    <li>d-элементы (металлы)</li>
                 </ul>
             </a>
 
             <!-- Органическая химия -->
             <a href="materials-organic.html" class="topic-card">
-                <span class="topic-emoji">🔬</span>
+                <span class="topic-emoji">🧬</span>
                 <h3>Органическая химия</h3>
-                <p>Углеродные соединения и их превращения</p>
+                <p>Химия углеродных соединений</p>
                 <ul>
-                    <li>Углеводороды и их производные</li>
-                    <li>Кислород- и азотсодержащие соединения</li>
-                    <li>Биополимеры (белки, углеводы)</li>
-                    <li>Учебное пособие В.Ф. Травеня</li>
+                    <li>Углеводороды (алканы, арены)</li>
+                    <li>Спирты, фенолы, эфиры</li>
+                    <li>Альдегиды и карбоновые кислоты</li>
+                    <li>Аминокислоты и полимеры</li>
                 </ul>
             </a>
 
-            <!-- Олимпиадная химия -->
-            <a href="olimpiads.html" class="topic-card">
-                <span class="topic-emoji">🏆</span>
-                <h3>Олимпиадная химия</h3>
-                <p>Задания и решения прошлых лет</p>
-                <ul>
-                    <li>Пригласительный этап 2025</li>
-                    <li>Задачи повышенной сложности</li>
-                    <li>Эталоны решений и критерии</li>
-                    <li>По классам (6–11)</li>
-                </ul>
-            </a>
-
-            <!-- Аналитическая химия (скоро) -->
-            <div class="topic-card coming-soon">
-                <span class="topic-emoji">⚖️</span>
-                <h3>Аналитическая химия</h3>
-                <p>Методы анализа и лабораторный практикум</p>
-                <ul>
-                    <li>Качественные реакции</li>
-                    <li>Титриметрический анализ</li>
-                    <li>Инструментальные методы</li>
-                </ul>
-                <span class="coming-soon-badge">Скоро</span>
-            </div>
-
-            <!-- Физическая химия (скоро) -->
-            <div class="topic-card coming-soon">
-                <span class="topic-emoji">⚛️</span>
+            <!-- Физическая химия -->
+            <a href="materials-physical.html" class="topic-card">
+                <span class="topic-emoji">🔥</span>
                 <h3>Физическая химия</h3>
-                <p>Закономерности химических процессов</p>
+                <p>Законы протекания химических процессов</p>
                 <ul>
                     <li>Химическая термодинамика</li>
+                    <li>Химическое равновесие</li>
                     <li>Кинетика и катализ</li>
                     <li>Электрохимия</li>
                 </ul>
-                <span class="coming-soon-badge">Скоро</span>
-            </div>
+            </a>
 
-            <!-- Интерактивная таблица Менделеева -->
-            <a href="periodic-table.html" class="topic-card">
-                <span class="topic-emoji"></span>
-                <h3>Таблица Менделеева</h3>
-                <p>Интерактивная периодическая система</p>
+            <!-- Аналитическая химия -->
+            <a href="materials-analytical.html" class="topic-card">
+                <span class="topic-emoji">🔬</span>
+                <h3>Аналитическая химия</h3>
+                <p>Методы определения состава веществ</p>
                 <ul>
-                    <li>Свойства элементов</li>
-                    <li>Электронные конфигурации</li>
-                    <li>Степени окисления</li>
-                    <li>Подробная информация</li>
+                    <li>Качественный анализ</li>
+                    <li>Титриметрия (кислотно-осн.)</li>
+                    <li>Редоксиметрия и осаждение</li>
+                    <li>Метрология и погрешности</li>
                 </ul>
             </a>
 
-            <!-- Справочные материалы -->
-            <div class="topic-card coming-soon">
-                <span class="topic-emoji"></span>
-                <h3>Справочные материалы</h3>
-                <p>Таблицы и константы для решения задач</p>
+            <!-- Алгоритмы и практикум (Стилизовано под виртуальный микроскоп в биологии) -->
+            <a href="materials-practice.html" class="topic-card microscope">
+                <span class="microscope-badge">🧮 Интерактив</span>
+                <span class="topic-emoji">📝</span>
+                <h3>Алгоритмы и практикум</h3>
+                <p>Пошаговые решения задач и расчетные формулы</p>
                 <ul>
-                    <li>Таблица растворимости</li>
-                    <li>Ряд активности металлов</li>
-                    <li>Цвета осадков и растворов</li>
-                    <li>Тривиальные названия</li>
+                    <li>Газовые законы</li>
+                    <li>Растворы и концентрации</li>
+                    <li>Задачи на избыток-недостаток</li>
+                    <li>ОВР и электролиз</li>
                 </ul>
-                <span class="coming-soon-badge">Скоро</span>
-                </div>
             </a>
-
-            <!-- Химический калькулятор (скоро) -->
-            <div class="topic-card coming-soon">
-                <span class="topic-emoji"></span>
-                <h3>Химический калькулятор</h3>
-                <p>Онлайн-инструменты для расчётов</p>
-                <ul>
-                    <li>Молярная масса веществ</li>
-                    <li>Массовая доля раствора</li>
-                    <li>Разбавление и концентрация</li>
-                </ul>
-                <span class="coming-soon-badge">Скоро</span>
-            </div>
-
         </div>
     </div>
 
     <footer>
-        <p>© 2026 Ресурсный центр «Химия» | Корольчук О.Г.</p>
-        <p>ГУО «Средняя школа №3 г. Хойники»</p>
+        <p>© 2026 Ресурсный центр «Химия»</p>
+        <p>Email: zz999an@yandex.by | г. Хойники, школа №3</p>
     </footer>
 
     <script>
