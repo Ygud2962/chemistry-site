@@ -6,7 +6,11 @@
     <title>План занятий - Ресурсный центр "Химия"</title>
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Raleway:wght@300;400;500;600&display=swap" rel="stylesheet">
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
         :root {
             --primary: #0D3B2E;
@@ -18,7 +22,9 @@
             --white: #FFFFFF;
         }
 
-        html { scroll-behavior: smooth; }
+        html {
+            scroll-behavior: smooth;
+        }
 
         body {
             font-family: 'Raleway', sans-serif;
@@ -28,16 +34,21 @@
             overflow-x: hidden;
         }
 
-        h1, h2, h3, h4 { font-family: 'Playfair Display', serif; }
+        h1, h2, h3, h4 {
+            font-family: 'Playfair Display', serif;
+        }
 
+        /* Animations */
         @keyframes fadeInUp {
             from { opacity: 0; transform: translateY(40px); }
             to { opacity: 1; transform: translateY(0); }
         }
+
         @keyframes fadeInDown {
             from { opacity: 0; transform: translateY(-40px); }
             to { opacity: 1; transform: translateY(0); }
         }
+
         @keyframes gradientShift {
             0% { background-position: 0% 50%; }
             50% { background-position: 100% 50%; }
@@ -47,7 +58,9 @@
         /* Navigation - Premium */
         .nav {
             position: fixed;
-            top: 0; left: 0; right: 0;
+            top: 0;
+            left: 0;
+            right: 0;
             background: rgba(255, 255, 255, 0.98);
             backdrop-filter: blur(15px);
             padding: 1rem 2rem;
@@ -55,6 +68,7 @@
             z-index: 1000;
             animation: fadeInDown 0.8s ease;
         }
+
         .nav-container {
             max-width: 1200px;
             margin: 0 auto;
@@ -62,6 +76,7 @@
             justify-content: space-between;
             align-items: center;
         }
+
         .nav-logo {
             font-family: 'Playfair Display', serif;
             font-size: 1.3rem;
@@ -70,11 +85,13 @@
             letter-spacing: 1px;
             z-index: 1001;
         }
+
         .nav-links {
             display: flex;
             gap: 2rem;
             list-style: none;
         }
+
         .nav-links a {
             color: var(--text);
             text-decoration: none;
@@ -83,42 +100,69 @@
             transition: color 0.3s;
             position: relative;
         }
+
         .nav-links a:after {
             content: '';
             position: absolute;
-            bottom: -4px; left: 0;
-            width: 0; height: 2px;
+            bottom: -4px;
+            left: 0;
+            width: 0;
+            height: 2px;
             background: var(--accent);
             transition: width 0.3s;
         }
-        .nav-links a:hover { color: var(--accent); }
-        .nav-links a:hover:after { width: 100%; }
+
+        .nav-links a:hover {
+            color: var(--accent);
+        }
+
+        .nav-links a:hover:after {
+            width: 100%;
+        }
 
         /* Burger Menu */
         .burger {
             display: none;
             flex-direction: column;
             justify-content: space-between;
-            width: 28px; height: 20px;
+            width: 28px;
+            height: 20px;
             cursor: pointer;
             z-index: 1001;
-            background: none; border: none; padding: 0;
+            background: none;
+            border: none;
+            padding: 0;
         }
+
         .burger span {
             display: block;
-            width: 100%; height: 2px;
+            width: 100%;
+            height: 2px;
             background: var(--primary);
             transition: all 0.3s ease;
             border-radius: 2px;
         }
-        .burger.active span:nth-child(1) { transform: translateY(9px) rotate(45deg); }
-        .burger.active span:nth-child(2) { opacity: 0; transform: translateX(-10px); }
-        .burger.active span:nth-child(3) { transform: translateY(-9px) rotate(-45deg); }
+
+        .burger.active span:nth-child(1) {
+            transform: translateY(9px) rotate(45deg);
+        }
+
+        .burger.active span:nth-child(2) {
+            opacity: 0;
+            transform: translateX(-10px);
+        }
+
+        .burger.active span:nth-child(3) {
+            transform: translateY(-9px) rotate(-45deg);
+        }
 
         .mobile-menu {
             display: none;
             position: fixed;
-            top: 0; left: 0; right: 0; bottom: 0;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
             background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
             z-index: 999;
             flex-direction: column;
@@ -127,19 +171,34 @@
             opacity: 0;
             transition: opacity 0.4s ease;
         }
-        .mobile-menu.active { display: flex; opacity: 1; }
-        .mobile-menu ul { list-style: none; text-align: center; }
+
+        .mobile-menu.active {
+            display: flex;
+            opacity: 1;
+        }
+
+        .mobile-menu ul {
+            list-style: none;
+            text-align: center;
+        }
+
         .mobile-menu li {
             margin: 1.5rem 0;
             transform: translateY(20px);
             opacity: 0;
             transition: all 0.4s ease;
         }
-        .mobile-menu.active li { transform: translateY(0); opacity: 1; }
+
+        .mobile-menu.active li {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
         .mobile-menu.active li:nth-child(1) { transition-delay: 0.1s; }
         .mobile-menu.active li:nth-child(2) { transition-delay: 0.2s; }
         .mobile-menu.active li:nth-child(3) { transition-delay: 0.3s; }
         .mobile-menu.active li:nth-child(4) { transition-delay: 0.4s; }
+
         .mobile-menu a {
             color: var(--white);
             text-decoration: none;
@@ -150,7 +209,26 @@
             transition: color 0.3s;
             position: relative;
         }
-        .mobile-menu a:hover { color: var(--accent); }
+
+        .mobile-menu a:hover {
+            color: var(--accent);
+        }
+
+        .mobile-menu a:after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 0;
+            height: 2px;
+            background: var(--accent);
+            transition: width 0.3s;
+        }
+
+        .mobile-menu a:hover:after {
+            width: 60%;
+        }
 
         /* Header */
         .header {
@@ -158,32 +236,39 @@
             background-size: 400% 400%;
             animation: gradientShift 15s ease infinite;
             color: var(--white);
-            padding: 8rem 2rem 4rem;
+            padding: 8rem 2rem 4rem; /* Увеличен отступ сверху, чтобы меню не перекрывало текст */
             text-align: center;
             position: relative;
             overflow: hidden;
         }
+
         .header:before {
             content: '';
             position: absolute;
-            top: -50%; right: -10%;
-            width: 600px; height: 600px;
+            top: -50%;
+            right: -10%;
+            width: 600px;
+            height: 600px;
             background: radial-gradient(circle, rgba(201,169,97,0.15) 0%, transparent 70%);
             animation: float 20s ease-in-out infinite;
             border-radius: 50%;
         }
+
         @keyframes float {
             0%, 100% { transform: translateY(0px) rotate(0deg); }
             33% { transform: translateY(-20px) rotate(5deg); }
             66% { transform: translateY(-10px) rotate(-5deg); }
         }
+
         .header h1 {
             font-size: 2.8rem;
             margin-bottom: 1rem;
             letter-spacing: 2px;
             animation: fadeInDown 1s ease;
-            position: relative; z-index: 1;
+            position: relative;
+            z-index: 1;
         }
+
         .header p {
             font-size: 1.1rem;
             opacity: 0.95;
@@ -191,7 +276,8 @@
             max-width: 700px;
             margin: 0 auto;
             animation: fadeInUp 1s ease 0.3s both;
-            position: relative; z-index: 1;
+            position: relative;
+            z-index: 1;
         }
 
         .content {
@@ -211,33 +297,48 @@
             transform: translateY(30px);
             transition: all 0.8s ease;
         }
-        .info-box.visible { opacity: 1; transform: translateY(0); }
+
+        .info-box.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
         .info-box h2 {
             color: var(--primary);
             font-size: 1.8rem;
             margin-bottom: 1rem;
         }
+
         .info-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
             gap: 1.5rem;
             margin-top: 1.5rem;
         }
+
         .info-item {
             padding: 1rem;
             background: var(--bg);
             border-radius: 10px;
             border: 1px solid rgba(201,169,97,0.2);
         }
+
         .info-item strong {
             color: var(--primary);
             display: block;
             margin-bottom: 0.5rem;
             font-size: 0.9rem;
         }
-        .info-item span { font-size: 0.95rem; opacity: 0.85; }
 
-        .months-section { margin-bottom: 4rem; }
+        .info-item span {
+            font-size: 0.95rem;
+            opacity: 0.85;
+        }
+
+        .months-section {
+            margin-bottom: 4rem;
+        }
+
         .month-title {
             font-size: 2rem;
             color: var(--primary);
@@ -247,11 +348,14 @@
             display: inline-block;
             position: relative;
         }
+
         .month-title:after {
             content: '';
             position: absolute;
-            bottom: -3px; left: 0;
-            width: 100px; height: 3px;
+            bottom: -3px;
+            left: 0;
+            width: 100px;
+            height: 3px;
             background: var(--primary);
         }
 
@@ -274,18 +378,29 @@
             position: relative;
             overflow: hidden;
         }
+
         .lesson-card:before {
             content: '';
             position: absolute;
-            top: 0; left: 0; right: 0;
+            top: 0;
+            left: 0;
+            right: 0;
             height: 4px;
             background: linear-gradient(90deg, var(--primary), var(--primary-light));
             transform: scaleX(0);
             transform-origin: left;
             transition: transform 0.5s ease;
         }
-        .lesson-card.visible { opacity: 1; transform: translateY(0) scale(1); }
-        .lesson-card:hover:before { transform: scaleX(1); }
+
+        .lesson-card.visible {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+        }
+
+        .lesson-card:hover:before {
+            transform: scaleX(1);
+        }
+
         .lesson-card:hover {
             transform: translateY(-8px) scale(1.01);
             box-shadow: 0 15px 50px rgba(13,59,46,0.15);
@@ -300,10 +415,12 @@
             padding-bottom: 1rem;
             border-bottom: 2px solid var(--bg);
         }
+
         .lesson-number {
             background: linear-gradient(135deg, var(--primary), var(--primary-light));
             color: var(--white);
-            width: 45px; height: 45px;
+            width: 45px;
+            height: 45px;
             border-radius: 50%;
             display: flex;
             align-items: center;
@@ -314,7 +431,11 @@
             box-shadow: 0 4px 15px rgba(13,59,46,0.3);
             transition: transform 0.3s;
         }
-        .lesson-card:hover .lesson-number { transform: rotate(360deg) scale(1.1); }
+
+        .lesson-card:hover .lesson-number {
+            transform: rotate(360deg) scale(1.1);
+        }
+
         .lesson-title {
             color: var(--primary);
             font-size: 1.15rem;
@@ -322,12 +443,14 @@
             font-weight: 600;
             font-family: 'Playfair Display', serif;
         }
+
         .lesson-meta {
             display: flex;
             gap: 1rem;
             margin-bottom: 1rem;
             flex-wrap: wrap;
         }
+
         .lesson-hours, .lesson-date {
             background: linear-gradient(135deg, rgba(201,169,97,0.2), rgba(201,169,97,0.1));
             color: var(--primary);
@@ -337,7 +460,12 @@
             font-weight: 600;
             border: 1px solid rgba(201,169,97,0.3);
         }
-        .lesson-content { font-size: 0.9rem; line-height: 1.6; }
+
+        .lesson-content {
+            font-size: 0.9rem;
+            line-height: 1.6;
+        }
+
         .lesson-content h4 {
             color: var(--primary);
             font-size: 0.95rem;
@@ -345,8 +473,16 @@
             font-family: 'Raleway', sans-serif;
             font-weight: 600;
         }
-        .lesson-content p, .lesson-content ul { margin-bottom: 0.7rem; }
-        .lesson-content ul { list-style: none; padding-left: 0; }
+
+        .lesson-content p, .lesson-content ul {
+            margin-bottom: 0.7rem;
+        }
+
+        .lesson-content ul {
+            list-style: none;
+            padding-left: 0;
+        }
+
         .lesson-content li {
             padding: 0.35rem 0;
             padding-left: 1.5rem;
@@ -354,6 +490,7 @@
             font-size: 0.88rem;
             line-height: 1.5;
         }
+
         .lesson-content li:before {
             content: "–";
             color: var(--accent);
@@ -361,6 +498,7 @@
             left: 0;
             font-weight: 600;
         }
+
         .lesson-form {
             background: linear-gradient(135deg, var(--bg), rgba(250,250,247,0.8));
             padding: 1rem;
@@ -369,6 +507,7 @@
             border-left: 3px solid var(--accent);
             font-size: 0.87rem;
         }
+
         .lesson-form strong {
             color: var(--primary);
             display: block;
@@ -387,190 +526,54 @@
             position: relative;
             overflow: hidden;
         }
+
         footer:before {
             content: '';
             position: absolute;
-            top: 0; left: 0; right: 0;
+            top: 0;
+            left: 0;
+            right: 0;
             height: 3px;
             background: linear-gradient(90deg, var(--accent), var(--accent-light));
         }
 
-        /* ============================================================
-           СКАЧИВАНИЕ — плавучая кнопка с меню
-           ============================================================ */
-        .download-fab {
-            position: fixed;
-            bottom: 2rem;
-            right: 2rem;
-            z-index: 998;
-            font-family: 'Raleway', sans-serif;
-        }
-        .download-main {
-            width: 60px;
-            height: 60px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, var(--primary), var(--primary-light));
-            color: var(--white);
-            border: none;
-            box-shadow: 0 10px 30px rgba(13,59,46,0.35);
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            position: relative;
-        }
-        .download-main:before {
-            content: '';
-            position: absolute;
-            inset: -3px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, var(--accent), var(--accent-light));
-            z-index: -1;
-            opacity: 0;
-            transition: opacity 0.3s;
-        }
-        .download-main:hover {
-            transform: scale(1.08) translateY(-2px);
-            box-shadow: 0 15px 40px rgba(13,59,46,0.5);
-        }
-        .download-main:hover:before { opacity: 1; }
-        .download-main.active svg { transform: rotate(180deg); }
-        .download-main svg { transition: transform 0.3s; }
-
-        .download-popup {
-            position: absolute;
-            bottom: 78px;
-            right: 0;
-            background: var(--white);
-            border-radius: 16px;
-            padding: 0.6rem;
-            box-shadow: 0 15px 50px rgba(13,59,46,0.25);
-            min-width: 260px;
-            opacity: 0;
-            visibility: hidden;
-            transform: translateY(15px) scale(0.95);
-            transform-origin: bottom right;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            border: 1px solid rgba(201,169,97,0.2);
-        }
-        .download-popup.active {
-            opacity: 1;
-            visibility: visible;
-            transform: translateY(0) scale(1);
-        }
-        .download-popup-header {
-            padding: 0.6rem 1rem 0.5rem;
-            font-size: 0.75rem;
-            text-transform: uppercase;
-            letter-spacing: 1.5px;
-            color: var(--accent);
-            font-weight: 700;
-            border-bottom: 1px solid rgba(201,169,97,0.15);
-            margin-bottom: 0.4rem;
-        }
-        .download-option {
-            display: flex;
-            align-items: center;
-            gap: 14px;
-            width: 100%;
-            padding: 12px 14px;
-            border: none;
-            background: transparent;
-            border-radius: 10px;
-            cursor: pointer;
-            text-align: left;
-            transition: background 0.2s;
-            font-family: 'Raleway', sans-serif;
-        }
-        .download-option:hover { background: rgba(201,169,97,0.1); }
-        .download-option:hover .download-option-icon {
-            background: var(--accent);
-            color: var(--white);
-        }
-        .download-option-icon {
-            font-size: 1.3rem;
-            width: 40px;
-            height: 40px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background: rgba(201,169,97,0.15);
-            border-radius: 10px;
-            flex-shrink: 0;
-            transition: all 0.2s;
-        }
-        .download-option-text { flex: 1; min-width: 0; }
-        .download-option strong {
-            display: block;
-            color: var(--primary);
-            font-size: 0.92rem;
-            margin-bottom: 2px;
-            font-weight: 600;
-        }
-        .download-option small {
-            display: block;
-            color: #888;
-            font-size: 0.75rem;
-            line-height: 1.3;
-        }
-
-        /* Тост-уведомление */
-        .download-toast {
-            position: fixed;
-            bottom: 7rem;
-            right: 2rem;
-            background: var(--primary);
-            color: var(--white);
-            padding: 0.9rem 1.3rem;
-            border-radius: 12px;
-            font-size: 0.88rem;
-            box-shadow: 0 10px 30px rgba(13,59,46,0.4);
-            z-index: 999;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            opacity: 0;
-            transform: translateY(15px);
-            pointer-events: none;
-            transition: all 0.3s;
-            max-width: calc(100vw - 4rem);
-        }
-        .download-toast.show {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
         /* Responsive */
         @media (max-width: 768px) {
-            .nav { padding: 1rem 1.5rem; }
-            .nav-links { display: none; }
-            .burger { display: flex; }
-            .header { padding: 6.5rem 1.5rem 3rem; }
-            .header h1 { font-size: 2.2rem; }
-            .header p { font-size: 1rem; }
-            .lessons-grid { grid-template-columns: 1fr; gap: 1.2rem; }
-            .lesson-card { padding: 1.5rem; }
-            .content { padding: 3rem 1.5rem; }
+            .nav {
+                padding: 1rem 1.5rem;
+            }
 
-            .download-fab {
-                bottom: 1.2rem;
-                right: 1.2rem;
+            .nav-links {
+                display: none;
             }
-            .download-main {
-                width: 54px;
-                height: 54px;
+
+            .burger {
+                display: flex;
             }
-            .download-popup {
-                bottom: 70px;
-                min-width: calc(100vw - 3rem);
-                right: 0;
+
+            .header {
+                padding: 6.5rem 1.5rem 3rem; /* Защита от перекрытия на мобильных */
             }
-            .download-toast {
-                bottom: 5.5rem;
-                right: 1.2rem;
-                left: 1.2rem;
-                max-width: none;
+
+            .header h1 {
+                font-size: 2.2rem;
+            }
+
+            .header p {
+                font-size: 1rem;
+            }
+
+            .lessons-grid {
+                grid-template-columns: 1fr;
+                gap: 1.2rem;
+            }
+
+            .lesson-card {
+                padding: 1.5rem;
+            }
+
+            .content {
+                padding: 3rem 1.5rem;
             }
         }
 
@@ -579,79 +582,10 @@
             transform: translateY(30px);
             transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
         }
+
         .scroll-animate.visible {
             opacity: 1;
             transform: translateY(0);
-        }
-
-        /* ============================================================
-           PRINT — для сохранения в PDF
-           ============================================================ */
-        @media print {
-            @page {
-                margin: 1.5cm;
-                size: A4;
-            }
-            body { background: white !important; }
-            .nav, .mobile-menu, .burger, .download-fab, .download-popup, .download-toast {
-                display: none !important;
-            }
-            .header {
-                background: var(--primary) !important;
-                -webkit-print-color-adjust: exact;
-                print-color-adjust: exact;
-                animation: none !important;
-                padding: 2rem 1.5rem !important;
-            }
-            .header:before { display: none !important; }
-            .header h1, .header p {
-                animation: none !important;
-                color: white !important;
-            }
-            .content {
-                padding: 1.5rem 0 !important;
-                max-width: 100% !important;
-            }
-            .info-box, .lesson-card {
-                animation: none !important;
-                transition: none !important;
-                box-shadow: 0 2px 8px rgba(0,0,0,0.08) !important;
-                opacity: 1 !important;
-                transform: none !important;
-                page-break-inside: avoid;
-                break-inside: avoid;
-            }
-            .info-box { margin-bottom: 1.5rem !important; }
-            .month-title {
-                page-break-after: avoid;
-                break-after: avoid;
-                font-size: 1.6rem !important;
-                margin-bottom: 1rem !important;
-            }
-            .lessons-grid {
-                gap: 1rem !important;
-                margin-bottom: 1.5rem !important;
-            }
-            .lesson-card { padding: 1.2rem !important; }
-            .lesson-card:hover {
-                transform: none !important;
-                border-color: transparent !important;
-            }
-            .lesson-card:hover:before { transform: scaleX(0) !important; }
-            .lesson-card:hover .lesson-number { transform: none !important; }
-            .months-section { margin-bottom: 1.5rem !important; }
-            .scroll-animate {
-                opacity: 1 !important;
-                transform: none !important;
-            }
-            footer {
-                background: var(--text) !important;
-                -webkit-print-color-adjust: exact;
-                print-color-adjust: exact;
-                margin-top: 2rem !important;
-                page-break-before: avoid;
-            }
-            footer:before { display: none !important; }
         }
     </style>
 </head>
@@ -674,6 +608,7 @@
         </div>
     </nav>
 
+    <!-- Мобильное меню -->
     <div class="mobile-menu" id="mobileMenu">
         <ul>
             <li><a href="index.html" class="mobile-link">Главная</a></li>
@@ -1404,50 +1339,8 @@
         <p>г. Хойники, школа №3</p>
     </footer>
 
-    <!-- ============================================================
-         СКАЧИВАНИЕ — плавучая кнопка
-         ============================================================ -->
-    <div class="download-fab">
-        <div class="download-popup" id="downloadPopup">
-            <div class="download-popup-header">Скачать документ</div>
-            <button class="download-option" data-action="pdf">
-                <div class="download-option-icon">📄</div>
-                <div class="download-option-text">
-                    <strong>PDF</strong>
-                    <small>Для печати и отправки</small>
-                </div>
-            </button>
-            <button class="download-option" data-action="html">
-                <div class="download-option-icon">💻</div>
-                <div class="download-option-text">
-                    <strong>HTML</strong>
-                    <small>Точная копия страницы</small>
-                </div>
-            </button>
-            <button class="download-option" data-action="doc">
-                <div class="download-option-icon">📝</div>
-                <div class="download-option-text">
-                    <strong>Word (DOC)</strong>
-                    <small>Для редактирования</small>
-                </div>
-            </button>
-        </div>
-        <button class="download-main" id="downloadMain" aria-label="Скачать документ" title="Скачать">
-            <svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
-                <polyline points="7 10 12 15 17 10"/>
-                <line x1="12" y1="15" x2="12" y2="3"/>
-            </svg>
-        </button>
-    </div>
-
-    <div class="download-toast" id="downloadToast">
-        <span id="downloadToastIcon">⏳</span>
-        <span id="downloadToastText">Подготовка файла…</span>
-    </div>
-
     <script>
-        // ============ BURGER MENU ============
+        // Burger Menu Logic
         const burger = document.getElementById('burger');
         const mobileMenu = document.getElementById('mobileMenu');
         const mobileLinks = document.querySelectorAll('.mobile-link');
@@ -1458,6 +1351,7 @@
                 mobileMenu.classList.toggle('active');
                 document.body.style.overflow = mobileMenu.classList.contains('active') ? 'hidden' : '';
             });
+
             mobileLinks.forEach(link => {
                 link.addEventListener('click', () => {
                     burger.classList.remove('active');
@@ -1467,8 +1361,12 @@
             });
         }
 
-        // ============ SCROLL ANIMATIONS ============
-        const observerOptions = { threshold: 0.1, rootMargin: "0px 0px -50px 0px" };
+        // Intersection Observer for animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: "0px 0px -50px 0px"
+        };
+
         const observer = new IntersectionObserver((entries) => {
             entries.forEach((entry, index) => {
                 if (entry.isIntersecting) {
@@ -1478,161 +1376,9 @@
                 }
             });
         }, observerOptions);
-        document.querySelectorAll('.scroll-animate').forEach((el) => observer.observe(el));
 
-        // ============ СКАЧИВАНИЕ ============
-        const downloadMain = document.getElementById('downloadMain');
-        const downloadPopup = document.getElementById('downloadPopup');
-        const downloadToast = document.getElementById('downloadToast');
-        const downloadToastIcon = document.getElementById('downloadToastIcon');
-        const downloadToastText = document.getElementById('downloadToastText');
-        let toastTimer = null;
-
-        // Открытие/закрытие меню
-        downloadMain.addEventListener('click', (e) => {
-            e.stopPropagation();
-            downloadMain.classList.toggle('active');
-            downloadPopup.classList.toggle('active');
-        });
-
-        // Закрытие при клике вне меню
-        document.addEventListener('click', (e) => {
-            if (!e.target.closest('.download-fab')) {
-                downloadMain.classList.remove('active');
-                downloadPopup.classList.remove('active');
-            }
-        });
-
-        // Закрытие по Escape
-        document.addEventListener('keydown', (e) => {
-            if (e.key === 'Escape') {
-                downloadMain.classList.remove('active');
-                downloadPopup.classList.remove('active');
-            }
-        });
-
-        // Тост
-        function showToast(icon, text, duration = 3000) {
-            downloadToastIcon.textContent = icon;
-            downloadToastText.textContent = text;
-            downloadToast.classList.add('show');
-            clearTimeout(toastTimer);
-            toastTimer = setTimeout(() => downloadToast.classList.remove('show'), duration);
-        }
-
-        // Закрыть меню после выбора
-        function closeMenu() {
-            downloadMain.classList.remove('active');
-            downloadPopup.classList.remove('active');
-        }
-
-        // ---------- СКАЧАТЬ PDF (через печать) ----------
-        function downloadPDF() {
-            closeMenu();
-            showToast('📄', 'Открывается окно печати — выберите «Сохранить как PDF»', 4000);
-            setTimeout(() => {
-                window.print();
-            }, 400);
-        }
-
-        // ---------- СКАЧАТЬ HTML ----------
-        function downloadHTML() {
-            closeMenu();
-            showToast('💻', 'Готовим HTML-файл…', 1500);
-
-            try {
-                // Клонируем документ
-                const clone = document.documentElement.cloneNode(true);
-
-                // Убираем все visible-классы, чтобы анимации сработали снова
-                clone.querySelectorAll('.visible').forEach(el => el.classList.remove('visible'));
-
-                // Убираем скачивание из клона (чтобы не было дубликата)
-                const fab = clone.querySelector('.download-fab');
-                if (fab) fab.remove();
-                const toast = clone.querySelector('.download-toast');
-                if (toast) toast.remove();
-
-                // Закрываем мобильное меню
-                const mm = clone.querySelector('#mobileMenu');
-                if (mm) mm.classList.remove('active');
-                const burgerClone = clone.querySelector('#burger');
-                if (burgerClone) burgerClone.classList.remove('active');
-
-                const html = '<!DOCTYPE html>\n' + clone.outerHTML;
-                const blob = new Blob([html], { type: 'text/html;charset=utf-8' });
-                const url = URL.createObjectURL(blob);
-                const a = document.createElement('a');
-                a.href = url;
-                a.download = 'plan-himiya.html';
-                document.body.appendChild(a);
-                a.click();
-                document.body.removeChild(a);
-                setTimeout(() => URL.revokeObjectURL(url), 1000);
-
-                setTimeout(() => showToast('✅', 'HTML-файл скачан', 2500), 400);
-            } catch (err) {
-                showToast('⚠️', 'Не удалось скачать HTML', 3000);
-            }
-        }
-
-        // ---------- СКАЧАТЬ DOC (для Word) ----------
-        function downloadDOC() {
-            closeMenu();
-            showToast('📝', 'Готовим Word-документ…', 1500);
-
-            try {
-                // Собираем стили
-                const styles = Array.from(document.querySelectorAll('style')).map(s => s.textContent).join('\n');
-
-                // Собираем содержимое
-                const headerHTML = document.querySelector('.header').outerHTML;
-                const contentHTML = document.querySelector('.content').outerHTML;
-                const footerHTML = document.querySelector('footer').outerHTML;
-
-                // Формируем документ для Word
-                const doc = `<html xmlns:o="urn:schemas-microsoft-com:office:office"
-xmlns:w="urn:schemas-microsoft-com:office:word"
-xmlns="http://www.w3.org/TR/REC-html40">
-<head>
-<meta charset="UTF-8">
-<meta name=ProgId content=Word.Document>
-<meta name=Generator content="Microsoft Word 15">
-<title>План занятий — Ресурсный центр «Химия»</title>
-<style>${styles}</style>
-</head>
-<body>
-${headerHTML}
-${contentHTML}
-${footerHTML}
-</body>
-</html>`;
-
-                // BOM для корректного распознавания UTF-8 в Word
-                const blob = new Blob(['\ufeff', doc], { type: 'application/msword' });
-                const url = URL.createObjectURL(blob);
-                const a = document.createElement('a');
-                a.href = url;
-                a.download = 'plan-himiya.doc';
-                document.body.appendChild(a);
-                a.click();
-                document.body.removeChild(a);
-                setTimeout(() => URL.revokeObjectURL(url), 1000);
-
-                setTimeout(() => showToast('✅', 'Word-документ скачан', 2500), 400);
-            } catch (err) {
-                showToast('⚠️', 'Не удалось скачать DOC', 3000);
-            }
-        }
-
-        // Обработчик кнопок меню
-        document.querySelectorAll('.download-option').forEach(btn => {
-            btn.addEventListener('click', () => {
-                const action = btn.dataset.action;
-                if (action === 'pdf') downloadPDF();
-                else if (action === 'html') downloadHTML();
-                else if (action === 'doc') downloadDOC();
-            });
+        document.querySelectorAll('.scroll-animate').forEach((el) => {
+            observer.observe(el);
         });
     </script>
 
